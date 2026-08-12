@@ -1,0 +1,755 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Accessibility report — Consensus Demo Player</title>
+<style>
+  :root {
+    --orange: #FC6839;
+    --ink: #172537;
+    --muted: #6F6F6F;
+    --line: #E4E0DC;
+    --bg: #FAF9F8;
+    --critical: #C62A2F;
+    --serious: #D2691E;
+    --moderate: #B38600;
+    --minor: #5B6B7C;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Poppins, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.55;
+  }
+  a { color: var(--orange); }
+  .wrap { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 40px; max-width: 1400px; margin: 0 auto; padding: 40px 32px 96px; }
+  main { min-width: 0; }
+  nav { position: sticky; top: 40px; align-self: start; font-size: 14px; }
+  nav h2 { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 24px 0 8px; }
+  nav a { display: block; padding: 6px 10px; border-radius: 8px; text-decoration: none; color: var(--ink); }
+  nav a:hover { background: #fff; }
+  nav a:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+  header.hero { border-bottom: 1px solid var(--line); padding-bottom: 24px; margin-bottom: 32px; }
+  .kicker { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--orange); font-weight: 600; margin: 0; }
+  h1 { font-size: 34px; line-height: 1.15; margin: 8px 0 12px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 13px; color: var(--muted); }
+  .meta code { background: #fff; border: 1px solid var(--line); padding: 1px 6px; border-radius: 5px; font-size: 12px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 24px 0 8px; }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .card .n { font-size: 30px; font-weight: 700; line-height: 1; }
+  .card .l { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .card.critical .n { color: var(--critical); }
+  .card.serious .n { color: var(--serious); }
+  .card.moderate .n { color: var(--moderate); }
+  section { margin-top: 48px; }
+  h2.sec { font-size: 22px; margin: 0 0 6px; }
+  .sec-note { color: var(--muted); font-size: 14px; margin: 0 0 20px; }
+  .finding { background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--line); border-radius: 12px; padding: 20px 22px; margin-bottom: 18px; min-width: 0; }
+  .finding.critical { border-left-color: var(--critical); }
+  .finding.serious { border-left-color: var(--serious); }
+  .finding.moderate { border-left-color: var(--moderate); }
+  .finding.minor { border-left-color: var(--minor); }
+  .finding h3 { font-size: 17px; margin: 10px 0 4px; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; padding: 3px 8px; border-radius: 999px; color: #fff; }
+  .badge.critical { background: var(--critical); }
+  .badge.serious { background: var(--serious); }
+  .badge.moderate { background: var(--moderate); }
+  .badge.minor { background: var(--minor); }
+  .tag { display: inline-block; font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 2px 8px; margin: 0 4px 4px 0; }
+  .count { font-size: 12px; color: var(--muted); font-weight: 600; }
+  .fix { background: #FFF6F2; border: 1px solid #FFD9C9; border-radius: 10px; padding: 12px 14px; margin-top: 14px; font-size: 14px; }
+  .fix strong { color: var(--orange); }
+  pre { background: #1A1A1A; color: #F0F0F0; padding: 12px 14px; border-radius: 8px; overflow-x: auto; max-width: 100%; font-size: 12px; margin: 8px 0 0; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  details { margin-top: 14px; }
+  summary { cursor: pointer; font-size: 14px; font-weight: 600; }
+  .nodes { display: grid; gap: 16px; margin-top: 14px; min-width: 0; }
+  .node { border-top: 1px solid var(--line); padding-top: 14px; min-width: 0; }
+  .node .sel { font-size: 12px; color: var(--muted); word-break: break-all; }
+  figure.shot { margin: 12px 0 0; }
+  figure.shot img { max-width: 100%; border: 1px solid var(--line); border-radius: 8px; display: block; background: #fff; }
+  figure.shot figcaption { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .states { display: grid; gap: 24px; }
+  table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+  th { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+  tr:last-child td { border-bottom: none; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+  @media (max-width: 900px) { .wrap { grid-template-columns: 1fr; } nav { position: static; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav aria-label="Report sections">
+  <strong>On this page</strong>
+  <h2>Overview</h2>
+  <a href="#summary">Summary</a>
+  <a href="#screens">Screens audited</a>
+  <h2>Findings</h2>
+  <a href="#manual">Keyboard &amp; dialog issues</a>
+  <a href="#label">Form elements must have labels</a>
+  <a href="#button-name">Buttons must have discernible text</a>
+  <a href="#color-contrast">Elements must meet minimum color contrast ratio thresholds</a>
+  <a href="#aria-dialog-name">ARIA dialog and alertdialog nodes should have an accessible name</a>
+  <a href="#aria-progressbar-name">ARIA progressbar nodes must have an accessible name</a>
+  <a href="#region">All page content should be contained by landmarks</a>
+  <a href="#landmark-one-main">Document should have one main landmark</a>
+  <a href="#heading-order">Heading levels should only increase by one</a>
+  <a href="#landmark-no-duplicate-contentinfo">Document should not have more than one contentinfo landmark</a>
+  <a href="#landmark-unique">Landmarks should have a unique role or role/label/title (i.e. accessible name) combination</a>
+  <h2>More</h2>
+  <a href="#incomplete">Needs review</a>
+  <a href="#focus">Focus order samples</a>
+  <a href="#method">Method &amp; limits</a>
+</nav>
+
+<main>
+<header class="hero">
+  <p class="kicker">Accessibility audit</p>
+  <h1>Consensus Demo Player — WCAG 2.1 AA report</h1>
+  <div class="meta">
+    <span>Target <code><a href="https://play.goconsensus.com/be2376b21">https://play.goconsensus.com/be2376b21</a></code></span>
+    <span>Viewport <code>1440×900</code></span>
+    <span>axe-core <code>4.12.1</code></span>
+    <span>Run <code>8/11/2026, 7:57:26 PM</code></span>
+  </div>
+</header>
+
+<section id="summary" style="margin-top:0">
+  <h2 class="sec">Summary</h2>
+  <p class="sec-note">10 automated rule failures plus 3 manual findings across 4 screens of the live Demo Player. Every automated failure below has a captured screen grab with the offending element ringed in red. OneTrust consent UI was excluded from axe so findings focus on Consensus player chrome.</p>
+  <div class="cards">
+    <div class="card critical"><div class="n">2</div><div class="l">Critical</div></div>
+    <div class="card serious"><div class="n">5</div><div class="l">Serious</div></div>
+    <div class="card moderate"><div class="n">6</div><div class="l">Moderate</div></div>
+    <div class="card"><div class="n">54</div><div class="l">Elements affected</div></div>
+    <div class="card"><div class="n">12/24</div><div class="l">Tab stops with no name</div></div>
+  </div>
+  <div class="fix"><strong>Headline:</strong> Audited the live share link <a href="https://play.goconsensus.com/be2376b21">https://play.goconsensus.com/be2376b21</a> (“New accessibility test”). Cover → Opt-in → in-player video were reachable as viewer Justin Ware. Guest “I’m new here” hits a sharing restriction, so the lead form / Request Access path was not fully exercised.</div>
+</section>
+
+<section id="screens">
+  <h2 class="sec">Screens audited</h2>
+  <p class="sec-note">Each screen was loaded in headless Chromium at 1440×900 and scanned with axe-core against WCAG 2.1 A/AA plus axe best practices.</p>
+  <div class="states">
+  <div class="finding">
+      <h3>Cover page — cookie banner open</h3>
+      <p class="sec-note">First paint of the Demo Player cover with the OneTrust consent dialog over the identity picker. — <span class="count">3 rule failures, 14 elements</span></p>
+      <figure class="shot"><a href="shots/cover-cookies-full.png" target="_blank" rel="noreferrer"><img src="shots/cover-cookies-full.png" alt="Cover page — cookie banner open — full page capture" loading="lazy"></a><figcaption>Cover page — cookie banner open — full page capture</figcaption></figure>
+    </div>
+  <div class="finding">
+      <h3>Cover page — identity picker</h3>
+      <p class="sec-note">After accepting cookies: personalized demo cover with “I’m new here” / named viewer, Contact me, and Policies. — <span class="count">4 rule failures, 12 elements</span></p>
+      <figure class="shot"><a href="shots/cover-full.png" target="_blank" rel="noreferrer"><img src="shots/cover-full.png" alt="Cover page — identity picker — full page capture" loading="lazy"></a><figcaption>Cover page — identity picker — full page capture</figcaption></figure>
+    </div>
+  <div class="finding">
+      <h3>Opt-in consent dialog</h3>
+      <p class="sec-note">After selecting a known viewer — tracking opt-in before the demo starts. — <span class="count">9 rule failures, 17 elements</span></p>
+      <figure class="shot"><a href="shots/opt-in-full.png" target="_blank" rel="noreferrer"><img src="shots/opt-in-full.png" alt="Opt-in consent dialog — full page capture" loading="lazy"></a><figcaption>Opt-in consent dialog — full page capture</figcaption></figure>
+    </div>
+  <div class="finding">
+      <h3>Video player — demo playing</h3>
+      <p class="sec-note">In-player experience after opt-in: video controls, invite, reactions, sidebar, and Get in touch. — <span class="count">2 rule failures, 11 elements</span></p>
+      <figure class="shot"><a href="shots/player-full.png" target="_blank" rel="noreferrer"><img src="shots/player-full.png" alt="Video player — demo playing — full page capture" loading="lazy"></a><figcaption>Video player — demo playing — full page capture</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="manual">
+  <h2 class="sec">Keyboard &amp; dialog issues</h2>
+  <p class="sec-note">Found by tabbing through each screen and observing dialog behavior. Automated scanners do not catch these fully.</p>
+  <article class="finding serious" id="cookie-banner-background">
+    <span class="badge serious">serious</span> <span class="tag">WCAG 2.4.3 Focus Order (A) · 4.1.2 Name, Role, Value (A)</span>
+    <h3>Cookie banner leaves cover page fully interactive underneath</h3>
+    <p>On first load the OneTrust consent dialog sits over the Demo Player cover, but axe still finds every cover control (identity picker, Contact me, Policies) and Tab can leave the banner into the page behind it. Screen-reader users can browse and activate controls that are visually obscured.</p>
+    <p class="sec-note"><strong>Evidence.</strong> First Tab stop was <code>&lt;button&gt;</code> — Contact me. 14 product elements were still audited under the banner (OneTrust itself was excluded from the axe scan).</p>
+    <figure class="shot"><a href="shots/cover-cookies-focus-1.png" target="_blank" rel="noreferrer"><img src="shots/cover-cookies-focus-1.png" alt="Cookie banner leaves cover page fully interactive underneath — evidence" loading="lazy"></a><figcaption>Cookie banner leaves cover page fully interactive underneath — evidence</figcaption></figure>
+    <div class="fix"><strong>Fix.</strong> Ensure the consent dialog traps focus, marks the page behind it <code>inert</code>/<code>aria-hidden</code>, and restores focus to the first cover control after Accept/Reject.<br><span class="count">OneTrust banner integration on Demo Player cover</span></div>
+  </article>
+  <article class="finding serious" id="optin-dialog-focus">
+    <span class="badge serious">serious</span> <span class="tag">WCAG 2.4.3 Focus Order (A)</span>
+    <h3>Opt-in dialog focus management needs a keyboard pass</h3>
+    <p>Selecting a known viewer opens an Opt-in dialog over the cover. Confirm that focus moves into the dialog, Tab cycles within it, Escape dismisses (or is intentionally disabled), and focus returns to the trigger after Opt-in and Continue.</p>
+    <p class="sec-note"><strong>Evidence.</strong> First Tab stop after the dialog opened: <code>&lt;button&gt;</code> — Opt-in and Continue.</p>
+    <figure class="shot"><a href="shots/opt-in-focus-1.png" target="_blank" rel="noreferrer"><img src="shots/opt-in-focus-1.png" alt="Opt-in dialog focus management needs a keyboard pass — evidence" loading="lazy"></a><figcaption>Opt-in dialog focus management needs a keyboard pass — evidence</figcaption></figure>
+    <div class="fix"><strong>Fix.</strong> Use a focus trap on the Opt-in surface and set initial focus on the primary action or dialog title.<br><span class="count">Demo Player cover · Opt-in modal</span></div>
+  </article>
+  <article class="finding moderate" id="player-keyboard">
+    <span class="badge moderate">moderate</span> <span class="tag">WCAG 2.1.1 Keyboard (A) · 4.1.2 Name, Role, Value (A)</span>
+    <h3>Video player keyboard &amp; naming sweep</h3>
+    <p>The in-player chrome exposes Pause/Mute/Subtitles/Settings/Fullscreen, reactions, Invite, sidebar demos, and Get in touch. Several controls rely on visible text; icon-only or compound labels still need verification against a screen reader.</p>
+    <p class="sec-note"><strong>Evidence.</strong> Of 16 Tab stops sampled in the player, 0 had no accessible name.</p>
+    <figure class="shot"><a href="shots/player-full.png" target="_blank" rel="noreferrer"><img src="shots/player-full.png" alt="Video player keyboard &amp; naming sweep — evidence" loading="lazy"></a><figcaption>Video player keyboard &amp; naming sweep — evidence</figcaption></figure>
+    <div class="fix"><strong>Fix.</strong> Give every icon control a stable <code>aria-label</code>, announce Now Playing changes via a polite live region, and keep captions discoverable from the keyboard.<br><span class="count">Demo Player video chrome &amp; sidebar</span></div>
+  </article>
+</section>
+
+<section>
+  <h2 class="sec">Automated failures</h2>
+  <p class="sec-note">Grouped by axe rule, ordered by severity then number of elements affected.</p>
+  <article class="finding critical" id="label">
+    <span class="badge critical">critical</span> <span class="count">3 elements · Cover page — cookie banner open, Cover page — identity picker, Opt-in consent dialog</span>
+    <h3>Form elements must have labels</h3>
+    <p>Ensure every form element has a label</p>
+    <div><span class="tag">wcag2a</span><span class="tag">wcag412</span></div>
+    <div class="fix"><strong>Rule.</strong> <code>label</code> — <a href="https://dequeuniversity.com/rules/axe/4.12/label?application=axeAPI" target="_blank" rel="noreferrer">axe guidance for this rule</a></div>
+    <details open>
+      <summary>Screen grabs — 3 of 3 affected elements</summary>
+      <div class="nodes">
+      <div class="node">
+        <p class="sel">Cover page — cookie banner open · <code>.src-shared-ui-switch--native-control-IbSfs</code></p>
+        <pre>&lt;input type=&quot;checkbox&quot; class=&quot;src-shared-ui-switch--native-control-IbSfs&quot; data-testid=&quot;optin toggle&quot; style=&quot;&quot;&gt;</pre>
+        <p class="sec-note">Fix any of the following:<br>  Element does not have an implicit (wrapped) &lt;label&gt;<br>  Element does not have an explicit &lt;label&gt;<br>  aria-label attribute does not exist or is empty<br>  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty<br>  Element has no title attribute<br>  Element has no placeholder attribute<br>  Element's default semantics were not overridden with role=&quot;none&quot; or role=&quot;presentation&quot;</p>
+        
+      </div>
+      <div class="node">
+        <p class="sel">Cover page — identity picker · <code>.src-shared-ui-switch--native-control-IbSfs</code></p>
+        <pre>&lt;input type=&quot;checkbox&quot; class=&quot;src-shared-ui-switch--native-control-IbSfs&quot; data-testid=&quot;optin toggle&quot; style=&quot;&quot;&gt;</pre>
+        <p class="sec-note">Fix any of the following:<br>  Element does not have an implicit (wrapped) &lt;label&gt;<br>  Element does not have an explicit &lt;label&gt;<br>  aria-label attribute does not exist or is empty<br>  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty<br>  Element has no title attribute<br>  Element has no placeholder attribute<br>  Element's default semantics were not overridden with role=&quot;none&quot; or role=&quot;presentation&quot;</p>
+        
+      </div>
+      <div class="node">
+        <p class="sel">Opt-in consent dialog · <code>.src-shared-ui-switch--native-control-IbSfs</code></p>
+        <pre>&lt;input type=&quot;checkbox&quot; class=&quot;src-shared-ui-switch--native-control-IbSfs&quot; data-testid=&quot;optin toggle&quot; style=&quot;&quot;&gt;</pre>
+        <p class="sec-note">Fix any of the following:<br>  Element does not have an implicit (wrapped) &lt;label&gt;<br>  Element does not have an explicit &lt;label&gt;<br>  aria-label attribute does not exist or is empty<br>  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty<br>  Element has no title attribute<br>  Element has no placeholder attribute<br>  Element's default semantics were not overridden with role=&quot;none&quot; or role=&quot;presentation&quot;</p>
+        
+      </div>
+      </div>
+    </details>
+  </article>
+  <article class="finding critical" id="button-name">
+    <span class="badge critical">critical</span> <span class="count">1 element · Opt-in consent dialog</span>
+    <h3>Buttons must have discernible text</h3>
+    <p>Ensure buttons have discernible text</p>
+    <div><span class="tag">wcag2a</span><span class="tag">wcag412</span></div>
+    <div class="fix"><strong>Rule.</strong> <code>button-name</code> — <a href="https://dequeuniversity.com/rules/axe/4.12/button-name?application=axeAPI" target="_blank" rel="noreferrer">axe guidance for this rule</a></div>
+    <details open>
+      <summary>Screen grabs — 1 of 1 affected element</summary>
+      <div class="nodes">
+      <div class="node">
+        <p class="sel">Opt-in consent dialog · <code>.src-shared-ui-modal-header--close-y1Mrg</code></p>
+        <pre>&lt;button class=&quot;src-shared-ui-modal-header--close-y1Mrg&quot; data-testid=&quot;modal-close-button&quot; type=&quot;button&quot;&gt;</pre>
+        <p class="sec-note">Fix any of the following:<br>  Element does not have inner text that is visible to screen readers<br>  aria-label attribute does not exist or is empty<br>  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty<br>  Element has no title attribute<br>  Element does not have an implicit (wrapped) &lt;label&gt;<br>  Element does not have an explicit &lt;label&gt;<br>  Element's default semantics were not overridden with role=&quot;none&quot; or role=&quot;presentation&quot;</p>
+        <figure class="shot"><a href="shots/opt-in-button-name-1.png" target="_blank" rel="noreferrer"><img src="shots/opt-in-button-name-1.png" alt="button-name — offending element ringed in red" loading="lazy"></a><figcaption>button-name — offending element ringed in red</figcaption></figure>
+      </div>
+      </div>
+    </details>
+  </article>
+  <article class="finding serious" id="color-contrast">
+    <span class="badge serious">serious</span> <span class="count">22 elements · Cover page — cookie banner open, Cover page — identity picker, Opt-in consent dialog, Video player — demo playing</span>
+    <h3>Elements must meet minimum color contrast ratio thresholds</h3>
+    <p>Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds</p>
+    <div><span class="tag">wcag2aa</span><span class="tag">wcag143</span></div>
+    <div class="fix"><strong>Rule.</strong> <code>color-contrast</code> — <a href="https://dequeuniversity.com/rules/axe/4.12/color-contrast?application=axeAPI" target="_blank" rel="noreferrer">axe guidance for this rule</a></div>
+    <details open>
+      <summary>Screen grabs — 5 of 22 affected elements</summary>
+      <div class="nodes">
+      <div class="node">
+        <p class="sel">Cover page — cookie banner open · <code>.src-widgets-legitimate-interest-ui--legitimate-Omr\+f</code></p>
+        <pre>&lt;div class=&quot;src-widgets-legitimate-interest-ui--legitimate-Omr+f src-widgets-cover-ui--legal-statement-sEr+-&quot;&gt;</pre>
+        <p class="sec-note">Fix any of the following:<br>  Element has insufficient color contrast of 3.5 (foreground color: #c8bcb7, background color: #76574a, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1</p>
+        <figure class="shot"><a href="shots/cover-cookies-color-contrast-1.png" target="_blank" rel="noreferrer"><img src="shots/cover-cookies-color-contrast-1.png" alt="color-contrast — offending element ringed in red" loading="lazy"></a><figcaption>color-contrast — offending element ringed in red</figcaption></figure>
+      </div>
+      <div class="node">
+        <p class="sel">Cover page — cookie banner open · <code>.src-widgets-cover-ui--copyright-9vt\+-</code></p>
+        <pre>&lt;div class=&quot;src-widgets-cover-ui--copyright-9vt+-&quot; data-testid=&quot;demo copyright value&quot;&gt;Copyright Z inc 2023&lt;/div&gt;</pre>
+        <p class="sec-note">Fix any of the following:<br>  Element has insufficient color contrast of 3.5 (foreground color: #c8bcb7, background color: #76574a, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1</p>
+        <figure class="shot"><a href="shots/cover-cookies-color-contrast-2.png" target="_blank" rel="noreferrer"><img src="shots/cover-cookies-color-contrast-2.png" alt="color-contrast — offending element ringed in red" loading="lazy"></a><figcaption>color-contrast — offending element ringed in red</figcaption></figure>
+      </div>
+      <div class="node">
+        <p class="sel">Cover page — cookie banner open · <code>.src-shared-ui-button--ghost-o9lnB</code></p>
+        <pre>&lt;button class=&quot;src-shared-ui-button--button-XQoY9 src-shared-ui-button--ghost-o9lnB src-widgets-contact-description-ui--button-uiljk&quot; type=&quot;button&quot; data-testid=&quot;contact me button&quot;&gt;Contact me&lt;/button&gt;</pre>
+        <p class="sec-note">Fix any of the following:<br>  Element has insufficient color contrast of 3.2 (foreground color: #e85340, background color: #f0f0f0, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1</p>
+        <figure class="shot"><a href="shots/cover-cookies-color-contrast-3.png" target="_blank" rel="noreferrer"><img src="shots/cover-cookies-color-contrast-3.png" alt="color-contrast — offending element ringed in red" loading="lazy"></a><figcaption>color-contrast — offending element ringed in red</figcaption></figure>
+      </div>
+      <div class="node">
+        <p class="sel">Cover page — cookie banner open · <code>.src-shared-ui-button--outlined-tqqXi</code></p>
+        <pre>&lt;button class=&quot;src-shared-ui-button--button-XQoY9 src-shared-ui-button--outlined-tqqXi src-shared-ui-button--square-nyDoN src-screens-way-ui-new-viewer-button--new-viewer-button-fMYBj&quot; type=&quot;button&quot; data-testid=&quot;new viewer button&quot;&gt;I'm new here&lt;/button&gt;</pre>
+        <p class="sec-note">Fix any of the following:<br>  Element has insufficient color contrast of 3.2 (foreground color: #e85340, background color: #f0f0f0, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1</p>
+        <figure class="shot"><a href="shots/cover-cookies-color-contrast-4.png" target="_blank" rel="noreferrer"><img src="shots/cover-cookies-color-contrast-4.png" alt="color-contrast — offending element ringed in red" loading="lazy"></a><figcaption>color-contrast — offending element ringed in red</figcaption></figure>
+      </div>
+      <div class="node">
+        <p class="sel">Cover page — cookie banner open · <code>.src-screens-way-ui-recipient-button--name-6tHwU</code></p>
+        <pre>&lt;span class=&quot;src-screens-way-ui-recipient-button--name-6tHwU&quot; data-testid=&quot;recipient fullname&quot;&gt;Justin Ware&lt;/span&gt;</pre>
+        <p class="sec-note">Fix any of the following:<br>  Element has insufficient color contrast of 3.65 (foreground color: #ffffff, background color: #e85340, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1</p>
+        <figure class="shot"><a href="shots/cover-cookies-color-contrast-5.png" target="_blank" rel="noreferrer"><img src="shots/cover-cookies-color-contrast-5.png" alt="color-contrast — offending element ringed in red" loading="lazy"></a><figcaption>color-contrast — offending element ringed in red</figcaption></figure>
+      </div>
+      </div>
+    </details>
+  </article>
+  <article class="finding serious" id="aria-dialog-name">
+    <span class="badge serious">serious</span> <span class="count">1 element · Opt-in consent dialog</span>
+    <h3>ARIA dialog and alertdialog nodes should have an accessible name</h3>
+    <p>Ensure every ARIA dialog and alertdialog node has an accessible name</p>
+    <div><span class="tag">best-practice</span></div>
+    <div class="fix"><strong>Rule.</strong> <code>aria-dialog-name</code> — <a href="https://dequeuniversity.com/rules/axe/4.12/aria-dialog-name?application=axeAPI" target="_blank" rel="noreferrer">axe guidance for this rule</a></div>
+    <details open>
+      <summary>Screen grabs — 1 of 1 affected element</summary>
+      <div class="nodes">
+      <div class="node">
+        <p class="sel">Opt-in consent dialog · <code>.src-shared-ui-modal--root-1B3QF</code></p>
+        <pre>&lt;div class=&quot;src-shared-ui-modal--root-1B3QF src-shared-ui-modal--small-UqmWn src-shared-ui-modal--backdrop-dgZ6r src-shared-ui-modal--centered-NEz9U src-shared-ui-modal--entered-yMKUE&quot; aria-modal=&quot;true&quot; role=&quot;dialog&quot;&gt;</pre>
+        <p class="sec-note">Fix any of the following:<br>  aria-label attribute does not exist or is empty<br>  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty<br>  Element has no title attribute</p>
+        <figure class="shot"><a href="shots/opt-in-aria-dialog-name-1.png" target="_blank" rel="noreferrer"><img src="shots/opt-in-aria-dialog-name-1.png" alt="aria-dialog-name — offending element ringed in red" loading="lazy"></a><figcaption>aria-dialog-name — offending element ringed in red</figcaption></figure>
+      </div>
+      </div>
+    </details>
+  </article>
+  <article class="finding serious" id="aria-progressbar-name">
+    <span class="badge serious">serious</span> <span class="count">1 element · Opt-in consent dialog</span>
+    <h3>ARIA progressbar nodes must have an accessible name</h3>
+    <p>Ensure every ARIA progressbar node has an accessible name</p>
+    <div><span class="tag">wcag2a</span><span class="tag">wcag111</span></div>
+    <div class="fix"><strong>Rule.</strong> <code>aria-progressbar-name</code> — <a href="https://dequeuniversity.com/rules/axe/4.12/aria-progressbar-name?application=axeAPI" target="_blank" rel="noreferrer">axe guidance for this rule</a></div>
+    <details open>
+      <summary>Screen grabs — 1 of 1 affected element</summary>
+      <div class="nodes">
+      <div class="node">
+        <p class="sel">Opt-in consent dialog · <code>.src-shared-ui-button--spinner-gIVnT</code></p>
+        <pre>&lt;div role=&quot;progressbar&quot; class=&quot;src-shared-ui-button--spinner-gIVnT&quot;&gt;</pre>
+        <p class="sec-note">Fix any of the following:<br>  aria-label attribute does not exist or is empty<br>  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty<br>  Element has no title attribute</p>
+        <figure class="shot"><a href="shots/opt-in-aria-progressbar-name-1.png" target="_blank" rel="noreferrer"><img src="shots/opt-in-aria-progressbar-name-1.png" alt="aria-progressbar-name — offending element ringed in red" loading="lazy"></a><figcaption>aria-progressbar-name — offending element ringed in red</figcaption></figure>
+      </div>
+      </div>
+    </details>
+  </article>
+  <article class="finding moderate" id="region">
+    <span class="badge moderate">moderate</span> <span class="count">22 elements · Cover page — cookie banner open, Cover page — identity picker, Opt-in consent dialog, Video player — demo playing</span>
+    <h3>All page content should be contained by landmarks</h3>
+    <p>Ensure all page content is contained by landmarks</p>
+    <div><span class="tag">best-practice</span></div>
+    <div class="fix"><strong>Rule.</strong> <code>region</code> — <a href="https://dequeuniversity.com/rules/axe/4.12/region?application=axeAPI" target="_blank" rel="noreferrer">axe guidance for this rule</a></div>
+    <details open>
+      <summary>Screen grabs — 5 of 22 affected elements</summary>
+      <div class="nodes">
+      <div class="node">
+        <p class="sel">Cover page — cookie banner open · <code>div[data-side=&quot;left&quot;]</code></p>
+        <pre>&lt;div class=&quot;src-shared-ui-transition-ui-transition--root-zp0yz&quot; data-phase=&quot;entered&quot; data-side=&quot;left&quot; data-transition=&quot;fade-in-center-out-left&quot; data-width=&quot;half&quot;&gt;</pre>
+        <p class="sec-note">Fix any of the following:<br>  Some page content is not contained by landmarks</p>
+        <figure class="shot"><a href="shots/cover-cookies-region-1.png" target="_blank" rel="noreferrer"><img src="shots/cover-cookies-region-1.png" alt="region — offending element ringed in red" loading="lazy"></a><figcaption>region — offending element ringed in red</figcaption></figure>
+      </div>
+      <div class="node">
+        <p class="sel">Cover page — cookie banner open · <code>.src-shared-ui-avatar--avatar-s0qid</code></p>
+        <pre>&lt;div data-testid=&quot;contact avatar&quot; class=&quot;src-shared-ui-avatar--avatar-s0qid undefined src-shared-ui-avatar--large-jL18w src-widgets-contact-description-ui--avatar-c-Nlk&quot;&gt;&lt;div&gt;JW&lt;/div&gt;&lt;/div&gt;</pre>
+        <p class="sec-note">Fix any of the following:<br>  Some page content is not contained by landmarks</p>
+        <figure class="shot"><a href="shots/cover-cookies-region-2.png" target="_blank" rel="noreferrer"><img src="shots/cover-cookies-region-2.png" alt="region — offending element ringed in red" loading="lazy"></a><figcaption>region — offending element ringed in red</figcaption></figure>
+      </div>
+      <div class="node">
+        <p class="sel">Cover page — cookie banner open · <code>.src-widgets-contact-description-ui--full-name-yspc3</code></p>
+        <pre>&lt;span class=&quot;src-widgets-contact-description-ui--full-name-yspc3&quot; data-is-vertical=&quot;false&quot; data-testid=&quot;contact info fullname&quot;&gt;Justin Ware&lt;/span&gt;</pre>
+        <p class="sec-note">Fix any of the following:<br>  Some page content is not contained by landmarks</p>
+        <figure class="shot"><a href="shots/cover-cookies-region-3.png" target="_blank" rel="noreferrer"><img src="shots/cover-cookies-region-3.png" alt="region — offending element ringed in red" loading="lazy"></a><figcaption>region — offending element ringed in red</figcaption></figure>
+      </div>
+      <div class="node">
+        <p class="sel">Cover page — cookie banner open · <code>.src-shared-ui-message-balloon--inner-d6GlH</code></p>
+        <pre>&lt;div class=&quot;src-shared-ui-message-balloon--inner-d6GlH&quot; data-testid=&quot;representative card message&quot; style=&quot;background-color: var(--color-neutral-0);&quot;&gt;</pre>
+        <p class="sec-note">Fix any of the following:<br>  Some page content is not contained by landmarks</p>
+        <figure class="shot"><a href="shots/cover-cookies-region-4.png" target="_blank" rel="noreferrer"><img src="shots/cover-cookies-region-4.png" alt="region — offending element ringed in red" loading="lazy"></a><figcaption>region — offending element ringed in red</figcaption></figure>
+      </div>
+      <div class="node">
+        <p class="sel">Cover page — cookie banner open · <code>.src-screens-way-ui-low-privacy--root-bTNMK</code></p>
+        <pre>&lt;div aria-label=&quot;low privacy identification host&quot; class=&quot;src-screens-way-ui-low-privacy--root-bTNMK&quot;&gt;</pre>
+        <p class="sec-note">Fix any of the following:<br>  Some page content is not contained by landmarks</p>
+        <figure class="shot"><a href="shots/cover-cookies-region-5.png" target="_blank" rel="noreferrer"><img src="shots/cover-cookies-region-5.png" alt="region — offending element ringed in red" loading="lazy"></a><figcaption>region — offending element ringed in red</figcaption></figure>
+      </div>
+      </div>
+    </details>
+  </article>
+  <article class="finding moderate" id="landmark-one-main">
+    <span class="badge moderate">moderate</span> <span class="count">1 element · Cover page — identity picker</span>
+    <h3>Document should have one main landmark</h3>
+    <p>Ensure the document has a main landmark</p>
+    <div><span class="tag">best-practice</span></div>
+    <div class="fix"><strong>Rule.</strong> <code>landmark-one-main</code> — <a href="https://dequeuniversity.com/rules/axe/4.12/landmark-one-main?application=axeAPI" target="_blank" rel="noreferrer">axe guidance for this rule</a></div>
+    <details open>
+      <summary>Screen grabs — 1 of 1 affected element</summary>
+      <div class="nodes">
+      <div class="node">
+        <p class="sel">Cover page — identity picker · <code>html</code></p>
+        <pre>&lt;html lang=&quot;en&quot; class=&quot;js-focus-visible&quot; data-js-focus-visibl...=&quot;&quot; style=&quot;--color-attention-50...&quot;&gt;</pre>
+        <p class="sec-note">Fix all of the following:<br>  Document does not have a main landmark</p>
+        <figure class="shot"><a href="shots/cover-landmark-one-main-1.png" target="_blank" rel="noreferrer"><img src="shots/cover-landmark-one-main-1.png" alt="landmark-one-main — offending element ringed in red" loading="lazy"></a><figcaption>landmark-one-main — offending element ringed in red</figcaption></figure>
+      </div>
+      </div>
+    </details>
+  </article>
+  <article class="finding moderate" id="heading-order">
+    <span class="badge moderate">moderate</span> <span class="count">1 element · Opt-in consent dialog</span>
+    <h3>Heading levels should only increase by one</h3>
+    <p>Ensure the order of headings is semantically correct</p>
+    <div><span class="tag">best-practice</span></div>
+    <div class="fix"><strong>Rule.</strong> <code>heading-order</code> — <a href="https://dequeuniversity.com/rules/axe/4.12/heading-order?application=axeAPI" target="_blank" rel="noreferrer">axe guidance for this rule</a></div>
+    <details open>
+      <summary>Screen grabs — 1 of 1 affected element</summary>
+      <div class="nodes">
+      <div class="node">
+        <p class="sel">Opt-in consent dialog · <code>h5</code></p>
+        <pre>&lt;h5&gt;Opt In&lt;/h5&gt;</pre>
+        <p class="sec-note">Fix any of the following:<br>  Heading order invalid</p>
+        <figure class="shot"><a href="shots/opt-in-heading-order-1.png" target="_blank" rel="noreferrer"><img src="shots/opt-in-heading-order-1.png" alt="heading-order — offending element ringed in red" loading="lazy"></a><figcaption>heading-order — offending element ringed in red</figcaption></figure>
+      </div>
+      </div>
+    </details>
+  </article>
+  <article class="finding moderate" id="landmark-no-duplicate-contentinfo">
+    <span class="badge moderate">moderate</span> <span class="count">1 element · Opt-in consent dialog</span>
+    <h3>Document should not have more than one contentinfo landmark</h3>
+    <p>Ensure the document has at most one contentinfo landmark</p>
+    <div><span class="tag">best-practice</span></div>
+    <div class="fix"><strong>Rule.</strong> <code>landmark-no-duplicate-contentinfo</code> — <a href="https://dequeuniversity.com/rules/axe/4.12/landmark-no-duplicate-contentinfo?application=axeAPI" target="_blank" rel="noreferrer">axe guidance for this rule</a></div>
+    <details open>
+      <summary>Screen grabs — 1 of 1 affected element</summary>
+      <div class="nodes">
+      <div class="node">
+        <p class="sel">Opt-in consent dialog · <code>.src-shared-ui-sticky-footer--root-mbU9B</code></p>
+        <pre>&lt;footer class=&quot;src-shared-ui-sticky-footer--root-mbU9B&quot;&gt;</pre>
+        <p class="sec-note">Fix any of the following:<br>  Document has more than one contentinfo landmark</p>
+        <figure class="shot"><a href="shots/opt-in-landmark-no-duplicate-contentinfo-1.png" target="_blank" rel="noreferrer"><img src="shots/opt-in-landmark-no-duplicate-contentinfo-1.png" alt="landmark-no-duplicate-contentinfo — offending element ringed in red" loading="lazy"></a><figcaption>landmark-no-duplicate-contentinfo — offending element ringed in red</figcaption></figure>
+      </div>
+      </div>
+    </details>
+  </article>
+  <article class="finding moderate" id="landmark-unique">
+    <span class="badge moderate">moderate</span> <span class="count">1 element · Opt-in consent dialog</span>
+    <h3>Landmarks should have a unique role or role/label/title (i.e. accessible name) combination</h3>
+    <p>Ensure landmarks are unique</p>
+    <div><span class="tag">best-practice</span></div>
+    <div class="fix"><strong>Rule.</strong> <code>landmark-unique</code> — <a href="https://dequeuniversity.com/rules/axe/4.12/landmark-unique?application=axeAPI" target="_blank" rel="noreferrer">axe guidance for this rule</a></div>
+    <details open>
+      <summary>Screen grabs — 1 of 1 affected element</summary>
+      <div class="nodes">
+      <div class="node">
+        <p class="sel">Opt-in consent dialog · <code>.src-shared-ui-sticky-footer--root-mbU9B</code></p>
+        <pre>&lt;footer class=&quot;src-shared-ui-sticky-footer--root-mbU9B&quot;&gt;</pre>
+        <p class="sec-note">Fix any of the following:<br>  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable</p>
+        <figure class="shot"><a href="shots/opt-in-landmark-unique-1.png" target="_blank" rel="noreferrer"><img src="shots/opt-in-landmark-unique-1.png" alt="landmark-unique — offending element ringed in red" loading="lazy"></a><figcaption>landmark-unique — offending element ringed in red</figcaption></figure>
+      </div>
+      </div>
+    </details>
+  </article>
+</section>
+
+<section id="incomplete">
+  <h2 class="sec">Needs review (axe incomplete)</h2>
+  <p class="sec-note">Axe could not confirm these automatically — they still matter for a Demo Player, especially captions and autoplay.</p>
+  <div class="finding moderate">
+      <span class="badge serious">serious</span> <span class="count">4 · Cover page — cookie banner open, Cover page — identity picker, Opt-in consent dialog, Video player — demo playing</span>
+      <h3>Elements must only use permitted ARIA attributes</h3>
+      <div class="fix"><strong>Rule.</strong> <code>aria-prohibited-attr</code> — <a href="https://dequeuniversity.com/rules/axe/4.12/aria-prohibited-attr?application=axeAPI" target="_blank" rel="noreferrer">axe guidance</a></div>
+    </div>
+  <div class="finding moderate">
+      <span class="badge serious">serious</span> <span class="count">4 · Opt-in consent dialog, Video player — demo playing</span>
+      <h3>Elements must meet minimum color contrast ratio thresholds</h3>
+      <div class="fix"><strong>Rule.</strong> <code>color-contrast</code> — <a href="https://dequeuniversity.com/rules/axe/4.12/color-contrast?application=axeAPI" target="_blank" rel="noreferrer">axe guidance</a></div>
+    </div>
+  <div class="finding moderate">
+      <span class="badge critical">critical</span> <span class="count">1 · Video player — demo playing</span>
+      <h3>ARIA attributes must conform to valid values</h3>
+      <div class="fix"><strong>Rule.</strong> <code>aria-valid-attr-value</code> — <a href="https://dequeuniversity.com/rules/axe/4.12/aria-valid-attr-value?application=axeAPI" target="_blank" rel="noreferrer">axe guidance</a></div>
+    </div>
+  <div class="finding moderate">
+      <span class="badge critical">critical</span> <span class="count">1 · Video player — demo playing</span>
+      <h3>&lt;video&gt; elements must have captions</h3>
+      <div class="fix"><strong>Rule.</strong> <code>video-caption</code> — <a href="https://dequeuniversity.com/rules/axe/4.12/video-caption?application=axeAPI" target="_blank" rel="noreferrer">axe guidance</a></div>
+    </div>
+  <div class="finding moderate">
+      <span class="badge moderate">moderate</span> <span class="count">1 · Video player — demo playing</span>
+      <h3>&lt;video&gt; or &lt;audio&gt; elements must not play automatically</h3>
+      <div class="fix"><strong>Rule.</strong> <code>no-autoplay-audio</code> — <a href="https://dequeuniversity.com/rules/axe/4.12/no-autoplay-audio?application=axeAPI" target="_blank" rel="noreferrer">axe guidance</a></div>
+    </div>
+</section>
+
+<section id="focus">
+  <h2 class="sec">Focus order samples</h2>
+  <p class="sec-note">First Tab stops recorded on each screen (OneTrust nodes skipped after Accept).</p>
+  <div class="finding">
+    <h3>Cover page — cookie banner open</h3>
+    <p class="sec-note">2 of 5 sampled stops had no accessible name · 1 without a detectable focus ring (automated — treat as inconclusive).</p>
+    <table>
+      <thead><tr><th>#</th><th>Control</th><th>Named</th><th>Focus ring</th></tr></thead>
+      <tbody>
+      <tr>
+        <td class="num">1</td>
+        <td><code>&lt;button&gt;</code> Contact me</td>
+        <td>yes</td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">2</td>
+        <td><code>&lt;button&gt;</code> I'm new here</td>
+        <td>yes</td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">3</td>
+        <td><code>&lt;button&gt;</code> Justin Ware</td>
+        <td>yes</td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">4</td>
+        <td><code>&lt;div&gt;</code> (no accessible name)</td>
+        <td><strong>no</strong></td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">5</td>
+        <td><code>&lt;input&gt;</code> (no accessible name)</td>
+        <td><strong>no</strong></td>
+        <td>inconclusive</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="finding">
+    <h3>Cover page — identity picker</h3>
+    <p class="sec-note">3 of 10 sampled stops had no accessible name · 1 without a detectable focus ring (automated — treat as inconclusive).</p>
+    <table>
+      <thead><tr><th>#</th><th>Control</th><th>Named</th><th>Focus ring</th></tr></thead>
+      <tbody>
+      <tr>
+        <td class="num">1</td>
+        <td><code>&lt;button&gt;</code> (no accessible name)</td>
+        <td><strong>no</strong></td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">2</td>
+        <td><code>&lt;a&gt;</code> Z inc Privacy Policy</td>
+        <td>yes</td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">3</td>
+        <td><code>&lt;a&gt;</code> Terms of Service</td>
+        <td>yes</td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">4</td>
+        <td><code>&lt;a&gt;</code> Z inc Partners</td>
+        <td>yes</td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">5</td>
+        <td><code>&lt;a&gt;</code> Consensus</td>
+        <td>yes</td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">6</td>
+        <td><code>&lt;button&gt;</code> Contact me</td>
+        <td>yes</td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">7</td>
+        <td><code>&lt;button&gt;</code> I'm new here</td>
+        <td>yes</td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">8</td>
+        <td><code>&lt;button&gt;</code> Justin Ware</td>
+        <td>yes</td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">9</td>
+        <td><code>&lt;div&gt;</code> (no accessible name)</td>
+        <td><strong>no</strong></td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">10</td>
+        <td><code>&lt;input&gt;</code> (no accessible name)</td>
+        <td><strong>no</strong></td>
+        <td>inconclusive</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="finding">
+    <h3>Opt-in consent dialog</h3>
+    <p class="sec-note">12 of 24 sampled stops had no accessible name · 0 without a detectable focus ring (automated — treat as inconclusive).</p>
+    <table>
+      <thead><tr><th>#</th><th>Control</th><th>Named</th><th>Focus ring</th></tr></thead>
+      <tbody>
+      <tr>
+        <td class="num">1</td>
+        <td><code>&lt;button&gt;</code> Opt-in and Continue</td>
+        <td>yes</td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">2</td>
+        <td><code>&lt;button&gt;</code> (no accessible name)</td>
+        <td><strong>no</strong></td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">3</td>
+        <td><code>&lt;button&gt;</code> Opt-in and Continue</td>
+        <td>yes</td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">4</td>
+        <td><code>&lt;button&gt;</code> (no accessible name)</td>
+        <td><strong>no</strong></td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">5</td>
+        <td><code>&lt;button&gt;</code> Opt-in and Continue</td>
+        <td>yes</td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">6</td>
+        <td><code>&lt;button&gt;</code> (no accessible name)</td>
+        <td><strong>no</strong></td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">7</td>
+        <td><code>&lt;button&gt;</code> Opt-in and Continue</td>
+        <td>yes</td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">8</td>
+        <td><code>&lt;button&gt;</code> (no accessible name)</td>
+        <td><strong>no</strong></td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">9</td>
+        <td><code>&lt;button&gt;</code> Opt-in and Continue</td>
+        <td>yes</td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">10</td>
+        <td><code>&lt;button&gt;</code> (no accessible name)</td>
+        <td><strong>no</strong></td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">11</td>
+        <td><code>&lt;button&gt;</code> Opt-in and Continue</td>
+        <td>yes</td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">12</td>
+        <td><code>&lt;button&gt;</code> (no accessible name)</td>
+        <td><strong>no</strong></td>
+        <td>detected</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="finding">
+    <h3>Video player — demo playing</h3>
+    <p class="sec-note">0 of 16 sampled stops had no accessible name · 3 without a detectable focus ring (automated — treat as inconclusive).</p>
+    <table>
+      <thead><tr><th>#</th><th>Control</th><th>Named</th><th>Focus ring</th></tr></thead>
+      <tbody>
+      <tr>
+        <td class="num">1</td>
+        <td><code>&lt;button&gt;</code> Pause</td>
+        <td>yes</td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">2</td>
+        <td><code>&lt;input&gt;</code> Seek</td>
+        <td>yes</td>
+        <td>inconclusive</td>
+      </tr>
+      <tr>
+        <td class="num">3</td>
+        <td><code>&lt;button&gt;</code> UnmuteMute</td>
+        <td>yes</td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">4</td>
+        <td><code>&lt;input&gt;</code> Volume</td>
+        <td>yes</td>
+        <td>inconclusive</td>
+      </tr>
+      <tr>
+        <td class="num">5</td>
+        <td><code>&lt;button&gt;</code> Disable subtitlesEnable subtitles</td>
+        <td>yes</td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">6</td>
+        <td><code>&lt;button&gt;</code> Settings</td>
+        <td>yes</td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">7</td>
+        <td><code>&lt;button&gt;</code> Non-FullscreenFullscreen</td>
+        <td>yes</td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">8</td>
+        <td><code>&lt;button&gt;</code> I like this!</td>
+        <td>yes</td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">9</td>
+        <td><code>&lt;button&gt;</code> Comment</td>
+        <td>yes</td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">10</td>
+        <td><code>&lt;button&gt;</code> I'm Confused or Dislike</td>
+        <td>yes</td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">11</td>
+        <td><code>&lt;button&gt;</code> JW</td>
+        <td>yes</td>
+        <td>detected</td>
+      </tr>
+      <tr>
+        <td class="num">12</td>
+        <td><code>&lt;button&gt;</code> Invite</td>
+        <td>yes</td>
+        <td>inconclusive</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="method">
+  <h2 class="sec">Method &amp; limits</h2>
+  <div class="finding">
+    <p>Headless Chromium (Playwright) loaded <a href="https://play.goconsensus.com/be2376b21">https://play.goconsensus.com/be2376b21</a> at 1440×900 with a 2× pixel ratio. axe-core 4.12.1 ran against <code>WCAG 2.1 A/AA + axe best practices</code> on each screen. For every failure the element was scrolled into view, ringed, and captured with 48px of surrounding context. A separate pass tabbed up to 24 stops per screen.</p>
+    <p><strong>Excluded.</strong> OneTrust cookie banner / preference center nodes were excluded from axe so the report reflects Consensus Demo Player UI, not the CMP vendor.</p>
+    <p><strong>Limits.</strong> Guest “I’m new here” is blocked (“Sharing restricted for this demo”), so the lead form and Request Access path were not audited end-to-end. Invite, Comment, Settings menus, and caption tracks need a VoiceOver/NVDA pass. Focus-indicator visibility and some contrast on media are inconclusive from automation alone.</p>
+    <p><strong>Re-run.</strong> <code>node .cursor/a11y-audit/run-player-audit.cjs &amp;&amp; node .cursor/a11y-audit/build-player-report.cjs</code></p>
+  </div>
+</section>
+
+<footer>Generated from a live audit of <a href="https://play.goconsensus.com/be2376b21">https://play.goconsensus.com/be2376b21</a> · Consensus Demo Player · 8/11/2026, 7:57:26 PM</footer>
+</main>
+</div>
+</body>
+</html>

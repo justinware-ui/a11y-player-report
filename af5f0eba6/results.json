@@ -1,0 +1,1284 @@
+{
+  "app": "Consensus Demo Player",
+  "demoSlug": "af5f0eba6",
+  "demoLabel": "Dylan Standard personalized with tours",
+  "url": "https://play.goconsensus.com/af5f0eba6",
+  "generatedAt": "2026-08-12T00:55:37.711Z",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "axeVersion": "4.12.1",
+  "standard": "WCAG 2.1 A/AA + axe best practices",
+  "states": [
+    {
+      "id": "identity-cookies",
+      "title": "Identity screen — cookie banner open",
+      "note": "First paint with the OneTrust consent dialog over the “who are you” identity picker.",
+      "full": "shots/identity-cookies-full.png",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/color-contrast?application=axeAPI",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "total": 17,
+          "nodes": [
+            {
+              "selector": "h1 > span:nth-child(1)",
+              "html": "<span>Personalized demo for</span>",
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.02 (foreground color: #eeeeee, background color: #a9a9a9, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1",
+              "impact": "serious",
+              "shot": "shots/identity-cookies-color-contrast-1.png"
+            },
+            {
+              "selector": ".src-widgets-cover-ui--organization-KHxBg",
+              "html": "<span class=\"src-widgets-cover-ui--organization-KHxBg\" data-testid=\"organization name\">Goconsensus</span>",
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.35 (foreground color: #ffffff, background color: #a9a9a9, font size: 21.0pt (28px), font weight: normal). Expected contrast ratio of 3:1",
+              "impact": "serious",
+              "shot": "shots/identity-cookies-color-contrast-2.png"
+            },
+            {
+              "selector": ".src-widgets-legitimate-interest-ui--legitimate-Omr\\+f",
+              "html": "<div class=\"src-widgets-legitimate-interest-ui--legitimate-Omr+f src-widgets-cover-ui--legal-statement-sEr+-\">",
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 1.73 (foreground color: #dddddd, background color: #a9a9a9, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1",
+              "impact": "serious",
+              "shot": "shots/identity-cookies-color-contrast-3.png"
+            },
+            {
+              "selector": "a[href$=\"privacy\"]",
+              "html": "<a class=\"src-widgets-cover-ui--link-PqMi4 src-shared-ui-link--root-ieCvT\" href=\"http://goconsensus.com/privacy\" rel=\"nofollow noopener noreferrer\" target=\"_blank\" data-testid=\"demo footer link\">Z inc Privacy Policy</a>",
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.35 (foreground color: #ffffff, background color: #a9a9a9, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1",
+              "impact": "serious",
+              "shot": "shots/identity-cookies-color-contrast-4.png"
+            },
+            {
+              "selector": "a[href$=\"terms\"]",
+              "html": "<a class=\"src-widgets-cover-ui--link-PqMi4 src-shared-ui-link--root-ieCvT\" href=\"http://goconsensus.com/terms\" rel=\"nofollow noopener noreferrer\" target=\"_blank\" data-testid=\"demo footer link\">Terms of Service</a>",
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.35 (foreground color: #ffffff, background color: #a9a9a9, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1",
+              "impact": "serious",
+              "shot": "shots/identity-cookies-color-contrast-5.png"
+            }
+          ]
+        },
+        {
+          "id": "label",
+          "impact": "critical",
+          "help": "Form elements must have labels",
+          "description": "Ensure every form element has a label",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/label?application=axeAPI",
+          "tags": [
+            "cat.forms",
+            "wcag2a",
+            "wcag412",
+            "section508",
+            "section508.22.n",
+            "TTv5",
+            "TT5.c",
+            "EN-301-549",
+            "EN-9.4.1.2",
+            "ACT",
+            "RGAAv4",
+            "RGAA-11.1.1"
+          ],
+          "total": 1,
+          "nodes": [
+            {
+              "selector": ".src-shared-ui-switch--native-control-IbSfs",
+              "html": "<input type=\"checkbox\" class=\"src-shared-ui-switch--native-control-IbSfs\" data-testid=\"optin toggle\" style=\"\">",
+              "failureSummary": "Fix any of the following:\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element has no placeholder attribute\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\"",
+              "impact": "critical",
+              "shot": null
+            }
+          ]
+        },
+        {
+          "id": "region",
+          "impact": "moderate",
+          "help": "All page content should be contained by landmarks",
+          "description": "Ensure all page content is contained by landmarks",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/region?application=axeAPI",
+          "tags": [
+            "cat.keyboard",
+            "best-practice",
+            "RGAAv4",
+            "RGAA-9.2.1"
+          ],
+          "total": 5,
+          "nodes": [
+            {
+              "selector": "div[data-side=\"left\"]",
+              "html": "<div class=\"src-shared-ui-transition-ui-transition--root-zp0yz\" data-phase=\"entered\" data-side=\"left\" data-transition=\"fade-in-center-out-left\" data-width=\"half\">",
+              "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks",
+              "impact": "moderate",
+              "shot": "shots/identity-cookies-region-1.png"
+            },
+            {
+              "selector": ".src-shared-ui-avatar--avatar-s0qid",
+              "html": "<div data-testid=\"contact avatar\" class=\"src-shared-ui-avatar--avatar-s0qid undefined src-shared-ui-avatar--large-jL18w src-widgets-contact-description-ui--avatar-c-Nlk\"><div>JW</div></div>",
+              "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks",
+              "impact": "moderate",
+              "shot": "shots/identity-cookies-region-2.png"
+            },
+            {
+              "selector": ".src-widgets-contact-description-ui--full-name-yspc3",
+              "html": "<span class=\"src-widgets-contact-description-ui--full-name-yspc3\" data-is-vertical=\"false\" data-testid=\"contact info fullname\">Justin Ware</span>",
+              "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks",
+              "impact": "moderate",
+              "shot": "shots/identity-cookies-region-3.png"
+            },
+            {
+              "selector": ".src-shared-ui-message-balloon--inner-d6GlH",
+              "html": "<div class=\"src-shared-ui-message-balloon--inner-d6GlH\" data-testid=\"representative card message\" style=\"background-color: var(--color-neutral-0);\">",
+              "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks",
+              "impact": "moderate",
+              "shot": "shots/identity-cookies-region-4.png"
+            },
+            {
+              "selector": ".src-screens-way-ui-low-privacy--root-bTNMK",
+              "html": "<div aria-label=\"low privacy identification host\" class=\"src-screens-way-ui-low-privacy--root-bTNMK\">",
+              "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks",
+              "impact": "moderate",
+              "shot": "shots/identity-cookies-region-5.png"
+            }
+          ]
+        }
+      ],
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "impact": "serious",
+          "help": "Elements must only use permitted ARIA attributes",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/aria-prohibited-attr?application=axeAPI",
+          "total": 1
+        }
+      ],
+      "focus": [
+        {
+          "index": 1,
+          "tag": "button",
+          "label": "Contact me",
+          "hasName": true,
+          "visibleFocus": true
+        },
+        {
+          "index": 2,
+          "tag": "button",
+          "label": "I'm new here",
+          "hasName": true,
+          "visibleFocus": true
+        },
+        {
+          "index": 3,
+          "tag": "button",
+          "label": "Justin Ware",
+          "hasName": true,
+          "visibleFocus": true
+        },
+        {
+          "index": 4,
+          "tag": "button",
+          "label": "Test User",
+          "hasName": true,
+          "visibleFocus": true
+        },
+        {
+          "index": 5,
+          "tag": "div",
+          "label": "(no accessible name)",
+          "hasName": false,
+          "visibleFocus": true
+        },
+        {
+          "index": 6,
+          "tag": "input",
+          "label": "(no accessible name)",
+          "hasName": false,
+          "visibleFocus": false
+        }
+      ],
+      "theme": [],
+      "ratingControls": [],
+      "bodyTextSample": "Personalized demo for\nGoconsensus\nThis is a legal statement describing Opt-in & Legitimate InterestThis is a legal statement describing Opt-in & Legitimate InterestThis is a legal statement describing Opt-in & Legitimate InterestThgitimate Interesgitimate Interesgitimate Interesgitimate Interesgitimate Interesgitimate Interesgit\nZ inc Privacy Policy\nTerms of Service\nZ inc Partners\nCopyright Z inc 2023\nPowered by\nConsensus\nJW\nJustin Ware\nContact me\nHi, I'm Justin.\nTell me who you are to get start"
+    },
+    {
+      "id": "identity",
+      "title": "Identity screen — viewer picker",
+      "note": "After accepting cookies: “I’m new here” / named viewers, Contact me, Opt In toggle, legal footer.",
+      "full": "shots/identity-full.png",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/color-contrast?application=axeAPI",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "total": 14,
+          "nodes": [
+            {
+              "selector": "h1 > span:nth-child(1)",
+              "html": "<span>Personalized demo for</span>",
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.02 (foreground color: #eeeeee, background color: #a9a9a9, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1",
+              "impact": "serious",
+              "shot": "shots/identity-color-contrast-1.png"
+            },
+            {
+              "selector": ".src-widgets-cover-ui--organization-KHxBg",
+              "html": "<span class=\"src-widgets-cover-ui--organization-KHxBg\" data-testid=\"organization name\">Goconsensus</span>",
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.35 (foreground color: #ffffff, background color: #a9a9a9, font size: 21.0pt (28px), font weight: normal). Expected contrast ratio of 3:1",
+              "impact": "serious",
+              "shot": "shots/identity-color-contrast-2.png"
+            },
+            {
+              "selector": ".src-widgets-legitimate-interest-ui--legitimate-Omr\\+f",
+              "html": "<div class=\"src-widgets-legitimate-interest-ui--legitimate-Omr+f src-widgets-cover-ui--legal-statement-sEr+-\">",
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 1.73 (foreground color: #dddddd, background color: #a9a9a9, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1",
+              "impact": "serious",
+              "shot": "shots/identity-color-contrast-3.png"
+            },
+            {
+              "selector": "a[href$=\"privacy\"]",
+              "html": "<a class=\"src-widgets-cover-ui--link-PqMi4 src-shared-ui-link--root-ieCvT\" href=\"http://goconsensus.com/privacy\" rel=\"nofollow noopener noreferrer\" target=\"_blank\" data-testid=\"demo footer link\">Z inc Privacy Policy</a>",
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.35 (foreground color: #ffffff, background color: #a9a9a9, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1",
+              "impact": "serious",
+              "shot": "shots/identity-color-contrast-4.png"
+            },
+            {
+              "selector": "a[href$=\"terms\"]",
+              "html": "<a class=\"src-widgets-cover-ui--link-PqMi4 src-shared-ui-link--root-ieCvT\" href=\"http://goconsensus.com/terms\" rel=\"nofollow noopener noreferrer\" target=\"_blank\" data-testid=\"demo footer link\">Terms of Service</a>",
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.35 (foreground color: #ffffff, background color: #a9a9a9, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1",
+              "impact": "serious",
+              "shot": "shots/identity-color-contrast-5.png"
+            }
+          ]
+        },
+        {
+          "id": "label",
+          "impact": "critical",
+          "help": "Form elements must have labels",
+          "description": "Ensure every form element has a label",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/label?application=axeAPI",
+          "tags": [
+            "cat.forms",
+            "wcag2a",
+            "wcag412",
+            "section508",
+            "section508.22.n",
+            "TTv5",
+            "TT5.c",
+            "EN-301-549",
+            "EN-9.4.1.2",
+            "ACT",
+            "RGAAv4",
+            "RGAA-11.1.1"
+          ],
+          "total": 1,
+          "nodes": [
+            {
+              "selector": ".src-shared-ui-switch--native-control-IbSfs",
+              "html": "<input type=\"checkbox\" class=\"src-shared-ui-switch--native-control-IbSfs\" data-testid=\"optin toggle\" style=\"\">",
+              "failureSummary": "Fix any of the following:\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element has no placeholder attribute\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\"",
+              "impact": "critical",
+              "shot": null
+            }
+          ]
+        },
+        {
+          "id": "landmark-one-main",
+          "impact": "moderate",
+          "help": "Document should have one main landmark",
+          "description": "Ensure the document has a main landmark",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/landmark-one-main?application=axeAPI",
+          "tags": [
+            "cat.semantics",
+            "best-practice"
+          ],
+          "total": 1,
+          "nodes": [
+            {
+              "selector": "html",
+              "html": "<html lang=\"en\" class=\"js-focus-visible\" data-js-focus-visibl...=\"\" style=\"--color-attention-50...\">",
+              "failureSummary": "Fix all of the following:\n  Document does not have a main landmark",
+              "impact": "moderate",
+              "shot": "shots/identity-landmark-one-main-1.png"
+            }
+          ]
+        },
+        {
+          "id": "region",
+          "impact": "moderate",
+          "help": "All page content should be contained by landmarks",
+          "description": "Ensure all page content is contained by landmarks",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/region?application=axeAPI",
+          "tags": [
+            "cat.keyboard",
+            "best-practice",
+            "RGAAv4",
+            "RGAA-9.2.1"
+          ],
+          "total": 6,
+          "nodes": [
+            {
+              "selector": "div[data-side=\"left\"]",
+              "html": "<div class=\"src-shared-ui-transition-ui-transition--root-zp0yz\" data-phase=\"entered\" data-side=\"left\" data-transition=\"fade-in-center-out-left\" data-width=\"half\">",
+              "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks",
+              "impact": "moderate",
+              "shot": "shots/identity-region-1.png"
+            },
+            {
+              "selector": ".src-shared-ui-avatar--avatar-s0qid",
+              "html": "<div data-testid=\"contact avatar\" class=\"src-shared-ui-avatar--avatar-s0qid undefined src-shared-ui-avatar--large-jL18w src-widgets-contact-description-ui--avatar-c-Nlk\"><div>JW</div></div>",
+              "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks",
+              "impact": "moderate",
+              "shot": "shots/identity-region-2.png"
+            },
+            {
+              "selector": ".src-widgets-contact-description-ui--full-name-yspc3",
+              "html": "<span class=\"src-widgets-contact-description-ui--full-name-yspc3\" data-is-vertical=\"false\" data-testid=\"contact info fullname\">Justin Ware</span>",
+              "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks",
+              "impact": "moderate",
+              "shot": "shots/identity-region-3.png"
+            },
+            {
+              "selector": ".src-shared-ui-message-balloon--inner-d6GlH",
+              "html": "<div class=\"src-shared-ui-message-balloon--inner-d6GlH\" data-testid=\"representative card message\" style=\"background-color: var(--color-neutral-0);\">",
+              "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks",
+              "impact": "moderate",
+              "shot": "shots/identity-region-4.png"
+            },
+            {
+              "selector": ".src-screens-way-ui-low-privacy--root-bTNMK",
+              "html": "<div aria-label=\"low privacy identification host\" class=\"src-screens-way-ui-low-privacy--root-bTNMK\">",
+              "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks",
+              "impact": "moderate",
+              "shot": "shots/identity-region-5.png"
+            }
+          ]
+        }
+      ],
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "impact": "serious",
+          "help": "Elements must only use permitted ARIA attributes",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/aria-prohibited-attr?application=axeAPI",
+          "total": 1
+        }
+      ],
+      "focus": [
+        {
+          "index": 1,
+          "tag": "button",
+          "label": "(no accessible name)",
+          "hasName": false,
+          "visibleFocus": true
+        },
+        {
+          "index": 2,
+          "tag": "a",
+          "label": "Z inc Privacy Policy",
+          "hasName": true,
+          "visibleFocus": true
+        },
+        {
+          "index": 3,
+          "tag": "a",
+          "label": "Terms of Service",
+          "hasName": true,
+          "visibleFocus": true
+        },
+        {
+          "index": 4,
+          "tag": "a",
+          "label": "Z inc Partners",
+          "hasName": true,
+          "visibleFocus": true
+        },
+        {
+          "index": 5,
+          "tag": "a",
+          "label": "Consensus",
+          "hasName": true,
+          "visibleFocus": true
+        },
+        {
+          "index": 6,
+          "tag": "button",
+          "label": "Contact me",
+          "hasName": true,
+          "visibleFocus": true
+        },
+        {
+          "index": 7,
+          "tag": "button",
+          "label": "I'm new here",
+          "hasName": true,
+          "visibleFocus": true
+        },
+        {
+          "index": 8,
+          "tag": "button",
+          "label": "Justin Ware",
+          "hasName": true,
+          "visibleFocus": true
+        },
+        {
+          "index": 9,
+          "tag": "button",
+          "label": "Test User",
+          "hasName": true,
+          "visibleFocus": true
+        },
+        {
+          "index": 10,
+          "tag": "div",
+          "label": "(no accessible name)",
+          "hasName": false,
+          "visibleFocus": true
+        },
+        {
+          "index": 11,
+          "tag": "input",
+          "label": "(no accessible name)",
+          "hasName": false,
+          "visibleFocus": false
+        }
+      ],
+      "theme": [
+        {
+          "label": "Contact me",
+          "color": "rgb(169, 169, 169)",
+          "background": "rgb(240, 240, 240)",
+          "ratio": 2.06,
+          "passesAA": false
+        },
+        {
+          "label": "I'm new here",
+          "color": "rgb(169, 169, 169)",
+          "background": "rgb(240, 240, 240)",
+          "ratio": 2.06,
+          "passesAA": false
+        },
+        {
+          "label": "Justin Ware",
+          "color": "rgb(255, 255, 255)",
+          "background": "rgb(169, 169, 169)",
+          "ratio": 2.35,
+          "passesAA": false
+        },
+        {
+          "label": "Test User",
+          "color": "rgb(255, 255, 255)",
+          "background": "rgb(169, 169, 169)",
+          "ratio": 2.35,
+          "passesAA": false
+        },
+        {
+          "label": "Policies & Statements",
+          "color": "rgb(169, 169, 169)",
+          "background": "rgb(240, 240, 240)",
+          "ratio": 2.06,
+          "passesAA": false
+        }
+      ],
+      "ratingControls": [
+        {
+          "tag": "input",
+          "type": "checkbox",
+          "role": "",
+          "width": 0,
+          "height": 0,
+          "zeroSize": true,
+          "tabIndex": 0,
+          "name": "",
+          "testid": "optin toggle",
+          "accessibleName": ""
+        }
+      ],
+      "bodyTextSample": "Personalized demo for\nGoconsensus\nThis is a legal statement describing Opt-in & Legitimate InterestThis is a legal statement describing Opt-in & Legitimate InterestThis is a legal statement describing Opt-in & Legitimate InterestThgitimate Interesgitimate Interesgitimate Interesgitimate Interesgitimate Interesgitimate Interesgit\nZ inc Privacy Policy\nTerms of Service\nZ inc Partners\nCopyright Z inc 2023\nPowered by\nConsensus\nJW\nJustin Ware\nContact me\nHi, I'm Justin.\nTell me who you are to get start"
+    },
+    {
+      "id": "opt-in",
+      "title": "Opt-in consent modal",
+      "note": "Consent gate shown after selecting a known viewer.",
+      "full": "shots/opt-in-full.png",
+      "violations": [
+        {
+          "id": "aria-dialog-name",
+          "impact": "serious",
+          "help": "ARIA dialog and alertdialog nodes should have an accessible name",
+          "description": "Ensure every ARIA dialog and alertdialog node has an accessible name",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/aria-dialog-name?application=axeAPI",
+          "tags": [
+            "cat.aria",
+            "best-practice"
+          ],
+          "total": 1,
+          "nodes": [
+            {
+              "selector": ".src-shared-ui-modal--root-1B3QF",
+              "html": "<div class=\"src-shared-ui-modal--root-1B3QF src-shared-ui-modal--small-UqmWn src-shared-ui-modal--backdrop-dgZ6r src-shared-ui-modal--centered-NEz9U src-shared-ui-modal--entered-yMKUE\" aria-modal=\"true\" role=\"dialog\">",
+              "failureSummary": "Fix any of the following:\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute",
+              "impact": "serious",
+              "shot": "shots/opt-in-aria-dialog-name-1.png"
+            }
+          ]
+        },
+        {
+          "id": "aria-progressbar-name",
+          "impact": "serious",
+          "help": "ARIA progressbar nodes must have an accessible name",
+          "description": "Ensure every ARIA progressbar node has an accessible name",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/aria-progressbar-name?application=axeAPI",
+          "tags": [
+            "cat.aria",
+            "wcag2a",
+            "wcag111",
+            "EN-301-549",
+            "EN-9.1.1.1",
+            "RGAAv4",
+            "RGAA-11.1.1"
+          ],
+          "total": 1,
+          "nodes": [
+            {
+              "selector": ".src-shared-ui-button--spinner-gIVnT",
+              "html": "<div role=\"progressbar\" class=\"src-shared-ui-button--spinner-gIVnT\">",
+              "failureSummary": "Fix any of the following:\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute",
+              "impact": "serious",
+              "shot": "shots/opt-in-aria-progressbar-name-1.png"
+            }
+          ]
+        },
+        {
+          "id": "button-name",
+          "impact": "critical",
+          "help": "Buttons must have discernible text",
+          "description": "Ensure buttons have discernible text",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/button-name?application=axeAPI",
+          "tags": [
+            "cat.name-role-value",
+            "wcag2a",
+            "wcag412",
+            "section508",
+            "section508.22.a",
+            "TTv5",
+            "TT6.a",
+            "EN-301-549",
+            "EN-9.4.1.2",
+            "ACT",
+            "RGAAv4",
+            "RGAA-11.9.1"
+          ],
+          "total": 1,
+          "nodes": [
+            {
+              "selector": ".src-shared-ui-modal-header--close-y1Mrg",
+              "html": "<button class=\"src-shared-ui-modal-header--close-y1Mrg\" data-testid=\"modal-close-button\" type=\"button\">",
+              "failureSummary": "Fix any of the following:\n  Element does not have inner text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\"",
+              "impact": "critical",
+              "shot": "shots/opt-in-button-name-1.png"
+            }
+          ]
+        },
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/color-contrast?application=axeAPI",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "total": 13,
+          "nodes": [
+            {
+              "selector": "h1 > span:nth-child(1)",
+              "html": "<span>Personalized demo for</span>",
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.02 (foreground color: #eeeeee, background color: #a9a9a9, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1",
+              "impact": "serious",
+              "shot": "shots/opt-in-color-contrast-1.png"
+            },
+            {
+              "selector": ".src-widgets-cover-ui--organization-KHxBg",
+              "html": "<span class=\"src-widgets-cover-ui--organization-KHxBg\" data-testid=\"organization name\">Goconsensus</span>",
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.35 (foreground color: #ffffff, background color: #a9a9a9, font size: 21.0pt (28px), font weight: normal). Expected contrast ratio of 3:1",
+              "impact": "serious",
+              "shot": "shots/opt-in-color-contrast-2.png"
+            },
+            {
+              "selector": ".src-widgets-legitimate-interest-ui--legitimate-Omr\\+f",
+              "html": "<div class=\"src-widgets-legitimate-interest-ui--legitimate-Omr+f src-widgets-cover-ui--legal-statement-sEr+-\">",
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 1.73 (foreground color: #dddddd, background color: #a9a9a9, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1",
+              "impact": "serious",
+              "shot": "shots/opt-in-color-contrast-3.png"
+            },
+            {
+              "selector": "a[href$=\"privacy\"]",
+              "html": "<a class=\"src-widgets-cover-ui--link-PqMi4 src-shared-ui-link--root-ieCvT\" href=\"http://goconsensus.com/privacy\" rel=\"nofollow noopener noreferrer\" target=\"_blank\" data-testid=\"demo footer link\">Z inc Privacy Policy</a>",
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.35 (foreground color: #ffffff, background color: #a9a9a9, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1",
+              "impact": "serious",
+              "shot": "shots/opt-in-color-contrast-4.png"
+            },
+            {
+              "selector": "a[href$=\"terms\"]",
+              "html": "<a class=\"src-widgets-cover-ui--link-PqMi4 src-shared-ui-link--root-ieCvT\" href=\"http://goconsensus.com/terms\" rel=\"nofollow noopener noreferrer\" target=\"_blank\" data-testid=\"demo footer link\">Terms of Service</a>",
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.35 (foreground color: #ffffff, background color: #a9a9a9, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1",
+              "impact": "serious",
+              "shot": "shots/opt-in-color-contrast-5.png"
+            }
+          ]
+        },
+        {
+          "id": "heading-order",
+          "impact": "moderate",
+          "help": "Heading levels should only increase by one",
+          "description": "Ensure the order of headings is semantically correct",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/heading-order?application=axeAPI",
+          "tags": [
+            "cat.semantics",
+            "best-practice"
+          ],
+          "total": 1,
+          "nodes": [
+            {
+              "selector": "h5",
+              "html": "<h5>Opt In</h5>",
+              "failureSummary": "Fix any of the following:\n  Heading order invalid",
+              "impact": "moderate",
+              "shot": "shots/opt-in-heading-order-1.png"
+            }
+          ]
+        },
+        {
+          "id": "label",
+          "impact": "critical",
+          "help": "Form elements must have labels",
+          "description": "Ensure every form element has a label",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/label?application=axeAPI",
+          "tags": [
+            "cat.forms",
+            "wcag2a",
+            "wcag412",
+            "section508",
+            "section508.22.n",
+            "TTv5",
+            "TT5.c",
+            "EN-301-549",
+            "EN-9.4.1.2",
+            "ACT",
+            "RGAAv4",
+            "RGAA-11.1.1"
+          ],
+          "total": 1,
+          "nodes": [
+            {
+              "selector": ".src-shared-ui-switch--native-control-IbSfs",
+              "html": "<input type=\"checkbox\" class=\"src-shared-ui-switch--native-control-IbSfs\" data-testid=\"optin toggle\" style=\"\">",
+              "failureSummary": "Fix any of the following:\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element has no placeholder attribute\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\"",
+              "impact": "critical",
+              "shot": null
+            }
+          ]
+        },
+        {
+          "id": "landmark-no-duplicate-contentinfo",
+          "impact": "moderate",
+          "help": "Document should not have more than one contentinfo landmark",
+          "description": "Ensure the document has at most one contentinfo landmark",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/landmark-no-duplicate-contentinfo?application=axeAPI",
+          "tags": [
+            "cat.semantics",
+            "best-practice"
+          ],
+          "total": 1,
+          "nodes": [
+            {
+              "selector": ".src-shared-ui-sticky-footer--root-mbU9B",
+              "html": "<footer class=\"src-shared-ui-sticky-footer--root-mbU9B\">",
+              "failureSummary": "Fix any of the following:\n  Document has more than one contentinfo landmark",
+              "impact": "moderate",
+              "shot": "shots/opt-in-landmark-no-duplicate-contentinfo-1.png"
+            }
+          ]
+        },
+        {
+          "id": "landmark-unique",
+          "impact": "moderate",
+          "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
+          "description": "Ensure landmarks are unique",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/landmark-unique?application=axeAPI",
+          "tags": [
+            "cat.semantics",
+            "best-practice"
+          ],
+          "total": 1,
+          "nodes": [
+            {
+              "selector": ".src-shared-ui-sticky-footer--root-mbU9B",
+              "html": "<footer class=\"src-shared-ui-sticky-footer--root-mbU9B\">",
+              "failureSummary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable",
+              "impact": "moderate",
+              "shot": "shots/opt-in-landmark-unique-1.png"
+            }
+          ]
+        },
+        {
+          "id": "region",
+          "impact": "moderate",
+          "help": "All page content should be contained by landmarks",
+          "description": "Ensure all page content is contained by landmarks",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/region?application=axeAPI",
+          "tags": [
+            "cat.keyboard",
+            "best-practice",
+            "RGAAv4",
+            "RGAA-9.2.1"
+          ],
+          "total": 5,
+          "nodes": [
+            {
+              "selector": "div[data-side=\"left\"]",
+              "html": "<div class=\"src-shared-ui-transition-ui-transition--root-zp0yz\" data-phase=\"entered\" data-side=\"left\" data-transition=\"fade-in-center-out-left\" data-width=\"half\">",
+              "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks",
+              "impact": "moderate",
+              "shot": "shots/opt-in-region-1.png"
+            },
+            {
+              "selector": ".src-shared-ui-avatar--avatar-s0qid",
+              "html": "<div data-testid=\"contact avatar\" class=\"src-shared-ui-avatar--avatar-s0qid undefined src-shared-ui-avatar--large-jL18w src-widgets-contact-description-ui--avatar-c-Nlk\"><div>JW</div></div>",
+              "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks",
+              "impact": "moderate",
+              "shot": "shots/opt-in-region-2.png"
+            },
+            {
+              "selector": ".src-widgets-contact-description-ui--full-name-yspc3",
+              "html": "<span class=\"src-widgets-contact-description-ui--full-name-yspc3\" data-is-vertical=\"false\" data-testid=\"contact info fullname\">Justin Ware</span>",
+              "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks",
+              "impact": "moderate",
+              "shot": "shots/opt-in-region-3.png"
+            },
+            {
+              "selector": ".src-shared-ui-message-balloon--inner-d6GlH",
+              "html": "<div class=\"src-shared-ui-message-balloon--inner-d6GlH\" data-testid=\"representative card message\" style=\"background-color: var(--color-neutral-0);\">",
+              "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks",
+              "impact": "moderate",
+              "shot": "shots/opt-in-region-4.png"
+            },
+            {
+              "selector": ".src-screens-way-ui-low-privacy--root-bTNMK",
+              "html": "<div aria-label=\"low privacy identification host\" class=\"src-screens-way-ui-low-privacy--root-bTNMK\">",
+              "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks",
+              "impact": "moderate",
+              "shot": "shots/opt-in-region-5.png"
+            }
+          ]
+        }
+      ],
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "impact": "serious",
+          "help": "Elements must only use permitted ARIA attributes",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/aria-prohibited-attr?application=axeAPI",
+          "total": 1
+        },
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/color-contrast?application=axeAPI",
+          "total": 2
+        }
+      ],
+      "focus": [
+        {
+          "index": 1,
+          "tag": "button",
+          "label": "Opt-in and Continue",
+          "hasName": true,
+          "visibleFocus": true
+        },
+        {
+          "index": 2,
+          "tag": "button",
+          "label": "(no accessible name)",
+          "hasName": false,
+          "visibleFocus": true
+        },
+        {
+          "index": 3,
+          "tag": "button",
+          "label": "Opt-in and Continue",
+          "hasName": true,
+          "visibleFocus": true
+        },
+        {
+          "index": 4,
+          "tag": "button",
+          "label": "(no accessible name)",
+          "hasName": false,
+          "visibleFocus": true
+        },
+        {
+          "index": 5,
+          "tag": "button",
+          "label": "Opt-in and Continue",
+          "hasName": true,
+          "visibleFocus": true
+        },
+        {
+          "index": 6,
+          "tag": "button",
+          "label": "(no accessible name)",
+          "hasName": false,
+          "visibleFocus": true
+        },
+        {
+          "index": 7,
+          "tag": "button",
+          "label": "Opt-in and Continue",
+          "hasName": true,
+          "visibleFocus": true
+        },
+        {
+          "index": 8,
+          "tag": "button",
+          "label": "(no accessible name)",
+          "hasName": false,
+          "visibleFocus": true
+        },
+        {
+          "index": 9,
+          "tag": "button",
+          "label": "Opt-in and Continue",
+          "hasName": true,
+          "visibleFocus": true
+        },
+        {
+          "index": 10,
+          "tag": "button",
+          "label": "(no accessible name)",
+          "hasName": false,
+          "visibleFocus": true
+        },
+        {
+          "index": 11,
+          "tag": "button",
+          "label": "Opt-in and Continue",
+          "hasName": true,
+          "visibleFocus": true
+        },
+        {
+          "index": 12,
+          "tag": "button",
+          "label": "(no accessible name)",
+          "hasName": false,
+          "visibleFocus": true
+        },
+        {
+          "index": 13,
+          "tag": "button",
+          "label": "Opt-in and Continue",
+          "hasName": true,
+          "visibleFocus": true
+        },
+        {
+          "index": 14,
+          "tag": "button",
+          "label": "(no accessible name)",
+          "hasName": false,
+          "visibleFocus": true
+        },
+        {
+          "index": 15,
+          "tag": "button",
+          "label": "Opt-in and Continue",
+          "hasName": true,
+          "visibleFocus": true
+        },
+        {
+          "index": 16,
+          "tag": "button",
+          "label": "(no accessible name)",
+          "hasName": false,
+          "visibleFocus": true
+        },
+        {
+          "index": 17,
+          "tag": "button",
+          "label": "Opt-in and Continue",
+          "hasName": true,
+          "visibleFocus": true
+        },
+        {
+          "index": 18,
+          "tag": "button",
+          "label": "(no accessible name)",
+          "hasName": false,
+          "visibleFocus": true
+        },
+        {
+          "index": 19,
+          "tag": "button",
+          "label": "Opt-in and Continue",
+          "hasName": true,
+          "visibleFocus": true
+        },
+        {
+          "index": 20,
+          "tag": "button",
+          "label": "(no accessible name)",
+          "hasName": false,
+          "visibleFocus": true
+        }
+      ],
+      "theme": [],
+      "ratingControls": [],
+      "bodyTextSample": "Personalized demo for\nGoconsensus\nThis is a legal statement describing Opt-in & Legitimate InterestThis is a legal statement describing Opt-in & Legitimate InterestThis is a legal statement describing Opt-in & Legitimate InterestThgitimate Interesgitimate Interesgitimate Interesgitimate Interesgitimate Interesgitimate Interesgit\nZ inc Privacy Policy\nTerms of Service\nZ inc Partners\nCopyright Z inc 2023\nPowered by\nConsensus\nJW\nJustin Ware\nContact me\nHi, I'm Justin.\nTell me who you are to get start"
+    },
+    {
+      "id": "post-continue",
+      "title": "Topic Rating screen",
+      "note": "Topic rating grid (Very / Somewhat / Not important) with Select all controls.",
+      "full": "shots/post-continue-full.png",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/color-contrast?application=axeAPI",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "total": 5,
+          "nodes": [
+            {
+              "selector": ".src-shared-ui-avatar--avatar-s0qid > div",
+              "html": "<div>JW</div>",
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.35 (foreground color: #ffffff, background color: #a9a9a9, font size: 24.0pt (32px), font weight: normal). Expected contrast ratio of 3:1",
+              "impact": "serious",
+              "shot": "shots/post-continue-color-contrast-1.png"
+            },
+            {
+              "selector": ".src-shared-ui-button--ghost-o9lnB",
+              "html": "<button class=\"src-shared-ui-button--button-XQoY9 src-shared-ui-button--ghost-o9lnB src-widgets-contact-description-ui--button-uiljk\" type=\"button\" data-testid=\"contact me button\">Contact me</button>",
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.06 (foreground color: #a9a9a9, background color: #f0f0f0, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1",
+              "impact": "serious",
+              "shot": "shots/post-continue-color-contrast-2.png"
+            },
+            {
+              "selector": ".src-screens-broadcast-ui-features-selection-ui-feature-grid--title-GDqqE:nth-child(2) > .src-shared-ui-button--text-huPo3.src-screens-broadcast-ui-features-selection-ui-feature-grid--select-all-WmDXQ.src-shared-ui-button--button-XQoY9",
+              "html": "<button class=\"src-shared-ui-button--button-XQoY9 src-shared-ui-button--text-huPo3 src-screens-broadcast-ui-features-selection-ui-feature-grid--select-all-WmDXQ\" type=\"button\">Select all</button>",
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.06 (foreground color: #a9a9a9, background color: #f0f0f0, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1",
+              "impact": "serious",
+              "shot": "shots/post-continue-color-contrast-3.png"
+            },
+            {
+              "selector": ".src-screens-broadcast-ui-features-selection-ui-feature-grid--title-GDqqE:nth-child(3) > .src-shared-ui-button--text-huPo3.src-screens-broadcast-ui-features-selection-ui-feature-grid--select-all-WmDXQ.src-shared-ui-button--button-XQoY9",
+              "html": "<button class=\"src-shared-ui-button--button-XQoY9 src-shared-ui-button--text-huPo3 src-screens-broadcast-ui-features-selection-ui-feature-grid--select-all-WmDXQ\" type=\"button\">Select all</button>",
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.06 (foreground color: #a9a9a9, background color: #f0f0f0, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1",
+              "impact": "serious",
+              "shot": "shots/post-continue-color-contrast-4.png"
+            },
+            {
+              "selector": ".src-screens-broadcast-ui-features-selection-ui-feature-grid--title-GDqqE:nth-child(4) > .src-shared-ui-button--text-huPo3.src-screens-broadcast-ui-features-selection-ui-feature-grid--select-all-WmDXQ.src-shared-ui-button--button-XQoY9",
+              "html": "<button class=\"src-shared-ui-button--button-XQoY9 src-shared-ui-button--text-huPo3 src-screens-broadcast-ui-features-selection-ui-feature-grid--select-all-WmDXQ\" type=\"button\">Select all</button>",
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.06 (foreground color: #a9a9a9, background color: #f0f0f0, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1",
+              "impact": "serious",
+              "shot": "shots/post-continue-color-contrast-5.png"
+            }
+          ]
+        },
+        {
+          "id": "region",
+          "impact": "moderate",
+          "help": "All page content should be contained by landmarks",
+          "description": "Ensure all page content is contained by landmarks",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/region?application=axeAPI",
+          "tags": [
+            "cat.keyboard",
+            "best-practice",
+            "RGAAv4",
+            "RGAA-9.2.1"
+          ],
+          "total": 3,
+          "nodes": [
+            {
+              "selector": ".src-widgets-logo-sidebar--root-wtw88",
+              "html": "<div class=\"src-widgets-logo-sidebar--root-wtw88\"><img src=\"https://play.goconsensus.com/api/cl/media/file/21a9bf14-7537-4098-bacd-142405c94fbd\" loading=\"lazy\" class=\"src-shared-ui-image--loaded-0xNyH src-shared-ui-image--loading-ERCDK\" alt=\"Logo\"></div>",
+              "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks",
+              "impact": "moderate",
+              "shot": "shots/post-continue-region-1.png"
+            },
+            {
+              "selector": ".src-widgets-sidebar-ui-header--root-zK61S",
+              "html": "<div class=\"src-widgets-sidebar-ui-header--root-zK61S\"><span class=\"src-widgets-sidebar-ui-header--heading-ypKBA\">My demo</span><div class=\"src-shared-ui-topics-info--info-EFFWf\">0 topics | 0 min</div></div>",
+              "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks",
+              "impact": "moderate",
+              "shot": "shots/post-continue-region-2.png"
+            },
+            {
+              "selector": ".src-widgets-sidebar-ui-demo-content--placeholder-JjwO6 > div",
+              "html": "<div>Rate the topics on the left to build your demo</div>",
+              "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks",
+              "impact": "moderate",
+              "shot": "shots/post-continue-region-3.png"
+            }
+          ]
+        }
+      ],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/color-contrast?application=axeAPI",
+          "total": 1
+        }
+      ],
+      "focus": [
+        {
+          "index": 1,
+          "tag": "button",
+          "label": "Contact me",
+          "hasName": true,
+          "visibleFocus": true
+        },
+        {
+          "index": 2,
+          "tag": "button",
+          "label": "Select all",
+          "hasName": true,
+          "visibleFocus": false
+        },
+        {
+          "index": 3,
+          "tag": "button",
+          "label": "Select all",
+          "hasName": true,
+          "visibleFocus": false
+        },
+        {
+          "index": 4,
+          "tag": "button",
+          "label": "Select all",
+          "hasName": true,
+          "visibleFocus": false
+        },
+        {
+          "index": 5,
+          "tag": "div",
+          "label": "(no accessible name)",
+          "hasName": false,
+          "visibleFocus": true
+        },
+        {
+          "index": 6,
+          "tag": "div",
+          "label": "(no accessible name)",
+          "hasName": false,
+          "visibleFocus": true
+        },
+        {
+          "index": 7,
+          "tag": "button",
+          "label": "Now Playing",
+          "hasName": true,
+          "visibleFocus": true
+        },
+        {
+          "index": 8,
+          "tag": "button",
+          "label": "All Demos2",
+          "hasName": true,
+          "visibleFocus": true
+        }
+      ],
+      "theme": [
+        {
+          "label": "Contact me",
+          "color": "rgb(169, 169, 169)",
+          "background": "rgb(240, 240, 240)",
+          "ratio": 2.06,
+          "passesAA": false
+        },
+        {
+          "label": "Continue",
+          "color": "rgb(255, 255, 255)",
+          "background": "rgb(169, 169, 169)",
+          "ratio": 2.35,
+          "passesAA": false
+        },
+        {
+          "label": "Select all",
+          "color": "rgb(169, 169, 169)",
+          "background": "rgb(240, 240, 240)",
+          "ratio": 2.06,
+          "passesAA": false
+        },
+        {
+          "label": "Select all",
+          "color": "rgb(169, 169, 169)",
+          "background": "rgb(240, 240, 240)",
+          "ratio": 2.06,
+          "passesAA": false
+        },
+        {
+          "label": "Select all",
+          "color": "rgb(169, 169, 169)",
+          "background": "rgb(240, 240, 240)",
+          "ratio": 2.06,
+          "passesAA": false
+        },
+        {
+          "label": "Rate all topics to continue",
+          "color": "rgb(255, 255, 255)",
+          "background": "rgb(169, 169, 169)",
+          "ratio": 2.35,
+          "passesAA": false
+        },
+        {
+          "label": "Now Playing",
+          "color": "rgb(41, 55, 72)",
+          "background": "rgba(151, 151, 151, 0.15)",
+          "ratio": 4.15,
+          "passesAA": false
+        },
+        {
+          "label": "All Demos\n2",
+          "color": "rgb(41, 55, 72)",
+          "background": "rgb(247, 244, 241)",
+          "ratio": 11.05,
+          "passesAA": true
+        },
+        {
+          "label": "Rate all topics to continue",
+          "color": "rgb(255, 255, 255)",
+          "background": "rgb(169, 169, 169)",
+          "ratio": 2.35,
+          "passesAA": false
+        }
+      ],
+      "ratingControls": [
+        {
+          "tag": "input",
+          "type": "checkbox",
+          "role": "",
+          "width": 0,
+          "height": 0,
+          "zeroSize": true,
+          "tabIndex": 0,
+          "name": "da4cbc5f-62f5-486d-a794-b2861ce75b1c",
+          "testid": "",
+          "accessibleName": ""
+        },
+        {
+          "tag": "input",
+          "type": "checkbox",
+          "role": "",
+          "width": 0,
+          "height": 0,
+          "zeroSize": true,
+          "tabIndex": 0,
+          "name": "da4cbc5f-62f5-486d-a794-b2861ce75b1c",
+          "testid": "",
+          "accessibleName": ""
+        },
+        {
+          "tag": "input",
+          "type": "checkbox",
+          "role": "",
+          "width": 0,
+          "height": 0,
+          "zeroSize": true,
+          "tabIndex": 0,
+          "name": "da4cbc5f-62f5-486d-a794-b2861ce75b1c",
+          "testid": "",
+          "accessibleName": ""
+        },
+        {
+          "tag": "input",
+          "type": "checkbox",
+          "role": "",
+          "width": 0,
+          "height": 0,
+          "zeroSize": true,
+          "tabIndex": 0,
+          "name": "b26ca434-12c3-4d0e-8445-9febfabf6a3c",
+          "testid": "",
+          "accessibleName": ""
+        },
+        {
+          "tag": "input",
+          "type": "checkbox",
+          "role": "",
+          "width": 0,
+          "height": 0,
+          "zeroSize": true,
+          "tabIndex": 0,
+          "name": "b26ca434-12c3-4d0e-8445-9febfabf6a3c",
+          "testid": "",
+          "accessibleName": ""
+        },
+        {
+          "tag": "input",
+          "type": "checkbox",
+          "role": "",
+          "width": 0,
+          "height": 0,
+          "zeroSize": true,
+          "tabIndex": 0,
+          "name": "b26ca434-12c3-4d0e-8445-9febfabf6a3c",
+          "testid": "",
+          "accessibleName": ""
+        }
+      ],
+      "bodyTextSample": "JW\nJustin Ware\nContact me\nWelcome, Justin.\nWhat topics are most important to you? Our system will create a demo tailored to your needs.\n\nDylan Standard personalized with tours\n\nTopic\nVery important\nSelect all\nSomewhat important\nSelect all\nNot important\nSelect all\nFeature 1\nFeature 2\nRate all topics to continue\nNow Playing\nAll Demos\n2\nMy demo\n0 topics | 0 min\nRate the topics on the left to build your demo\nRate all topics to continue"
+    }
+  ]
+}

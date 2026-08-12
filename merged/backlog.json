@@ -1,0 +1,210 @@
+{
+  "title": "Consensus Player — Accessibility Fix Backlog",
+  "url": "https://play.goconsensus.com/be2376b21",
+  "generatedAt": "2026-08-12T00:15:00.000Z",
+  "sources": [
+    "Claude: consensus-player-a11y-audit-by-team.md",
+    "Claude: consensus-player-a11y-audit-be2376b21.md",
+    "Cursor: live axe-core + Playwright audit"
+  ],
+  "items": [
+    {
+      "id": "P0-1",
+      "priority": "P0",
+      "severity": "critical",
+      "owner": "Engineering",
+      "pages": ["C"],
+      "title": "Opt-In tooltip stuck open blocks the toggle",
+      "fix": "Dismiss tooltip on blur/Escape/outside-click; fix z-index/hit-testing so it never captures pointer events over the toggle.",
+      "sources": ["claude-by-team"],
+      "shots": []
+    },
+    {
+      "id": "P0-2",
+      "priority": "P0",
+      "severity": "critical",
+      "owner": "Design + Engineering",
+      "pages": ["A"],
+      "title": "Topic-rating checkboxes are 0×0px and skipped by Tab",
+      "fix": "Give inputs real dimensions matching visible icons so they re-enter the Tab sequence.",
+      "sources": ["claude-by-team"],
+      "shots": []
+    },
+    {
+      "id": "P0-3",
+      "priority": "P0",
+      "severity": "critical",
+      "owner": "Design + Engineering",
+      "pages": ["A"],
+      "title": "Topic-rating inputs use checkbox semantics for radio behavior",
+      "fix": "Convert to radiogroup/radio (or native radios) with aria-labels for Very / Somewhat / Not important.",
+      "sources": ["claude-by-team"],
+      "shots": []
+    },
+    {
+      "id": "P0-4",
+      "priority": "P0",
+      "severity": "critical",
+      "owner": "Engineering",
+      "pages": ["C", "Cover", "Shared"],
+      "title": "Modal close (X) has no accessible name",
+      "fix": "Add aria-label=\"Close\" on shared modal-header close component.",
+      "sources": ["claude-by-team", "claude-be2376", "cursor-axe"],
+      "shots": ["shots/opt-in-button-name-1.png"],
+      "axeRules": ["button-name"]
+    },
+    {
+      "id": "P1-1",
+      "priority": "P1",
+      "severity": "serious",
+      "owner": "Engineering",
+      "pages": ["C", "Cover", "Shared"],
+      "title": "Required fields lack required / aria-required",
+      "fix": "Add aria-required=\"true\" (or required) at the shared form-field component.",
+      "sources": ["claude-by-team", "claude-be2376"],
+      "shots": []
+    },
+    {
+      "id": "P1-2",
+      "priority": "P1",
+      "severity": "critical",
+      "owner": "Engineering",
+      "pages": ["C", "Cover"],
+      "title": "Opt-In toggle has no accessible name",
+      "fix": "Associate label via for/id or aria-labelledby pointing at \"Opt In\" text.",
+      "sources": ["claude-by-team", "claude-be2376", "cursor-axe"],
+      "shots": ["shots/cover-full.png", "shots/opt-in-full.png"],
+      "axeRules": ["label"]
+    },
+    {
+      "id": "P1-3",
+      "priority": "P1",
+      "severity": "serious",
+      "owner": "Design + Engineering",
+      "pages": ["Cover", "Shared"],
+      "title": "Corrupted / duplicated legal disclaimer text",
+      "fix": "Fix source copy / template once; re-check contrast after rewrite.",
+      "sources": ["claude-by-team", "claude-be2376", "cursor-axe"],
+      "shots": ["shots/cover-color-contrast-1.png", "shots/cover-cookies-full.png"],
+      "axeRules": ["color-contrast"]
+    },
+    {
+      "id": "P1-4",
+      "priority": "P1",
+      "severity": "serious",
+      "owner": "Design + Engineering",
+      "pages": ["A", "B", "C", "Shared"],
+      "title": "No established labeling pattern for icon-only controls",
+      "fix": "Standardize visible or visually-hidden labels; use reaction bar as reference.",
+      "sources": ["claude-by-team"],
+      "shots": ["shots/player-full.png"]
+    },
+    {
+      "id": "P1-5",
+      "priority": "P1",
+      "severity": "serious",
+      "owner": "Design + Engineering",
+      "pages": ["A", "B", "C", "Shared"],
+      "title": "No focus-ring token for custom controls",
+      "fix": "Define one :focus-visible token; apply to header arrows, seek/volume, reactions, Opt-In toggle.",
+      "sources": ["claude-by-team"],
+      "shots": ["shots/player-full.png"]
+    },
+    {
+      "id": "P2-1",
+      "priority": "P2",
+      "severity": "serious",
+      "owner": "Engineering",
+      "pages": ["Cover", "C"],
+      "title": "Opt-In consent modal missing dialog accessible name / semantics",
+      "fix": "role=dialog, aria-modal=true, aria-labelledby on a real heading.",
+      "sources": ["claude-be2376", "cursor-axe"],
+      "shots": ["shots/opt-in-aria-dialog-name-1.png", "shots/opt-in-full.png"],
+      "axeRules": ["aria-dialog-name"]
+    },
+    {
+      "id": "P2-2",
+      "priority": "P2",
+      "severity": "serious",
+      "owner": "Engineering",
+      "pages": ["Cover", "C"],
+      "title": "Button spinner progressbar has no accessible name",
+      "fix": "aria-label=\"Loading\" or aria-hidden if decorative.",
+      "sources": ["cursor-axe"],
+      "shots": ["shots/opt-in-aria-progressbar-name-1.png"],
+      "axeRules": ["aria-progressbar-name"]
+    },
+    {
+      "id": "P2-3",
+      "priority": "P2",
+      "severity": "critical",
+      "owner": "Engineering",
+      "pages": ["C", "Cover"],
+      "title": "Country dropdown lacks combobox/listbox semantics",
+      "fix": "Implement ARIA 1.2 combobox pattern.",
+      "sources": ["claude-be2376"],
+      "shots": []
+    },
+    {
+      "id": "P2-4",
+      "priority": "P2",
+      "severity": "critical",
+      "owner": "Engineering",
+      "pages": ["B"],
+      "title": "Header prev/next chevrons have no accessible name",
+      "fix": "aria-label=\"Previous topic\" / \"Next topic\".",
+      "sources": ["claude-by-team"],
+      "shots": ["shots/player-full.png"]
+    },
+    {
+      "id": "P2-5",
+      "priority": "P2",
+      "severity": "serious",
+      "owner": "Engineering",
+      "pages": ["C"],
+      "title": "Lead-capture modal opens without moving focus",
+      "fix": "Move focus to first field or title; add aria-labelledby.",
+      "sources": ["claude-by-team"],
+      "shots": []
+    },
+    {
+      "id": "P2-10",
+      "priority": "P2",
+      "severity": "serious",
+      "owner": "Design + Engineering",
+      "pages": ["Cover", "B"],
+      "title": "Color contrast below WCAG AA on legal text and player chrome",
+      "fix": "Raise contrast to ≥4.5:1 (3:1 large text).",
+      "sources": ["cursor-axe"],
+      "shots": [
+        "shots/cover-color-contrast-1.png",
+        "shots/cover-color-contrast-2.png",
+        "shots/player-color-contrast-1.png",
+        "shots/player-color-contrast-2.png"
+      ],
+      "axeRules": ["color-contrast"]
+    },
+    {
+      "id": "D-1",
+      "priority": "P2",
+      "severity": "critical",
+      "owner": "Design",
+      "pages": ["C"],
+      "title": "Opt-In explanation only available via tooltip",
+      "fix": "Replace with always-visible helper copy under the toggle.",
+      "sources": ["claude-by-team"],
+      "shots": []
+    },
+    {
+      "id": "D-2",
+      "priority": "P2",
+      "severity": "critical",
+      "owner": "Design",
+      "pages": ["A"],
+      "title": "Topic-rating icons need segmented-control redesign",
+      "fix": "Connected pill group with hit area matching visible control.",
+      "sources": ["claude-by-team"],
+      "shots": []
+    }
+  ]
+}

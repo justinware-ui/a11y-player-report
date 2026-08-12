@@ -1,0 +1,10 @@
+{
+  "name": "a11y-player-report",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Consensus Demo Player WCAG AA accessibility audit pack (Claude + Cursor)",
+  "scripts": {
+    "build": "mkdir -p dist && rsync -a --exclude dist --exclude .git --exclude node_modules --exclude scripts ./ dist/",
+    "rebuild-report": "node scripts/build-merged-report.cjs"
+  }
+}

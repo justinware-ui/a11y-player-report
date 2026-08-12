@@ -1,0 +1,792 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Merged a11y pack — Consensus Demo Player</title>
+<style>
+  :root {
+    --orange: #FC6839; --ink: #172537; --muted: #6F6F6F; --line: #E4E0DC; --bg: #FAF9F8;
+    --critical: #C62A2F; --serious: #D2691E; --moderate: #B38600; --minor: #5B6B7C;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Poppins, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--ink); background: var(--bg); line-height: 1.55; }
+  a { color: var(--orange); }
+  .shell { max-width: 1240px; margin: 0 auto; padding: 40px 32px 96px; }
+  header.hero { border-bottom: 1px solid var(--line); padding-bottom: 20px; margin-bottom: 8px; }
+  .kicker { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--orange); font-weight: 600; margin: 0; }
+  h1 { font-size: 32px; line-height: 1.15; margin: 8px 0 10px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--muted); }
+  .meta code { background: #fff; border: 1px solid var(--line); padding: 1px 6px; border-radius: 5px; font-size: 12px; }
+  .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 24px 0 0; border-bottom: 1px solid var(--line); }
+  .tab { appearance: none; background: transparent; border: 1px solid transparent; border-bottom: none; font: inherit; font-size: 14px; font-weight: 600; color: var(--muted); padding: 10px 16px; border-radius: 10px 10px 0 0; cursor: pointer; }
+  .tab:hover { color: var(--ink); background: #fff; }
+  .tab[aria-selected="true"] { background: #fff; color: var(--ink); border-color: var(--line); box-shadow: 0 1px 0 #fff; }
+  .tab:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+  .tab .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--critical); margin-right: 8px; vertical-align: middle; }
+  .tab.backlog .dot { background: var(--orange); }
+  .tab.shared .dot { background: var(--serious); }
+  .inline-tab-link { appearance: none; background: none; border: none; padding: 0; font: inherit; color: var(--orange); font-weight: 600; text-decoration: underline; cursor: pointer; }
+  .inline-tab-link:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+  .jump { font-size: 14px; margin: 0 0 20px; color: var(--muted); }
+  .jump a { font-weight: 600; }
+  .panel { display: none; padding-top: 28px; }
+  .panel.active { display: block; }
+  .demo-block { margin-bottom: 56px; padding-bottom: 40px; border-bottom: 1px solid var(--line); }
+  .demo-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .demo-head h2 { font-size: 24px; margin: 0 0 8px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin: 20px 0 8px; }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+  .card .n { font-size: 26px; font-weight: 700; line-height: 1; }
+  .card .l { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .card.critical .n { color: var(--critical); }
+  .card.serious .n { color: var(--serious); }
+  h3.sub { font-size: 18px; margin: 40px 0 6px; padding-top: 8px; }
+  h4 { font-size: 16px; margin: 6px 0; }
+  .sec-note { color: var(--muted); font-size: 14px; margin: 0 0 14px; }
+  .verified { font-size: 12px; color: #2b7a4b; margin: 8px 0 0; font-weight: 600; }
+  .finding { background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--line); border-radius: 12px; padding: 18px 20px; margin-bottom: 16px; }
+  .finding.critical { border-left-color: var(--critical); }
+  .finding.serious { border-left-color: var(--serious); }
+  .finding.moderate { border-left-color: var(--moderate); }
+  .finding.minor { border-left-color: var(--minor); }
+  .finding h3 { font-size: 16px; margin: 10px 0 6px; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .badge { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; padding: 3px 8px; border-radius: 999px; color: #fff; }
+  .badge.critical { background: var(--critical); }
+  .badge.serious { background: var(--serious); }
+  .badge.moderate { background: var(--moderate); }
+  .badge.minor { background: var(--minor); }
+  .id { font-family: ui-monospace, Menlo, monospace; font-size: 12px; font-weight: 700; }
+  .owner, .page, .src { font-size: 11px; border: 1px solid var(--line); border-radius: 999px; padding: 2px 8px; color: var(--muted); background: #fafafa; }
+  .owner { border-color: #FFD9C9; color: #9a3d12; background: #FFF6F2; }
+  .fix { background: #FFF6F2; border: 1px solid #FFD9C9; border-radius: 10px; padding: 10px 12px; margin-top: 10px; font-size: 14px; }
+  .fix strong { color: var(--orange); }
+  details { margin-top: 12px; }
+  summary { cursor: pointer; font-size: 13px; font-weight: 600; color: var(--muted); }
+  .shots { display: grid; gap: 12px; margin-top: 12px; }
+  figure.shot { margin: 10px 0 0; }
+  figure.shot img { max-width: 100%; border: 1px solid var(--line); border-radius: 8px; display: block; background: #fff; }
+  figure.shot figcaption { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .states { display: grid; gap: 18px; }
+  table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; font-size: 14px; margin-bottom: 8px; }
+  th, td { text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+  tr:last-child td { border-bottom: none; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .fail { color: var(--critical); }
+  ul.sources { font-size: 14px; color: var(--muted); }
+  footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="hero">
+  <p class="kicker">Merged accessibility pack</p>
+  <h1>Consensus Demo Player — Claude + Cursor</h1>
+  <div class="meta">
+    <span>Demos <code>2</code></span>
+    <span>Backlog items <code>32</code></span>
+    <span>Critical <code>14</code></span>
+    <span>P0 hotfixes <code>8</code></span>
+    <span>Standard <code>WCAG 2.1 / 2.2 AA</code></span>
+  </div>
+</header>
+
+<div class="tabs" role="tablist" aria-label="Audit report sections">
+  <button class="tab" role="tab" id="tab-demos" aria-controls="panel-demos" aria-selected="true" data-target="panel-demos"><span class="dot"></span>Demos audited</button>
+  <button class="tab backlog" role="tab" id="tab-backlog" aria-controls="panel-backlog" aria-selected="false" data-target="panel-backlog"><span class="dot"></span>Backlog</button>
+  <button class="tab shared" role="tab" id="tab-shared" aria-controls="panel-shared" aria-selected="false" data-target="panel-shared"><span class="dot"></span>Shared component bugs</button>
+</div>
+
+<section class="panel active" id="panel-demos" role="tabpanel" aria-labelledby="tab-demos">
+  <p class="jump">Jump to: <a href="#demo-be2376b21">Demo with single video</a> · <a href="#demo-af5f0eba6">Dylan Standard personalized with tours</a></p>
+  <article class="demo-block" id="demo-be2376b21">
+  <header class="demo-head">
+    <h2>Demo with single video</h2>
+    <div class="meta">
+      <span>URL <code><a href="https://play.goconsensus.com/be2376b21" target="_blank" rel="noreferrer">https://play.goconsensus.com/be2376b21</a></code></span>
+      <span>axe <code>4.12.1</code></span>
+      <span>Run <code>8/11/2026, 7:57:26 PM</code></span>
+    </div>
+    <p class="sec-note"><strong>Coverage.</strong> Cover → Opt-In → video player reached</p>
+  </header>
+
+  <div class="cards">
+    <div class="card critical"><div class="n">9</div><div class="l">Critical</div></div>
+    <div class="card serious"><div class="n">8</div><div class="l">Serious</div></div>
+    <div class="card"><div class="n">17</div><div class="l">Backlog items</div></div>
+    <div class="card"><div class="n">9</div><div class="l">With screen grabs</div></div>
+  </div>
+  <p class="sec-note">Tickets for this demo are in the <button type="button" class="inline-tab-link" data-target="panel-backlog">Backlog</button> tab → <a href="#backlog-be2376b21">Demo with single video</a>.</p>
+
+  <h3 class="sub">Screens captured</h3>
+  <div class="states">
+  <div class="finding">
+      <h4>Cover page — cookie banner open</h4>
+      <p class="sec-note">First paint of the Demo Player cover with the OneTrust consent dialog over the identity picker. — 3 axe rules, 14 elements</p>
+      <figure class="shot"><a href="shots/cover-cookies-full.png" target="_blank" rel="noreferrer"><img src="shots/cover-cookies-full.png" alt="Cover page — cookie banner open" loading="lazy"></a></figure>
+    </div>
+<div class="finding">
+      <h4>Cover page — identity picker</h4>
+      <p class="sec-note">After accepting cookies: personalized demo cover with “I’m new here” / named viewer, Contact me, and Policies. — 4 axe rules, 12 elements</p>
+      <figure class="shot"><a href="shots/cover-full.png" target="_blank" rel="noreferrer"><img src="shots/cover-full.png" alt="Cover page — identity picker" loading="lazy"></a></figure>
+    </div>
+<div class="finding">
+      <h4>Opt-in consent dialog</h4>
+      <p class="sec-note">After selecting a known viewer — tracking opt-in before the demo starts. — 9 axe rules, 17 elements</p>
+      <figure class="shot"><a href="shots/opt-in-full.png" target="_blank" rel="noreferrer"><img src="shots/opt-in-full.png" alt="Opt-in consent dialog" loading="lazy"></a></figure>
+    </div>
+<div class="finding">
+      <h4>Video player — demo playing</h4>
+      <p class="sec-note">In-player experience after opt-in: video controls, invite, reactions, sidebar, and Get in touch. — 2 axe rules, 11 elements</p>
+      <figure class="shot"><a href="shots/player-full.png" target="_blank" rel="noreferrer"><img src="shots/player-full.png" alt="Video player — demo playing" loading="lazy"></a></figure>
+    </div>
+  </div>
+
+  
+
+  
+
+  <h3 class="sub">Sources</h3>
+  <ul class="sources">
+    <li>Claude — <code>consensus-player-a11y-audit-be2376b21.md</code></li><li>Claude — <code>consensus-player-a11y-audit-by-team.md</code></li>
+    <li>Cursor — live Playwright + axe-core run (<code>4.12.1</code>)</li>
+    <li>Backlog data — <a href="merged/backlog.md">backlog.md</a></li>
+  </ul>
+</article>
+<article class="demo-block" id="demo-af5f0eba6">
+  <header class="demo-head">
+    <h2>Dylan Standard personalized with tours</h2>
+    <div class="meta">
+      <span>URL <code><a href="https://play.goconsensus.com/af5f0eba6" target="_blank" rel="noreferrer">https://play.goconsensus.com/af5f0eba6</a></code></span>
+      <span>axe <code>4.12.1</code></span>
+      <span>Run <code>8/11/2026, 8:55:37 PM</code></span>
+    </div>
+    <p class="sec-note"><strong>Coverage.</strong> Identity → Opt-In → Topic Rating reached; product tour gated behind rating + cross-origin iframe</p>
+  </header>
+
+  <div class="cards">
+    <div class="card critical"><div class="n">5</div><div class="l">Critical</div></div>
+    <div class="card serious"><div class="n">5</div><div class="l">Serious</div></div>
+    <div class="card"><div class="n">15</div><div class="l">Backlog items</div></div>
+    <div class="card"><div class="n">10</div><div class="l">With screen grabs</div></div>
+  </div>
+  <p class="sec-note">Tickets for this demo are in the <button type="button" class="inline-tab-link" data-target="panel-backlog">Backlog</button> tab → <a href="#backlog-af5f0eba6">Dylan Standard personalized with tours</a>.</p>
+
+  <h3 class="sub">Screens captured</h3>
+  <div class="states">
+  <div class="finding">
+      <h4>Identity screen — cookie banner open</h4>
+      <p class="sec-note">First paint with the OneTrust consent dialog over the “who are you” identity picker. — 3 axe rules, 23 elements</p>
+      <figure class="shot"><a href="af5f0eba6/shots/identity-cookies-full.png" target="_blank" rel="noreferrer"><img src="af5f0eba6/shots/identity-cookies-full.png" alt="Identity screen — cookie banner open" loading="lazy"></a></figure>
+    </div>
+<div class="finding">
+      <h4>Identity screen — viewer picker</h4>
+      <p class="sec-note">After accepting cookies: “I’m new here” / named viewers, Contact me, Opt In toggle, legal footer. — 4 axe rules, 22 elements</p>
+      <figure class="shot"><a href="af5f0eba6/shots/identity-full.png" target="_blank" rel="noreferrer"><img src="af5f0eba6/shots/identity-full.png" alt="Identity screen — viewer picker" loading="lazy"></a></figure>
+    </div>
+<div class="finding">
+      <h4>Opt-in consent modal</h4>
+      <p class="sec-note">Consent gate shown after selecting a known viewer. — 9 axe rules, 25 elements</p>
+      <figure class="shot"><a href="af5f0eba6/shots/opt-in-full.png" target="_blank" rel="noreferrer"><img src="af5f0eba6/shots/opt-in-full.png" alt="Opt-in consent modal" loading="lazy"></a></figure>
+    </div>
+<div class="finding">
+      <h4>Topic Rating screen</h4>
+      <p class="sec-note">Topic rating grid (Very / Somewhat / Not important) with Select all controls. — 2 axe rules, 8 elements</p>
+      <figure class="shot"><a href="af5f0eba6/shots/post-continue-full.png" target="_blank" rel="noreferrer"><img src="af5f0eba6/shots/post-continue-full.png" alt="Topic Rating screen" loading="lazy"></a></figure>
+    </div>
+  </div>
+
+  <h3 class="sub">Independent contrast measurement (Cursor)</h3>
+  <p class="sec-note">Computed foreground/background sampled directly from the live DOM on this demo.</p>
+  <table><thead><tr><th>Control</th><th>Foreground</th><th>Background</th><th class="num">Ratio</th><th>AA</th></tr></thead><tbody><tr><td>Contact me</td><td><code>rgb(169, 169, 169)</code></td><td><code>rgb(240, 240, 240)</code></td><td class="num"><strong class="fail">2.06:1</strong></td><td><strong class="fail">fails AA</strong></td></tr><tr><td>I'm new here</td><td><code>rgb(169, 169, 169)</code></td><td><code>rgb(240, 240, 240)</code></td><td class="num"><strong class="fail">2.06:1</strong></td><td><strong class="fail">fails AA</strong></td></tr><tr><td>Justin Ware</td><td><code>rgb(255, 255, 255)</code></td><td><code>rgb(169, 169, 169)</code></td><td class="num"><strong class="fail">2.35:1</strong></td><td><strong class="fail">fails AA</strong></td></tr><tr><td>Test User</td><td><code>rgb(255, 255, 255)</code></td><td><code>rgb(169, 169, 169)</code></td><td class="num"><strong class="fail">2.35:1</strong></td><td><strong class="fail">fails AA</strong></td></tr><tr><td>Policies &amp; Statements</td><td><code>rgb(169, 169, 169)</code></td><td><code>rgb(240, 240, 240)</code></td><td class="num"><strong class="fail">2.06:1</strong></td><td><strong class="fail">fails AA</strong></td></tr></tbody></table>
+
+  <h3 class="sub">Zero-size hit targets (Cursor probe)</h3>
+  <p class="sec-note">Elements returning width or height of 0 from <code>getBoundingClientRect()</code> — Chrome skips these in Tab order regardless of <code>tabindex</code>.</p>
+  <table><thead><tr><th>Screen</th><th>Element</th><th>Group name</th><th class="num">Size</th><th>Accessible name</th></tr></thead><tbody>
+  <tr><td>Identity screen — viewer picker</td><td><code>input[type=checkbox]</code> <span class="src">optin toggle</span></td><td><code>—</code></td><td class="num"><strong class="fail">0×0</strong></td><td><strong class="fail">none</strong></td></tr><tr><td>Topic Rating screen</td><td><code>input[type=checkbox]</code></td><td><code>da4cbc5f-62f5-</code></td><td class="num"><strong class="fail">0×0</strong></td><td><strong class="fail">none</strong></td></tr><tr><td>Topic Rating screen</td><td><code>input[type=checkbox]</code></td><td><code>da4cbc5f-62f5-</code></td><td class="num"><strong class="fail">0×0</strong></td><td><strong class="fail">none</strong></td></tr><tr><td>Topic Rating screen</td><td><code>input[type=checkbox]</code></td><td><code>da4cbc5f-62f5-</code></td><td class="num"><strong class="fail">0×0</strong></td><td><strong class="fail">none</strong></td></tr><tr><td>Topic Rating screen</td><td><code>input[type=checkbox]</code></td><td><code>b26ca434-12c3-</code></td><td class="num"><strong class="fail">0×0</strong></td><td><strong class="fail">none</strong></td></tr><tr><td>Topic Rating screen</td><td><code>input[type=checkbox]</code></td><td><code>b26ca434-12c3-</code></td><td class="num"><strong class="fail">0×0</strong></td><td><strong class="fail">none</strong></td></tr><tr><td>Topic Rating screen</td><td><code>input[type=checkbox]</code></td><td><code>b26ca434-12c3-</code></td><td class="num"><strong class="fail">0×0</strong></td><td><strong class="fail">none</strong></td></tr>
+  </tbody></table>
+
+  <h3 class="sub">Sources</h3>
+  <ul class="sources">
+    <li>Claude — <code>consensus-player-a11y-audit-af5f0eba6-by-team.md</code></li>
+    <li>Cursor — live Playwright + axe-core run (<code>4.12.1</code>)</li>
+    <li>Backlog data — <a href="merged/backlog-af5f0eba6.md">backlog-af5f0eba6.md</a></li>
+  </ul>
+</article>
+</section>
+
+<section class="panel" id="panel-backlog" role="tabpanel" aria-labelledby="tab-backlog">
+  <header class="demo-head">
+    <h2>Fix backlog</h2>
+    <p class="sec-note">All Design vs Engineering tickets across both demos — P0 → P1 → P2 within each demo.</p>
+  </header>
+  <p class="jump">Jump to: <a href="#backlog-be2376b21">Demo with single video</a> · <a href="#backlog-af5f0eba6">Dylan Standard personalized with tours</a></p>
+  <article class="demo-block" id="backlog-be2376b21">
+  <header class="demo-head">
+    <h2>Demo with single video</h2>
+    <p class="sec-note">Design vs Engineering tickets — severity, page, suggested fix, and evidence. Full text: <a href="merged/backlog.md">backlog.md</a>.</p>
+  </header>
+
+  <div class="cards">
+    <div class="card critical"><div class="n">4</div><div class="l">P0 hotfixes</div></div>
+    <div class="card serious"><div class="n">5</div><div class="l">P1 shared</div></div>
+    <div class="card"><div class="n">8</div><div class="l">P2 page-specific</div></div>
+    <div class="card"><div class="n">17</div><div class="l">Total tickets</div></div>
+  </div>
+
+  <h3 class="sub" id="be2376b21-p0">P0 — Hotfixes</h3>
+  <p class="sec-note">Ship first: functional dead-ends or hard keyboard blocks.</p>
+  <article class="finding critical" id="be2376b21-P0-1">
+    <div class="meta-row">
+      <span class="badge critical">critical</span>
+      <span class="id">P0-1</span>
+      <span class="owner">Engineering</span>
+      <span class="page">Page C</span>
+      <span class="src">Claude · by team</span>
+    </div>
+    <h3>Opt-In tooltip stuck open blocks the toggle</h3>
+    
+    <div class="fix"><strong>Fix.</strong> Dismiss tooltip on blur/Escape/outside-click; fix z-index/hit-testing so it never captures pointer events over the toggle.</div>
+    
+    <p class="sec-note">No Cursor screen grab — see note above for why this finding could not be captured live.</p>
+  </article>
+<article class="finding critical" id="be2376b21-P0-2">
+    <div class="meta-row">
+      <span class="badge critical">critical</span>
+      <span class="id">P0-2</span>
+      <span class="owner">Design + Engineering</span>
+      <span class="page">Page A</span>
+      <span class="src">Claude · by team</span>
+    </div>
+    <h3>Topic-rating checkboxes are 0×0px and skipped by Tab</h3>
+    
+    <div class="fix"><strong>Fix.</strong> Give inputs real dimensions matching visible icons so they re-enter the Tab sequence.</div>
+    
+    <p class="sec-note">No Cursor screen grab — see note above for why this finding could not be captured live.</p>
+  </article>
+<article class="finding critical" id="be2376b21-P0-3">
+    <div class="meta-row">
+      <span class="badge critical">critical</span>
+      <span class="id">P0-3</span>
+      <span class="owner">Design + Engineering</span>
+      <span class="page">Page A</span>
+      <span class="src">Claude · by team</span>
+    </div>
+    <h3>Topic-rating inputs use checkbox semantics for radio behavior</h3>
+    
+    <div class="fix"><strong>Fix.</strong> Convert to radiogroup/radio (or native radios) with aria-labels for Very / Somewhat / Not important.</div>
+    
+    <p class="sec-note">No Cursor screen grab — see note above for why this finding could not be captured live.</p>
+  </article>
+<article class="finding critical" id="be2376b21-P0-4">
+    <div class="meta-row">
+      <span class="badge critical">critical</span>
+      <span class="id">P0-4</span>
+      <span class="owner">Engineering</span>
+      <span class="page">Page C</span><span class="page">Page Cover</span><span class="page">Page Shared</span>
+      <span class="src">Claude · by team</span><span class="src">Claude · be2376</span><span class="src">Cursor · axe</span>
+    </div>
+    <h3>Modal close (X) has no accessible name</h3>
+    
+    <div class="fix"><strong>Fix.</strong> Add aria-label=&quot;Close&quot; on shared modal-header close component.</div>
+    
+    <details open><summary>Evidence screen grabs (1)</summary><div class="shots"><figure class="shot"><a href="shots/opt-in-button-name-1.png" target="_blank" rel="noreferrer"><img src="shots/opt-in-button-name-1.png" alt="P0-4 — Modal close (X) has no accessible name" loading="lazy"></a><figcaption>P0-4 — Modal close (X) has no accessible name</figcaption></figure></div></details>
+  </article>
+
+  <h3 class="sub" id="be2376b21-p1">P1 — Shared components</h3>
+  <p class="sec-note">One fix clears multiple screens or demos.</p>
+  <article class="finding serious" id="be2376b21-P1-1">
+    <div class="meta-row">
+      <span class="badge serious">serious</span>
+      <span class="id">P1-1</span>
+      <span class="owner">Engineering</span>
+      <span class="page">Page C</span><span class="page">Page Cover</span><span class="page">Page Shared</span>
+      <span class="src">Claude · by team</span><span class="src">Claude · be2376</span>
+    </div>
+    <h3>Required fields lack required / aria-required</h3>
+    
+    <div class="fix"><strong>Fix.</strong> Add aria-required=&quot;true&quot; (or required) at the shared form-field component.</div>
+    
+    <p class="sec-note">No Cursor screen grab — see note above for why this finding could not be captured live.</p>
+  </article>
+<article class="finding critical" id="be2376b21-P1-2">
+    <div class="meta-row">
+      <span class="badge critical">critical</span>
+      <span class="id">P1-2</span>
+      <span class="owner">Engineering</span>
+      <span class="page">Page C</span><span class="page">Page Cover</span>
+      <span class="src">Claude · by team</span><span class="src">Claude · be2376</span><span class="src">Cursor · axe</span>
+    </div>
+    <h3>Opt-In toggle has no accessible name</h3>
+    
+    <div class="fix"><strong>Fix.</strong> Associate label via for/id or aria-labelledby pointing at &quot;Opt In&quot; text.</div>
+    
+    <details open><summary>Evidence screen grabs (2)</summary><div class="shots"><figure class="shot"><a href="shots/cover-full.png" target="_blank" rel="noreferrer"><img src="shots/cover-full.png" alt="P1-2 — Opt-In toggle has no accessible name" loading="lazy"></a><figcaption>P1-2 — Opt-In toggle has no accessible name</figcaption></figure><figure class="shot"><a href="shots/opt-in-full.png" target="_blank" rel="noreferrer"><img src="shots/opt-in-full.png" alt="P1-2 — Opt-In toggle has no accessible name" loading="lazy"></a><figcaption>P1-2 — Opt-In toggle has no accessible name</figcaption></figure></div></details>
+  </article>
+<article class="finding serious" id="be2376b21-P1-3">
+    <div class="meta-row">
+      <span class="badge serious">serious</span>
+      <span class="id">P1-3</span>
+      <span class="owner">Design + Engineering</span>
+      <span class="page">Page Cover</span><span class="page">Page Shared</span>
+      <span class="src">Claude · by team</span><span class="src">Claude · be2376</span><span class="src">Cursor · axe</span>
+    </div>
+    <h3>Corrupted / duplicated legal disclaimer text</h3>
+    
+    <div class="fix"><strong>Fix.</strong> Fix source copy / template once; re-check contrast after rewrite.</div>
+    
+    <details open><summary>Evidence screen grabs (2)</summary><div class="shots"><figure class="shot"><a href="shots/cover-color-contrast-1.png" target="_blank" rel="noreferrer"><img src="shots/cover-color-contrast-1.png" alt="P1-3 — Corrupted / duplicated legal disclaimer text" loading="lazy"></a><figcaption>P1-3 — Corrupted / duplicated legal disclaimer text</figcaption></figure><figure class="shot"><a href="shots/cover-cookies-full.png" target="_blank" rel="noreferrer"><img src="shots/cover-cookies-full.png" alt="P1-3 — Corrupted / duplicated legal disclaimer text" loading="lazy"></a><figcaption>P1-3 — Corrupted / duplicated legal disclaimer text</figcaption></figure></div></details>
+  </article>
+<article class="finding serious" id="be2376b21-P1-4">
+    <div class="meta-row">
+      <span class="badge serious">serious</span>
+      <span class="id">P1-4</span>
+      <span class="owner">Design + Engineering</span>
+      <span class="page">Page A</span><span class="page">Page B</span><span class="page">Page C</span><span class="page">Page Shared</span>
+      <span class="src">Claude · by team</span>
+    </div>
+    <h3>No established labeling pattern for icon-only controls</h3>
+    
+    <div class="fix"><strong>Fix.</strong> Standardize visible or visually-hidden labels; use reaction bar as reference.</div>
+    
+    <details open><summary>Evidence screen grabs (1)</summary><div class="shots"><figure class="shot"><a href="shots/player-full.png" target="_blank" rel="noreferrer"><img src="shots/player-full.png" alt="P1-4 — No established labeling pattern for icon-only controls" loading="lazy"></a><figcaption>P1-4 — No established labeling pattern for icon-only controls</figcaption></figure></div></details>
+  </article>
+<article class="finding serious" id="be2376b21-P1-5">
+    <div class="meta-row">
+      <span class="badge serious">serious</span>
+      <span class="id">P1-5</span>
+      <span class="owner">Design + Engineering</span>
+      <span class="page">Page A</span><span class="page">Page B</span><span class="page">Page C</span><span class="page">Page Shared</span>
+      <span class="src">Claude · by team</span>
+    </div>
+    <h3>No focus-ring token for custom controls</h3>
+    
+    <div class="fix"><strong>Fix.</strong> Define one :focus-visible token; apply to header arrows, seek/volume, reactions, Opt-In toggle.</div>
+    
+    <details open><summary>Evidence screen grabs (1)</summary><div class="shots"><figure class="shot"><a href="shots/player-full.png" target="_blank" rel="noreferrer"><img src="shots/player-full.png" alt="P1-5 — No focus-ring token for custom controls" loading="lazy"></a><figcaption>P1-5 — No focus-ring token for custom controls</figcaption></figure></div></details>
+  </article>
+
+  <h3 class="sub" id="be2376b21-p2">P2 — Page-specific &amp; Design decisions</h3>
+  <article class="finding serious" id="be2376b21-P2-1">
+    <div class="meta-row">
+      <span class="badge serious">serious</span>
+      <span class="id">P2-1</span>
+      <span class="owner">Engineering</span>
+      <span class="page">Page Cover</span><span class="page">Page C</span>
+      <span class="src">Claude · be2376</span><span class="src">Cursor · axe</span>
+    </div>
+    <h3>Opt-In consent modal missing dialog accessible name / semantics</h3>
+    
+    <div class="fix"><strong>Fix.</strong> role=dialog, aria-modal=true, aria-labelledby on a real heading.</div>
+    
+    <details open><summary>Evidence screen grabs (2)</summary><div class="shots"><figure class="shot"><a href="shots/opt-in-aria-dialog-name-1.png" target="_blank" rel="noreferrer"><img src="shots/opt-in-aria-dialog-name-1.png" alt="P2-1 — Opt-In consent modal missing dialog accessible name / semantics" loading="lazy"></a><figcaption>P2-1 — Opt-In consent modal missing dialog accessible name / semantics</figcaption></figure><figure class="shot"><a href="shots/opt-in-full.png" target="_blank" rel="noreferrer"><img src="shots/opt-in-full.png" alt="P2-1 — Opt-In consent modal missing dialog accessible name / semantics" loading="lazy"></a><figcaption>P2-1 — Opt-In consent modal missing dialog accessible name / semantics</figcaption></figure></div></details>
+  </article>
+<article class="finding serious" id="be2376b21-P2-2">
+    <div class="meta-row">
+      <span class="badge serious">serious</span>
+      <span class="id">P2-2</span>
+      <span class="owner">Engineering</span>
+      <span class="page">Page Cover</span><span class="page">Page C</span>
+      <span class="src">Cursor · axe</span>
+    </div>
+    <h3>Button spinner progressbar has no accessible name</h3>
+    
+    <div class="fix"><strong>Fix.</strong> aria-label=&quot;Loading&quot; or aria-hidden if decorative.</div>
+    
+    <details open><summary>Evidence screen grabs (1)</summary><div class="shots"><figure class="shot"><a href="shots/opt-in-aria-progressbar-name-1.png" target="_blank" rel="noreferrer"><img src="shots/opt-in-aria-progressbar-name-1.png" alt="P2-2 — Button spinner progressbar has no accessible name" loading="lazy"></a><figcaption>P2-2 — Button spinner progressbar has no accessible name</figcaption></figure></div></details>
+  </article>
+<article class="finding critical" id="be2376b21-P2-3">
+    <div class="meta-row">
+      <span class="badge critical">critical</span>
+      <span class="id">P2-3</span>
+      <span class="owner">Engineering</span>
+      <span class="page">Page C</span><span class="page">Page Cover</span>
+      <span class="src">Claude · be2376</span>
+    </div>
+    <h3>Country dropdown lacks combobox/listbox semantics</h3>
+    
+    <div class="fix"><strong>Fix.</strong> Implement ARIA 1.2 combobox pattern.</div>
+    
+    <p class="sec-note">No Cursor screen grab — see note above for why this finding could not be captured live.</p>
+  </article>
+<article class="finding critical" id="be2376b21-P2-4">
+    <div class="meta-row">
+      <span class="badge critical">critical</span>
+      <span class="id">P2-4</span>
+      <span class="owner">Engineering</span>
+      <span class="page">Page B</span>
+      <span class="src">Claude · by team</span>
+    </div>
+    <h3>Header prev/next chevrons have no accessible name</h3>
+    
+    <div class="fix"><strong>Fix.</strong> aria-label=&quot;Previous topic&quot; / &quot;Next topic&quot;.</div>
+    
+    <details open><summary>Evidence screen grabs (1)</summary><div class="shots"><figure class="shot"><a href="shots/player-full.png" target="_blank" rel="noreferrer"><img src="shots/player-full.png" alt="P2-4 — Header prev/next chevrons have no accessible name" loading="lazy"></a><figcaption>P2-4 — Header prev/next chevrons have no accessible name</figcaption></figure></div></details>
+  </article>
+<article class="finding serious" id="be2376b21-P2-5">
+    <div class="meta-row">
+      <span class="badge serious">serious</span>
+      <span class="id">P2-5</span>
+      <span class="owner">Engineering</span>
+      <span class="page">Page C</span>
+      <span class="src">Claude · by team</span>
+    </div>
+    <h3>Lead-capture modal opens without moving focus</h3>
+    
+    <div class="fix"><strong>Fix.</strong> Move focus to first field or title; add aria-labelledby.</div>
+    
+    <p class="sec-note">No Cursor screen grab — see note above for why this finding could not be captured live.</p>
+  </article>
+<article class="finding serious" id="be2376b21-P2-10">
+    <div class="meta-row">
+      <span class="badge serious">serious</span>
+      <span class="id">P2-10</span>
+      <span class="owner">Design + Engineering</span>
+      <span class="page">Page Cover</span><span class="page">Page B</span>
+      <span class="src">Cursor · axe</span>
+    </div>
+    <h3>Color contrast below WCAG AA on legal text and player chrome</h3>
+    
+    <div class="fix"><strong>Fix.</strong> Raise contrast to ≥4.5:1 (3:1 large text).</div>
+    
+    <details open><summary>Evidence screen grabs (4)</summary><div class="shots"><figure class="shot"><a href="shots/cover-color-contrast-1.png" target="_blank" rel="noreferrer"><img src="shots/cover-color-contrast-1.png" alt="P2-10 — Color contrast below WCAG AA on legal text and player chrome" loading="lazy"></a><figcaption>P2-10 — Color contrast below WCAG AA on legal text and player chrome</figcaption></figure><figure class="shot"><a href="shots/cover-color-contrast-2.png" target="_blank" rel="noreferrer"><img src="shots/cover-color-contrast-2.png" alt="P2-10 — Color contrast below WCAG AA on legal text and player chrome" loading="lazy"></a><figcaption>P2-10 — Color contrast below WCAG AA on legal text and player chrome</figcaption></figure><figure class="shot"><a href="shots/player-color-contrast-1.png" target="_blank" rel="noreferrer"><img src="shots/player-color-contrast-1.png" alt="P2-10 — Color contrast below WCAG AA on legal text and player chrome" loading="lazy"></a><figcaption>P2-10 — Color contrast below WCAG AA on legal text and player chrome</figcaption></figure><figure class="shot"><a href="shots/player-color-contrast-2.png" target="_blank" rel="noreferrer"><img src="shots/player-color-contrast-2.png" alt="P2-10 — Color contrast below WCAG AA on legal text and player chrome" loading="lazy"></a><figcaption>P2-10 — Color contrast below WCAG AA on legal text and player chrome</figcaption></figure></div></details>
+  </article>
+<article class="finding critical" id="be2376b21-D-1">
+    <div class="meta-row">
+      <span class="badge critical">critical</span>
+      <span class="id">D-1</span>
+      <span class="owner">Design</span>
+      <span class="page">Page C</span>
+      <span class="src">Claude · by team</span>
+    </div>
+    <h3>Opt-In explanation only available via tooltip</h3>
+    
+    <div class="fix"><strong>Fix.</strong> Replace with always-visible helper copy under the toggle.</div>
+    
+    <p class="sec-note">No Cursor screen grab — see note above for why this finding could not be captured live.</p>
+  </article>
+<article class="finding critical" id="be2376b21-D-2">
+    <div class="meta-row">
+      <span class="badge critical">critical</span>
+      <span class="id">D-2</span>
+      <span class="owner">Design</span>
+      <span class="page">Page A</span>
+      <span class="src">Claude · by team</span>
+    </div>
+    <h3>Topic-rating icons need segmented-control redesign</h3>
+    
+    <div class="fix"><strong>Fix.</strong> Connected pill group with hit area matching visible control.</div>
+    
+    <p class="sec-note">No Cursor screen grab — see note above for why this finding could not be captured live.</p>
+  </article>
+</article>
+<article class="demo-block" id="backlog-af5f0eba6">
+  <header class="demo-head">
+    <h2>Dylan Standard personalized with tours</h2>
+    <p class="sec-note">Design vs Engineering tickets — severity, page, suggested fix, and evidence. Full text: <a href="merged/backlog-af5f0eba6.md">backlog-af5f0eba6.md</a>.</p>
+  </header>
+
+  <div class="cards">
+    <div class="card critical"><div class="n">4</div><div class="l">P0 hotfixes</div></div>
+    <div class="card serious"><div class="n">4</div><div class="l">P1 shared</div></div>
+    <div class="card"><div class="n">7</div><div class="l">P2 page-specific</div></div>
+    <div class="card"><div class="n">15</div><div class="l">Total tickets</div></div>
+  </div>
+
+  <h3 class="sub" id="af5f0eba6-p0">P0 — Hotfixes</h3>
+  <p class="sec-note">Ship first: functional dead-ends or hard keyboard blocks.</p>
+  <article class="finding critical" id="af5f0eba6-AF-P0-1">
+    <div class="meta-row">
+      <span class="badge critical">critical</span>
+      <span class="id">AF-P0-1</span>
+      <span class="owner">Design + Engineering</span>
+      <span class="page">Page A</span><span class="page">Page C</span>
+      <span class="src">Claude · af5f0eba6</span><span class="src">Cursor · axe</span>
+    </div>
+    <h3>Entire demo renders in a grey theme at ~2:1 contrast</h3>
+    <p>Cursor independently measured every themed control on this demo: &quot;I'm new here&quot;, &quot;Contact me&quot; and &quot;Select all&quot; at rgb(169,169,169) on rgb(240,240,240) = 2.06:1; &quot;Justin Ware&quot;, &quot;Test User&quot; and &quot;Continue&quot; white-on-grey = 2.35:1. 8 of 9 measured controls fail AA. Matches Claude's finding exactly.</p>
+    <div class="fix"><strong>Fix.</strong> Investigate the missing/failed brand theme assignment for this demo, and add a contrast-safe token fallback so a themeless demo cannot ship below 4.5:1 (3:1 for UI boundaries).</div>
+    <p class="verified">Independently confirmed by Cursor computed-style measurement</p>
+    <details open><summary>Evidence screen grabs (3)</summary><div class="shots"><figure class="shot"><a href="af5f0eba6/shots/evidence-contrast-identity.png" target="_blank" rel="noreferrer"><img src="af5f0eba6/shots/evidence-contrast-identity.png" alt="AF-P0-1 — Entire demo renders in a grey theme at ~2:1 contrast" loading="lazy"></a><figcaption>AF-P0-1 — Entire demo renders in a grey theme at ~2:1 contrast</figcaption></figure><figure class="shot"><a href="af5f0eba6/shots/evidence-contrast-selectall.png" target="_blank" rel="noreferrer"><img src="af5f0eba6/shots/evidence-contrast-selectall.png" alt="AF-P0-1 — Entire demo renders in a grey theme at ~2:1 contrast" loading="lazy"></a><figcaption>AF-P0-1 — Entire demo renders in a grey theme at ~2:1 contrast</figcaption></figure><figure class="shot"><a href="af5f0eba6/shots/identity-full.png" target="_blank" rel="noreferrer"><img src="af5f0eba6/shots/identity-full.png" alt="AF-P0-1 — Entire demo renders in a grey theme at ~2:1 contrast" loading="lazy"></a><figcaption>AF-P0-1 — Entire demo renders in a grey theme at ~2:1 contrast</figcaption></figure></div></details>
+  </article>
+<article class="finding critical" id="af5f0eba6-AF-P0-2">
+    <div class="meta-row">
+      <span class="badge critical">critical</span>
+      <span class="id">AF-P0-2</span>
+      <span class="owner">Design + Engineering</span>
+      <span class="page">Page C</span>
+      <span class="src">Claude · af5f0eba6</span><span class="src">Claude · by team</span><span class="src">Cursor · axe</span>
+    </div>
+    <h3>Topic-rating checkboxes render at 0×0 and are unreachable by keyboard</h3>
+    <p>Cursor confirmed all 6 rating inputs (2 topics × 3 ratings) return width 0 / height 0 from getBoundingClientRect() with tabIndex 0 and no accessible name. Chrome's sequential focus skips zero-dimension elements regardless of tabIndex, so keyboard-only users cannot rate topics — and rating is required to continue. Third demo where this reproduces.</p>
+    <div class="fix"><strong>Fix.</strong> Give the input real dimensions matching the visible star/check/X icon (or move focus to a sized sibling), then add aria-labels. Fix once at the shared component.</div>
+    <p class="verified">Independently confirmed by Cursor getBoundingClientRect() probe</p>
+    <details open><summary>Evidence screen grabs (3)</summary><div class="shots"><figure class="shot"><a href="af5f0eba6/shots/evidence-topic-row.png" target="_blank" rel="noreferrer"><img src="af5f0eba6/shots/evidence-topic-row.png" alt="AF-P0-2 — Topic-rating checkboxes render at 0×0 and are unreachable by keyboard" loading="lazy"></a><figcaption>AF-P0-2 — Topic-rating checkboxes render at 0×0 and are unreachable by keyboard</figcaption></figure><figure class="shot"><a href="af5f0eba6/shots/evidence-rating-cell.png" target="_blank" rel="noreferrer"><img src="af5f0eba6/shots/evidence-rating-cell.png" alt="AF-P0-2 — Topic-rating checkboxes render at 0×0 and are unreachable by keyboard" loading="lazy"></a><figcaption>AF-P0-2 — Topic-rating checkboxes render at 0×0 and are unreachable by keyboard</figcaption></figure><figure class="shot"><a href="af5f0eba6/shots/evidence-topics-full.png" target="_blank" rel="noreferrer"><img src="af5f0eba6/shots/evidence-topics-full.png" alt="AF-P0-2 — Topic-rating checkboxes render at 0×0 and are unreachable by keyboard" loading="lazy"></a><figcaption>AF-P0-2 — Topic-rating checkboxes render at 0×0 and are unreachable by keyboard</figcaption></figure></div></details>
+  </article>
+<article class="finding critical" id="af5f0eba6-AF-P0-3">
+    <div class="meta-row">
+      <span class="badge critical">critical</span>
+      <span class="id">AF-P0-3</span>
+      <span class="owner">Design + Engineering</span>
+      <span class="page">Page C</span>
+      <span class="src">Claude · by team</span><span class="src">Cursor · axe</span>
+    </div>
+    <h3>Rating controls are checkboxes implementing mutually-exclusive radio behavior</h3>
+    <p>Cursor observed the 6 inputs share one name per topic (da4cbc5f… and b26ca434…), i.e. radio-group semantics implemented with type=checkbox and no role=radiogroup/radio.</p>
+    <div class="fix"><strong>Fix.</strong> Convert to role=radiogroup + role=radio (or native radios) with per-option labels, alongside the hit-target fix.</div>
+    <p class="verified">Independently confirmed by Cursor DOM probe (shared name attribute)</p>
+    <details open><summary>Evidence screen grabs (1)</summary><div class="shots"><figure class="shot"><a href="af5f0eba6/shots/evidence-topic-row.png" target="_blank" rel="noreferrer"><img src="af5f0eba6/shots/evidence-topic-row.png" alt="AF-P0-3 — Rating controls are checkboxes implementing mutually-exclusive radio behavior" loading="lazy"></a><figcaption>AF-P0-3 — Rating controls are checkboxes implementing mutually-exclusive radio behavior</figcaption></figure></div></details>
+  </article>
+<article class="finding serious" id="af5f0eba6-AF-P0-4">
+    <div class="meta-row">
+      <span class="badge serious">serious</span>
+      <span class="id">AF-P0-4</span>
+      <span class="owner">Engineering</span>
+      <span class="page">Page D</span>
+      <span class="src">Claude · af5f0eba6</span>
+    </div>
+    <h3>Product tour close (X) button does not respond to clicks</h3>
+    <p>Claude observed two click attempts failing to dismiss the tour overlay, stranding the visitor. Not reproducible by Cursor this pass — tour sits behind the rating gate and inside a cross-origin iframe.</p>
+    <div class="fix"><strong>Fix.</strong> Check click handler / hit-target registration and z-index or event propagation on the tour close control.</div>
+    <p class="verified">Claude-only — not reproduced by Cursor</p>
+    <p class="sec-note">No Cursor screen grab — see note above for why this finding could not be captured live.</p>
+  </article>
+
+  <h3 class="sub" id="af5f0eba6-p1">P1 — Shared components</h3>
+  <p class="sec-note">One fix clears multiple screens or demos.</p>
+  <article class="finding critical" id="af5f0eba6-AF-P1-1">
+    <div class="meta-row">
+      <span class="badge critical">critical</span>
+      <span class="id">AF-P1-1</span>
+      <span class="owner">Engineering</span>
+      <span class="page">Page A</span><span class="page">Page B</span>
+      <span class="src">Cursor · axe</span><span class="src">Claude · by team</span>
+    </div>
+    <h3>Opt-In toggle is 0×0 and has no accessible name</h3>
+    <p>Cursor probe found input[data-testid=&quot;optin toggle&quot;] at width 0 / height 0 with empty accessible name; axe also reports it under the label rule on all identity states.</p>
+    <div class="fix"><strong>Fix.</strong> Give the toggle real dimensions and associate the visible “Opt In” text via label for/id or aria-labelledby.</div>
+    <p class="verified">Independently confirmed by Cursor</p>
+    <details open><summary>Evidence screen grabs (2)</summary><div class="shots"><figure class="shot"><a href="af5f0eba6/shots/evidence-optin-toggle-row.png" target="_blank" rel="noreferrer"><img src="af5f0eba6/shots/evidence-optin-toggle-row.png" alt="AF-P1-1 — Opt-In toggle is 0×0 and has no accessible name" loading="lazy"></a><figcaption>AF-P1-1 — Opt-In toggle is 0×0 and has no accessible name</figcaption></figure><figure class="shot"><a href="af5f0eba6/shots/identity-full.png" target="_blank" rel="noreferrer"><img src="af5f0eba6/shots/identity-full.png" alt="AF-P1-1 — Opt-In toggle is 0×0 and has no accessible name" loading="lazy"></a><figcaption>AF-P1-1 — Opt-In toggle is 0×0 and has no accessible name</figcaption></figure></div></details>
+  </article>
+<article class="finding critical" id="af5f0eba6-AF-P1-2">
+    <div class="meta-row">
+      <span class="badge critical">critical</span>
+      <span class="id">AF-P1-2</span>
+      <span class="owner">Engineering</span>
+      <span class="page">Page B</span>
+      <span class="src">Cursor · axe</span><span class="src">Claude · by team</span>
+    </div>
+    <h3>Modal close (X) has no accessible name</h3>
+    <p>Shared modal-header close component, flagged by axe button-name on the Opt-In modal. Same component as the other two demos.</p>
+    <div class="fix"><strong>Fix.</strong> Add aria-label=&quot;Close&quot; at the shared modal-header component.</div>
+    <p class="verified">Confirmed by Cursor axe on this demo</p>
+    <details open><summary>Evidence screen grabs (1)</summary><div class="shots"><figure class="shot"><a href="af5f0eba6/shots/opt-in-button-name-1.png" target="_blank" rel="noreferrer"><img src="af5f0eba6/shots/opt-in-button-name-1.png" alt="AF-P1-2 — Modal close (X) has no accessible name" loading="lazy"></a><figcaption>AF-P1-2 — Modal close (X) has no accessible name</figcaption></figure></div></details>
+  </article>
+<article class="finding serious" id="af5f0eba6-AF-P1-3">
+    <div class="meta-row">
+      <span class="badge serious">serious</span>
+      <span class="id">AF-P1-3</span>
+      <span class="owner">Engineering</span>
+      <span class="page">Page B</span>
+      <span class="src">Cursor · axe</span><span class="src">Claude · af5f0eba6</span>
+    </div>
+    <h3>Opt-In modal has no dialog accessible name; spinner progressbar unnamed</h3>
+    <p>axe reports aria-dialog-name and aria-progressbar-name on the Opt-In modal, matching the be2376b21 result.</p>
+    <div class="fix"><strong>Fix.</strong> Add aria-labelledby on a real heading for the dialog; label or hide the button spinner from assistive tech.</div>
+    <p class="verified">Confirmed by Cursor axe on this demo</p>
+    <details open><summary>Evidence screen grabs (2)</summary><div class="shots"><figure class="shot"><a href="af5f0eba6/shots/opt-in-aria-dialog-name-1.png" target="_blank" rel="noreferrer"><img src="af5f0eba6/shots/opt-in-aria-dialog-name-1.png" alt="AF-P1-3 — Opt-In modal has no dialog accessible name; spinner progressbar unnamed" loading="lazy"></a><figcaption>AF-P1-3 — Opt-In modal has no dialog accessible name; spinner progressbar unnamed</figcaption></figure><figure class="shot"><a href="af5f0eba6/shots/opt-in-aria-progressbar-name-1.png" target="_blank" rel="noreferrer"><img src="af5f0eba6/shots/opt-in-aria-progressbar-name-1.png" alt="AF-P1-3 — Opt-In modal has no dialog accessible name; spinner progressbar unnamed" loading="lazy"></a><figcaption>AF-P1-3 — Opt-In modal has no dialog accessible name; spinner progressbar unnamed</figcaption></figure></div></details>
+  </article>
+<article class="finding serious" id="af5f0eba6-AF-P1-4">
+    <div class="meta-row">
+      <span class="badge serious">serious</span>
+      <span class="id">AF-P1-4</span>
+      <span class="owner">Design + Engineering</span>
+      <span class="page">Page A</span><span class="page">Page B</span>
+      <span class="src">Claude · af5f0eba6</span><span class="src">Claude · by team</span><span class="src">Cursor · axe</span>
+    </div>
+    <h3>Corrupted / duplicated legal disclaimer copy — third confirmation</h3>
+    <p>The garbled “…gitimate Interesgitimate Interes…” string renders on this demo's identity screen too, and is read in full by screen readers. Also contributes to the contrast failures on the footer text.</p>
+    <div class="fix"><strong>Fix.</strong> Fix the template / string-concatenation logic at the source, then apply the corrected copy.</div>
+    <p class="verified">Confirmed by Cursor page text capture</p>
+    <details open><summary>Evidence screen grabs (1)</summary><div class="shots"><figure class="shot"><a href="af5f0eba6/shots/identity-cookies-full.png" target="_blank" rel="noreferrer"><img src="af5f0eba6/shots/identity-cookies-full.png" alt="AF-P1-4 — Corrupted / duplicated legal disclaimer copy — third confirmation" loading="lazy"></a><figcaption>AF-P1-4 — Corrupted / duplicated legal disclaimer copy — third confirmation</figcaption></figure></div></details>
+  </article>
+
+  <h3 class="sub" id="af5f0eba6-p2">P2 — Page-specific &amp; Design decisions</h3>
+  <article class="finding serious" id="af5f0eba6-AF-P2-1">
+    <div class="meta-row">
+      <span class="badge serious">serious</span>
+      <span class="id">AF-P2-1</span>
+      <span class="owner">Design</span>
+      <span class="page">Page D</span>
+      <span class="src">Claude · af5f0eba6</span>
+    </div>
+    <h3>Tab key advances the tour instead of moving focus</h3>
+    <p>Claude observed Tab moving the tour spotlight rather than performing conventional focus navigation, which breaks keyboard expectations and blocks tabbing the underlying page.</p>
+    <div class="fix"><strong>Fix.</strong> Decide deliberately: keep Tab as focus navigation with dedicated Next/Back controls, or signal the repurposed behavior visibly each step.</div>
+    <p class="verified">Claude-only — tour not reachable by Cursor this pass</p>
+    <p class="sec-note">No Cursor screen grab — see note above for why this finding could not be captured live.</p>
+  </article>
+<article class="finding serious" id="af5f0eba6-AF-P2-2">
+    <div class="meta-row">
+      <span class="badge serious">serious</span>
+      <span class="id">AF-P2-2</span>
+      <span class="owner">Engineering</span>
+      <span class="page">Page D</span>
+      <span class="src">Claude · af5f0eba6</span>
+    </div>
+    <h3>Tour content is a cross-origin iframe and cannot be audited from the parent</h3>
+    <p>Only the iframe title (&quot;Dynamic tour&quot;) is verifiable externally. The tour's internal DOM/ARIA needs a pass from inside the ReachSuite / tour-builder codebase.</p>
+    <div class="fix"><strong>Fix.</strong> Schedule a dedicated audit inside the tour codebase, or provide tooling that can reach into the iframe.</div>
+    <p class="verified">Methodology limit — both auditors</p>
+    <p class="sec-note">No Cursor screen grab — see note above for why this finding could not be captured live.</p>
+  </article>
+<article class="finding moderate" id="af5f0eba6-AF-P2-3">
+    <div class="meta-row">
+      <span class="badge moderate">moderate</span>
+      <span class="id">AF-P2-3</span>
+      <span class="owner">Engineering</span>
+      <span class="page">Page A</span><span class="page">Page B</span><span class="page">Page C</span>
+      <span class="src">Cursor · axe</span>
+    </div>
+    <h3>Missing landmarks and content outside regions</h3>
+    <p>axe reports landmark-one-main plus region violations across identity, opt-in and topic rating; duplicate contentinfo and landmark-unique on the opt-in state.</p>
+    <div class="fix"><strong>Fix.</strong> Add a single &lt;main&gt;, unique labelled landmarks, and wrap page content in regions.</div>
+    <p class="verified">Confirmed by Cursor axe</p>
+    <details open><summary>Evidence screen grabs (2)</summary><div class="shots"><figure class="shot"><a href="af5f0eba6/shots/identity-landmark-one-main-1.png" target="_blank" rel="noreferrer"><img src="af5f0eba6/shots/identity-landmark-one-main-1.png" alt="AF-P2-3 — Missing landmarks and content outside regions" loading="lazy"></a><figcaption>AF-P2-3 — Missing landmarks and content outside regions</figcaption></figure><figure class="shot"><a href="af5f0eba6/shots/opt-in-landmark-unique-1.png" target="_blank" rel="noreferrer"><img src="af5f0eba6/shots/opt-in-landmark-unique-1.png" alt="AF-P2-3 — Missing landmarks and content outside regions" loading="lazy"></a><figcaption>AF-P2-3 — Missing landmarks and content outside regions</figcaption></figure></div></details>
+  </article>
+<article class="finding moderate" id="af5f0eba6-AF-P2-4">
+    <div class="meta-row">
+      <span class="badge moderate">moderate</span>
+      <span class="id">AF-P2-4</span>
+      <span class="owner">Engineering</span>
+      <span class="page">Page B</span>
+      <span class="src">Cursor · axe</span>
+    </div>
+    <h3>Heading order jumps (h5 with no preceding levels)</h3>
+    <p>axe heading-order on the Opt-In modal — the “Opt In” heading is an h5 with no higher-level headings.</p>
+    <div class="fix"><strong>Fix.</strong> Use a real heading hierarchy once Design confirms structure.</div>
+    <p class="verified">Confirmed by Cursor axe</p>
+    <details open><summary>Evidence screen grabs (1)</summary><div class="shots"><figure class="shot"><a href="af5f0eba6/shots/opt-in-heading-order-1.png" target="_blank" rel="noreferrer"><img src="af5f0eba6/shots/opt-in-heading-order-1.png" alt="AF-P2-4 — Heading order jumps (h5 with no preceding levels)" loading="lazy"></a><figcaption>AF-P2-4 — Heading order jumps (h5 with no preceding levels)</figcaption></figure></div></details>
+  </article>
+<article class="finding moderate" id="af5f0eba6-AF-P2-5">
+    <div class="meta-row">
+      <span class="badge moderate">moderate</span>
+      <span class="id">AF-P2-5</span>
+      <span class="owner">Design + Engineering</span>
+      <span class="page">Page C</span>
+      <span class="src">Claude · by team</span><span class="src">Cursor · axe</span>
+    </div>
+    <h3>Three “Select all” buttons share one accessible name</h3>
+    <p>Very / Somewhat / Not important columns each expose an identical “Select all” name with no column context.</p>
+    <div class="fix"><strong>Fix.</strong> aria-label=&quot;Select all — Very important&quot; etc.</div>
+    <p class="verified">Observed by Cursor on this demo</p>
+    <details open><summary>Evidence screen grabs (1)</summary><div class="shots"><figure class="shot"><a href="af5f0eba6/shots/evidence-contrast-selectall.png" target="_blank" rel="noreferrer"><img src="af5f0eba6/shots/evidence-contrast-selectall.png" alt="AF-P2-5 — Three “Select all” buttons share one accessible name" loading="lazy"></a><figcaption>AF-P2-5 — Three “Select all” buttons share one accessible name</figcaption></figure></div></details>
+  </article>
+<article class="finding minor" id="af5f0eba6-AF-P2-6">
+    <div class="meta-row">
+      <span class="badge minor">minor</span>
+      <span class="id">AF-P2-6</span>
+      <span class="owner">Engineering</span>
+      <span class="page">Page A</span>
+      <span class="src">Claude · af5f0eba6</span>
+    </div>
+    <h3>Document title is the demo's internal name</h3>
+    <p>Title reads “Dylan Standard personalized with tours” rather than visitor-appropriate copy.</p>
+    <div class="fix"><strong>Fix.</strong> Set a meaningful document.title for viewers.</div>
+    <p class="verified">Confirmed by Cursor page title</p>
+    <p class="sec-note">No Cursor screen grab — see note above for why this finding could not be captured live.</p>
+  </article>
+<article class="finding moderate" id="af5f0eba6-AF-P2-7">
+    <div class="meta-row">
+      <span class="badge moderate">moderate</span>
+      <span class="id">AF-P2-7</span>
+      <span class="owner">Engineering</span>
+      <span class="page">Page A</span>
+      <span class="src">Claude · af5f0eba6</span><span class="src">Claude · by team</span>
+    </div>
+    <h3>Required-field asterisk convention has no programmatic equivalent</h3>
+    <p>Carried over from the shared registration form; third confirmation across demos.</p>
+    <div class="fix"><strong>Fix.</strong> Add aria-required / required at the shared field component.</div>
+    <p class="verified">Claude-confirmed; shared component</p>
+    <p class="sec-note">No Cursor screen grab — see note above for why this finding could not be captured live.</p>
+  </article>
+</article>
+</section>
+
+<section class="panel" id="panel-shared" role="tabpanel" aria-labelledby="tab-shared">
+  <header class="demo-head">
+    <h2>Bugs that reproduce across demos</h2>
+    <p class="sec-note">These are single shared-component or shared-template defects. Fixing each once clears the same finding on every demo — highest leverage work in the whole pack.</p>
+  </header>
+  <table>
+    <thead><tr><th>Finding</th><th>Seen on</th><th>Why it matters</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Topic-rating controls at 0×0 with no accessible name</strong></td><td>af5f0eba6 (Cursor-confirmed), a754d887d + be2376b21 (Claude)</td><td>Three demos. Keyboard users cannot rate topics; rating is required to proceed.</td></tr><tr><td><strong>Modal close (X) button unlabeled</strong></td><td>be2376b21, af5f0eba6 (both Cursor axe-confirmed)</td><td>Single shared modal-header component.</td></tr><tr><td><strong>Opt-In toggle unlabeled (and 0×0 on af5f0eba6)</strong></td><td>be2376b21, af5f0eba6</td><td>Shared switch component; axe label rule fires on both.</td></tr><tr><td><strong>Corrupted / duplicated legal disclaimer copy</strong></td><td>All three demos</td><td>Template or string-concatenation bug; read in full by screen readers.</td></tr><tr><td><strong>Required-field indication is visual only</strong></td><td>be2376b21, af5f0eba6</td><td>No required / aria-required on asterisked fields.</td></tr><tr><td><strong>Missing landmarks, generic document titles, heading-order gaps</strong></td><td>Both audited demos</td><td>Structural fixes at the player shell.</td></tr>
+    </tbody>
+  </table>
+  <div class="fix" style="margin-top:20px"><strong>Recommended order.</strong> 1) Rating hit-target + radio semantics · 2) Modal close + Opt-In toggle labels · 3) Required-field indication · 4) Legal-copy template bug · 5) Landmarks, titles, heading order · 6) Per-demo theme/contrast config safety net.</div>
+</section>
+
+<footer>
+  Pack lives at <code>/a11y-audit/</code> ·
+  <a href="report.html">Cursor-only report (single video)</a>
+</footer>
+</div>
+<script>
+  const tabs = [...document.querySelectorAll('.tab')];
+  const select = (id) => {
+    tabs.forEach((t) => {
+      const on = t.dataset.target === id;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    document.querySelectorAll('.panel').forEach((p) => p.classList.toggle('active', p.id === id));
+    history.replaceState(null, '', '#' + id);
+  };
+  tabs.forEach((t) => t.addEventListener('click', () => select(t.dataset.target)));
+  document.querySelectorAll('.inline-tab-link').forEach((btn) =>
+    btn.addEventListener('click', () => {
+      select(btn.dataset.target);
+      const hash = btn.getAttribute('href');
+      if (hash && hash.startsWith('#')) {
+        requestAnimationFrame(() => document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth' }));
+      }
+    }),
+  );
+  // In-panel jump links that need the backlog/demos tab open first
+  document.querySelectorAll('.jump a[href^="#backlog-"]').forEach((a) => {
+    a.addEventListener('click', () => select('panel-backlog'));
+  });
+  document.querySelectorAll('.jump a[href^="#demo-"]').forEach((a) => {
+    a.addEventListener('click', () => select('panel-demos'));
+  });
+  document.querySelectorAll('a[href^="#backlog-"]').forEach((a) => {
+    if (a.closest('.jump')) return;
+    a.addEventListener('click', (e) => {
+      select('panel-backlog');
+      const id = a.getAttribute('href');
+      requestAnimationFrame(() => document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' }));
+      e.preventDefault();
+    });
+  });
+  tabs.forEach((t, i) =>
+    t.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      e.preventDefault();
+      const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+      next.focus();
+      select(next.dataset.target);
+    }),
+  );
+  if (location.hash && document.querySelector(location.hash + '.panel')) select(location.hash.slice(1));
+  else if (location.hash && location.hash.startsWith('#backlog-')) {
+    select('panel-backlog');
+    requestAnimationFrame(() => document.querySelector(location.hash)?.scrollIntoView());
+  } else if (location.hash && location.hash.startsWith('#demo-')) {
+    select('panel-demos');
+    requestAnimationFrame(() => document.querySelector(location.hash)?.scrollIntoView());
+  }
+</script>
+</body>
+</html>
