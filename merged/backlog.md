@@ -7,6 +7,7 @@ Unified backlog from Claude’s WCAG 2.2 AA audits + Cursor’s live axe pass on
 - Claude — `consensus-player-a11y-audit-by-team.md` (Pages A/B/C, Design vs Eng)
 - Claude — `consensus-player-a11y-audit-be2376b21.md` (this URL: identity / Opt-In / registration)
 - Cursor — live Playwright + axe-core run (cover → Opt-In → video player) with screen grabs
+- Cursor — guest “I’m new here” registration with `justin.ware@goconsensus.com` (Country + Phone + Opt-In → personalized player)
 
 **How to use**
 1. Start with **P0 Hotfixes** — functional or hard keyboard blocks.
@@ -70,7 +71,8 @@ Unified backlog from Claude’s WCAG 2.2 AA audits + Cursor’s live axe pass on
 |---|---|---|---|---|---|---|
 | P2-1 | **Opt-In / consent modal missing dialog semantics** on this URL’s Opt-In surface (`role="dialog"` + `aria-modal` + named title) | Serious | Engineering | Cover / C | Add dialog roles + `aria-labelledby` on a real heading | Claude be2376; Cursor `opt-in-aria-dialog-name-1.png` |
 | P2-2 | **ARIA progressbar (button spinner) has no accessible name** | Serious | Engineering | Cover / C | `aria-label="Loading"` (or hide decorative spinner from AT) | Cursor `opt-in-aria-progressbar-name-1.png` |
-| P2-3 | **Custom Country dropdown lacks combobox/listbox semantics** | Critical | Engineering | C / Cover | ARIA 1.2 combobox pattern | Claude be2376 (DOM inspection) |
+| P2-3 | **Custom Country dropdown lacks combobox/listbox semantics** — unlabeled `field country`, suggestions are `div.option` (no `role=option`) | Critical | Engineering | C / Cover | ARIA 1.2 combobox pattern | Claude be2376; **Cursor** `lead-country-suggestions.png` |
+| P2-11 | **Phone field appears only after Country** and silently gates Continue | Serious | Engineering | C | Keep in initial order or announce via live region | **Cursor** `lead-phone-required-error.png` |
 | P2-4 | **Header prev/next chevrons unlabeled** | Critical | Engineering | B | `aria-label="Previous topic"` / `"Next topic"` | Claude by-team |
 | P2-5 | **Lead-capture modal: no initial focus move; missing `aria-labelledby`** (trap itself works) | Serious | Engineering | C | Focus first field or title on open; wire `aria-labelledby` | Claude by-team |
 | P2-6 | **“Select all” buttons share identical accessible names** | Moderate | Engineering | A | `aria-label="Select all — Very important"` etc. | Claude by-team |

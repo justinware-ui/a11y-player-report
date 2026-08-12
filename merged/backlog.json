@@ -1,11 +1,12 @@
 {
   "title": "Consensus Player — Accessibility Fix Backlog",
   "url": "https://play.goconsensus.com/be2376b21",
-  "generatedAt": "2026-08-12T00:15:00.000Z",
+  "generatedAt": "2026-08-12T02:15:00.000Z",
   "sources": [
     "Claude: consensus-player-a11y-audit-by-team.md",
     "Claude: consensus-player-a11y-audit-be2376b21.md",
-    "Cursor: live axe-core + Playwright audit"
+    "Cursor: live axe-core + Playwright audit",
+    "Cursor: guest registration / lead-gate (justin.ware@goconsensus.com)"
   ],
   "items": [
     {
@@ -60,9 +61,11 @@
       "owner": "Engineering",
       "pages": ["C", "Cover", "Shared"],
       "title": "Required fields lack required / aria-required",
-      "fix": "Add aria-required=\"true\" (or required) at the shared form-field component.",
-      "sources": ["claude-by-team", "claude-be2376"],
-      "shots": []
+      "detail": "Guest form shows required styling on First name, Last name, Email, Country, and Phone Number. Most inputs have no aria-required; Country’s visible input uses HTML required but is unlabelled. Empty phone blocks Continue with “Phone number is required to continue”.",
+      "fix": "Add aria-required=\"true\" (or required) at the shared form-field component; keep error text linked via aria-describedby.",
+      "sources": ["claude-by-team", "claude-be2376", "cursor-axe"],
+      "shots": ["shots/lead-new-viewer-form.png", "shots/lead-phone-required-error.png"],
+      "verified": "Cursor guest registration on be2376b21 (justin.ware@goconsensus.com)"
     },
     {
       "id": "P1-2",
@@ -71,10 +74,12 @@
       "owner": "Engineering",
       "pages": ["C", "Cover"],
       "title": "Opt-In toggle has no accessible name",
-      "fix": "Associate label via for/id or aria-labelledby pointing at \"Opt In\" text.",
+      "detail": "On the new-viewer form, input[data-testid=\"optin toggle\"] is still 0×0 with no accessible name; axe label rule fires. Visible “Opt In” text is not programmatically associated.",
+      "fix": "Associate label via for/id or aria-labelledby pointing at \"Opt In\" text; give the control a real hit target.",
       "sources": ["claude-by-team", "claude-be2376", "cursor-axe"],
-      "shots": ["shots/cover-full.png", "shots/opt-in-full.png"],
-      "axeRules": ["label"]
+      "shots": ["shots/cover-full.png", "shots/opt-in-full.png", "shots/lead-form-complete.png"],
+      "axeRules": ["label"],
+      "verified": "Reconfirmed on guest registration form"
     },
     {
       "id": "P1-3",
@@ -83,10 +88,12 @@
       "owner": "Design + Engineering",
       "pages": ["Cover", "Shared"],
       "title": "Corrupted / duplicated legal disclaimer text",
+      "detail": "API /legal/statements?country=US returns the same corrupted string (“…gitimate Interes…”). Still shown beside the guest form.",
       "fix": "Fix source copy / template once; re-check contrast after rewrite.",
       "sources": ["claude-by-team", "claude-be2376", "cursor-axe"],
-      "shots": ["shots/cover-color-contrast-1.png", "shots/cover-cookies-full.png"],
-      "axeRules": ["color-contrast"]
+      "shots": ["shots/cover-color-contrast-1.png", "shots/cover-cookies-full.png", "shots/lead-new-viewer-form.png"],
+      "axeRules": ["color-contrast"],
+      "verified": "Confirmed again during guest registration; same payload from legal/statements API"
     },
     {
       "id": "P1-4",
@@ -141,9 +148,25 @@
       "owner": "Engineering",
       "pages": ["C", "Cover"],
       "title": "Country dropdown lacks combobox/listbox semantics",
-      "fix": "Implement ARIA 1.2 combobox pattern.",
-      "sources": ["claude-be2376"],
-      "shots": []
+      "detail": "Visible control is input[data-testid=\"field country\"] with no accessible name (axe label). Suggestions render as div.option without role=option / listbox. Hidden country_autofill is aria-hidden. Nearby UIKit anchor uses aria-expanded/aria-haspopup without an allowed role (axe aria-allowed-attr).",
+      "fix": "Implement ARIA 1.2 combobox pattern: labelled input, listbox + option roles, and wire aria-expanded to the combobox.",
+      "sources": ["claude-be2376", "cursor-axe"],
+      "shots": ["shots/lead-country-suggestions.png", "shots/lead-new-viewer-form.png"],
+      "axeRules": ["label", "aria-allowed-attr"],
+      "verified": "Cursor guest form: selected United States via div.option click; Continue enabled only after phone + opt-in"
+    },
+    {
+      "id": "P2-11",
+      "priority": "P2",
+      "severity": "serious",
+      "owner": "Engineering",
+      "pages": ["C"],
+      "title": "Phone field appears only after Country and is easy to miss",
+      "detail": "Phone Number is visually required and gates Continue, but it is not in the initial field set until Country resolves. Screen readers / keyboard users can believe the form is complete while Continue stays disabled.",
+      "fix": "Keep phone in the initial required field order (or announce the newly required field via live region when Country is set).",
+      "sources": ["cursor-axe"],
+      "shots": ["shots/lead-phone-required-error.png", "shots/lead-form-complete.png"],
+      "verified": "Cursor: Continue stayed disabled until phone filled; error “Phone number is required to continue”"
     },
     {
       "id": "P2-4",
@@ -162,10 +185,12 @@
       "severity": "serious",
       "owner": "Engineering",
       "pages": ["C"],
-      "title": "Lead-capture modal opens without moving focus",
-      "fix": "Move focus to first field or title; add aria-labelledby.",
-      "sources": ["claude-by-team"],
-      "shots": []
+      "title": "Lead-capture / new-viewer form opens without a clear focus move",
+      "detail": "“I’m new here” reveals form[aria-label=\"new viewer form\"]. Cursor reached and submitted this path; Claude’s separate lead-capture modal focus finding still applies to gated flows that use a dialog.",
+      "fix": "Move focus to first field or form heading on open; ensure dialog variant uses aria-labelledby.",
+      "sources": ["claude-by-team", "cursor-axe"],
+      "shots": ["shots/lead-new-viewer-form.png", "shots/lead-after-submit-player.png"],
+      "verified": "Cursor completed guest submit → personalized player (b6bd9c4bf)"
     },
     {
       "id": "P2-10",

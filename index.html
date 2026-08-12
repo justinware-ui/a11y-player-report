@@ -86,7 +86,7 @@
   <h1>Consensus Demo Player — Claude + Cursor</h1>
   <div class="meta">
     <span>Demos <code>2</code></span>
-    <span>Backlog items <code>32</code></span>
+    <span>Backlog items <code>33</code></span>
     <span>Critical <code>14</code></span>
     <span>P0 hotfixes <code>8</code></span>
     <span>Standard <code>WCAG 2.1 / 2.2 AA</code></span>
@@ -107,16 +107,16 @@
     <div class="meta">
       <span>URL <code><a href="https://play.goconsensus.com/be2376b21" target="_blank" rel="noreferrer">https://play.goconsensus.com/be2376b21</a></code></span>
       <span>axe <code>4.12.1</code></span>
-      <span>Run <code>8/11/2026, 7:57:26 PM</code></span>
+      <span>Run <code>8/11/2026, 10:13:11 PM</code></span>
     </div>
-    <p class="sec-note"><strong>Coverage.</strong> Cover → Opt-In → video player reached</p>
+    <p class="sec-note"><strong>Coverage.</strong> Cover → Opt-In → video player; guest “I’m new here” registration (justin.ware@goconsensus.com) → personalized player</p>
   </header>
 
   <div class="cards">
     <div class="card critical"><div class="n">9</div><div class="l">Critical</div></div>
-    <div class="card serious"><div class="n">8</div><div class="l">Serious</div></div>
-    <div class="card"><div class="n">17</div><div class="l">Backlog items</div></div>
-    <div class="card"><div class="n">9</div><div class="l">With screen grabs</div></div>
+    <div class="card serious"><div class="n">9</div><div class="l">Serious</div></div>
+    <div class="card"><div class="n">18</div><div class="l">Backlog items</div></div>
+    <div class="card"><div class="n">13</div><div class="l">With screen grabs</div></div>
   </div>
   <p class="sec-note">Tickets for this demo are in the <button type="button" class="inline-tab-link" data-target="panel-backlog">Backlog</button> tab → <a href="#backlog-be2376b21">Demo with single video</a>.</p>
 
@@ -126,21 +126,31 @@
       <h4>Cover page — cookie banner open</h4>
       <p class="sec-note">First paint of the Demo Player cover with the OneTrust consent dialog over the identity picker. — 3 axe rules, 14 elements</p>
       <figure class="shot"><a href="shots/cover-cookies-full.png" target="_blank" rel="noreferrer"><img src="shots/cover-cookies-full.png" alt="Cover page — cookie banner open" loading="lazy"></a></figure>
+      
     </div>
 <div class="finding">
       <h4>Cover page — identity picker</h4>
       <p class="sec-note">After accepting cookies: personalized demo cover with “I’m new here” / named viewer, Contact me, and Policies. — 4 axe rules, 12 elements</p>
       <figure class="shot"><a href="shots/cover-full.png" target="_blank" rel="noreferrer"><img src="shots/cover-full.png" alt="Cover page — identity picker" loading="lazy"></a></figure>
+      
     </div>
 <div class="finding">
       <h4>Opt-in consent dialog</h4>
       <p class="sec-note">After selecting a known viewer — tracking opt-in before the demo starts. — 9 axe rules, 17 elements</p>
       <figure class="shot"><a href="shots/opt-in-full.png" target="_blank" rel="noreferrer"><img src="shots/opt-in-full.png" alt="Opt-in consent dialog" loading="lazy"></a></figure>
+      
     </div>
 <div class="finding">
       <h4>Video player — demo playing</h4>
       <p class="sec-note">In-player experience after opt-in: video controls, invite, reactions, sidebar, and Get in touch. — 2 axe rules, 11 elements</p>
       <figure class="shot"><a href="shots/player-full.png" target="_blank" rel="noreferrer"><img src="shots/player-full.png" alt="Video player — demo playing" loading="lazy"></a></figure>
+      
+    </div>
+<div class="finding">
+      <h4>New viewer / lead-capture registration form</h4>
+      <p class="sec-note">Guest path via “I’m new here” using justin.ware@goconsensus.com. Required fields: First/Last name, Email, Country, Phone. Country uses visible data-testid=&quot;field country&quot; plus hidden country_autofill. Opt-In toggle is 0×0. Successful submit → personalized player (hash b6bd9c4bf). — 5 axe rules, 14 elements</p>
+      <figure class="shot"><a href="shots/lead-form-complete.png" target="_blank" rel="noreferrer"><img src="shots/lead-form-complete.png" alt="New viewer / lead-capture registration form" loading="lazy"></a></figure>
+      <figure class="shot"><a href="shots/lead-new-viewer-form.png" target="_blank" rel="noreferrer"><img src="shots/lead-new-viewer-form.png" alt="New viewer / lead-capture registration form" loading="lazy"></a></figure><figure class="shot"><a href="shots/lead-country-suggestions.png" target="_blank" rel="noreferrer"><img src="shots/lead-country-suggestions.png" alt="New viewer / lead-capture registration form" loading="lazy"></a></figure><figure class="shot"><a href="shots/lead-phone-required-error.png" target="_blank" rel="noreferrer"><img src="shots/lead-phone-required-error.png" alt="New viewer / lead-capture registration form" loading="lazy"></a></figure><figure class="shot"><a href="shots/lead-after-submit-player.png" target="_blank" rel="noreferrer"><img src="shots/lead-after-submit-player.png" alt="New viewer / lead-capture registration form" loading="lazy"></a></figure>
     </div>
   </div>
 
@@ -180,21 +190,25 @@
       <h4>Identity screen — cookie banner open</h4>
       <p class="sec-note">First paint with the OneTrust consent dialog over the “who are you” identity picker. — 3 axe rules, 23 elements</p>
       <figure class="shot"><a href="af5f0eba6/shots/identity-cookies-full.png" target="_blank" rel="noreferrer"><img src="af5f0eba6/shots/identity-cookies-full.png" alt="Identity screen — cookie banner open" loading="lazy"></a></figure>
+      
     </div>
 <div class="finding">
       <h4>Identity screen — viewer picker</h4>
       <p class="sec-note">After accepting cookies: “I’m new here” / named viewers, Contact me, Opt In toggle, legal footer. — 4 axe rules, 22 elements</p>
       <figure class="shot"><a href="af5f0eba6/shots/identity-full.png" target="_blank" rel="noreferrer"><img src="af5f0eba6/shots/identity-full.png" alt="Identity screen — viewer picker" loading="lazy"></a></figure>
+      
     </div>
 <div class="finding">
       <h4>Opt-in consent modal</h4>
       <p class="sec-note">Consent gate shown after selecting a known viewer. — 9 axe rules, 25 elements</p>
       <figure class="shot"><a href="af5f0eba6/shots/opt-in-full.png" target="_blank" rel="noreferrer"><img src="af5f0eba6/shots/opt-in-full.png" alt="Opt-in consent modal" loading="lazy"></a></figure>
+      
     </div>
 <div class="finding">
       <h4>Topic Rating screen</h4>
       <p class="sec-note">Topic rating grid (Very / Somewhat / Not important) with Select all controls. — 2 axe rules, 8 elements</p>
       <figure class="shot"><a href="af5f0eba6/shots/post-continue-full.png" target="_blank" rel="noreferrer"><img src="af5f0eba6/shots/post-continue-full.png" alt="Topic Rating screen" loading="lazy"></a></figure>
+      
     </div>
   </div>
 
@@ -232,8 +246,8 @@
   <div class="cards">
     <div class="card critical"><div class="n">4</div><div class="l">P0 hotfixes</div></div>
     <div class="card serious"><div class="n">5</div><div class="l">P1 shared</div></div>
-    <div class="card"><div class="n">8</div><div class="l">P2 page-specific</div></div>
-    <div class="card"><div class="n">17</div><div class="l">Total tickets</div></div>
+    <div class="card"><div class="n">9</div><div class="l">P2 page-specific</div></div>
+    <div class="card"><div class="n">18</div><div class="l">Total tickets</div></div>
   </div>
 
   <h3 class="sub" id="be2376b21-p0">P0 — Hotfixes</h3>
@@ -303,13 +317,13 @@
       <span class="id">P1-1</span>
       <span class="owner">Engineering</span>
       <span class="page">Page C</span><span class="page">Page Cover</span><span class="page">Page Shared</span>
-      <span class="src">Claude · by team</span><span class="src">Claude · be2376</span>
+      <span class="src">Claude · by team</span><span class="src">Claude · be2376</span><span class="src">Cursor · axe</span>
     </div>
     <h3>Required fields lack required / aria-required</h3>
-    
-    <div class="fix"><strong>Fix.</strong> Add aria-required=&quot;true&quot; (or required) at the shared form-field component.</div>
-    
-    <p class="sec-note">No Cursor screen grab — see note above for why this finding could not be captured live.</p>
+    <p>Guest form shows required styling on First name, Last name, Email, Country, and Phone Number. Most inputs have no aria-required; Country’s visible input uses HTML required but is unlabelled. Empty phone blocks Continue with “Phone number is required to continue”.</p>
+    <div class="fix"><strong>Fix.</strong> Add aria-required=&quot;true&quot; (or required) at the shared form-field component; keep error text linked via aria-describedby.</div>
+    <p class="verified">Cursor guest registration on be2376b21 (justin.ware@goconsensus.com)</p>
+    <details open><summary>Evidence screen grabs (2)</summary><div class="shots"><figure class="shot"><a href="shots/lead-new-viewer-form.png" target="_blank" rel="noreferrer"><img src="shots/lead-new-viewer-form.png" alt="P1-1 — Required fields lack required / aria-required" loading="lazy"></a><figcaption>P1-1 — Required fields lack required / aria-required</figcaption></figure><figure class="shot"><a href="shots/lead-phone-required-error.png" target="_blank" rel="noreferrer"><img src="shots/lead-phone-required-error.png" alt="P1-1 — Required fields lack required / aria-required" loading="lazy"></a><figcaption>P1-1 — Required fields lack required / aria-required</figcaption></figure></div></details>
   </article>
 <article class="finding critical" id="be2376b21-P1-2">
     <div class="meta-row">
@@ -320,10 +334,10 @@
       <span class="src">Claude · by team</span><span class="src">Claude · be2376</span><span class="src">Cursor · axe</span>
     </div>
     <h3>Opt-In toggle has no accessible name</h3>
-    
-    <div class="fix"><strong>Fix.</strong> Associate label via for/id or aria-labelledby pointing at &quot;Opt In&quot; text.</div>
-    
-    <details open><summary>Evidence screen grabs (2)</summary><div class="shots"><figure class="shot"><a href="shots/cover-full.png" target="_blank" rel="noreferrer"><img src="shots/cover-full.png" alt="P1-2 — Opt-In toggle has no accessible name" loading="lazy"></a><figcaption>P1-2 — Opt-In toggle has no accessible name</figcaption></figure><figure class="shot"><a href="shots/opt-in-full.png" target="_blank" rel="noreferrer"><img src="shots/opt-in-full.png" alt="P1-2 — Opt-In toggle has no accessible name" loading="lazy"></a><figcaption>P1-2 — Opt-In toggle has no accessible name</figcaption></figure></div></details>
+    <p>On the new-viewer form, input[data-testid=&quot;optin toggle&quot;] is still 0×0 with no accessible name; axe label rule fires. Visible “Opt In” text is not programmatically associated.</p>
+    <div class="fix"><strong>Fix.</strong> Associate label via for/id or aria-labelledby pointing at &quot;Opt In&quot; text; give the control a real hit target.</div>
+    <p class="verified">Reconfirmed on guest registration form</p>
+    <details open><summary>Evidence screen grabs (3)</summary><div class="shots"><figure class="shot"><a href="shots/cover-full.png" target="_blank" rel="noreferrer"><img src="shots/cover-full.png" alt="P1-2 — Opt-In toggle has no accessible name" loading="lazy"></a><figcaption>P1-2 — Opt-In toggle has no accessible name</figcaption></figure><figure class="shot"><a href="shots/opt-in-full.png" target="_blank" rel="noreferrer"><img src="shots/opt-in-full.png" alt="P1-2 — Opt-In toggle has no accessible name" loading="lazy"></a><figcaption>P1-2 — Opt-In toggle has no accessible name</figcaption></figure><figure class="shot"><a href="shots/lead-form-complete.png" target="_blank" rel="noreferrer"><img src="shots/lead-form-complete.png" alt="P1-2 — Opt-In toggle has no accessible name" loading="lazy"></a><figcaption>P1-2 — Opt-In toggle has no accessible name</figcaption></figure></div></details>
   </article>
 <article class="finding serious" id="be2376b21-P1-3">
     <div class="meta-row">
@@ -334,10 +348,10 @@
       <span class="src">Claude · by team</span><span class="src">Claude · be2376</span><span class="src">Cursor · axe</span>
     </div>
     <h3>Corrupted / duplicated legal disclaimer text</h3>
-    
+    <p>API /legal/statements?country=US returns the same corrupted string (“…gitimate Interes…”). Still shown beside the guest form.</p>
     <div class="fix"><strong>Fix.</strong> Fix source copy / template once; re-check contrast after rewrite.</div>
-    
-    <details open><summary>Evidence screen grabs (2)</summary><div class="shots"><figure class="shot"><a href="shots/cover-color-contrast-1.png" target="_blank" rel="noreferrer"><img src="shots/cover-color-contrast-1.png" alt="P1-3 — Corrupted / duplicated legal disclaimer text" loading="lazy"></a><figcaption>P1-3 — Corrupted / duplicated legal disclaimer text</figcaption></figure><figure class="shot"><a href="shots/cover-cookies-full.png" target="_blank" rel="noreferrer"><img src="shots/cover-cookies-full.png" alt="P1-3 — Corrupted / duplicated legal disclaimer text" loading="lazy"></a><figcaption>P1-3 — Corrupted / duplicated legal disclaimer text</figcaption></figure></div></details>
+    <p class="verified">Confirmed again during guest registration; same payload from legal/statements API</p>
+    <details open><summary>Evidence screen grabs (3)</summary><div class="shots"><figure class="shot"><a href="shots/cover-color-contrast-1.png" target="_blank" rel="noreferrer"><img src="shots/cover-color-contrast-1.png" alt="P1-3 — Corrupted / duplicated legal disclaimer text" loading="lazy"></a><figcaption>P1-3 — Corrupted / duplicated legal disclaimer text</figcaption></figure><figure class="shot"><a href="shots/cover-cookies-full.png" target="_blank" rel="noreferrer"><img src="shots/cover-cookies-full.png" alt="P1-3 — Corrupted / duplicated legal disclaimer text" loading="lazy"></a><figcaption>P1-3 — Corrupted / duplicated legal disclaimer text</figcaption></figure><figure class="shot"><a href="shots/lead-new-viewer-form.png" target="_blank" rel="noreferrer"><img src="shots/lead-new-viewer-form.png" alt="P1-3 — Corrupted / duplicated legal disclaimer text" loading="lazy"></a><figcaption>P1-3 — Corrupted / duplicated legal disclaimer text</figcaption></figure></div></details>
   </article>
 <article class="finding serious" id="be2376b21-P1-4">
     <div class="meta-row">
@@ -403,13 +417,27 @@
       <span class="id">P2-3</span>
       <span class="owner">Engineering</span>
       <span class="page">Page C</span><span class="page">Page Cover</span>
-      <span class="src">Claude · be2376</span>
+      <span class="src">Claude · be2376</span><span class="src">Cursor · axe</span>
     </div>
     <h3>Country dropdown lacks combobox/listbox semantics</h3>
-    
-    <div class="fix"><strong>Fix.</strong> Implement ARIA 1.2 combobox pattern.</div>
-    
-    <p class="sec-note">No Cursor screen grab — see note above for why this finding could not be captured live.</p>
+    <p>Visible control is input[data-testid=&quot;field country&quot;] with no accessible name (axe label). Suggestions render as div.option without role=option / listbox. Hidden country_autofill is aria-hidden. Nearby UIKit anchor uses aria-expanded/aria-haspopup without an allowed role (axe aria-allowed-attr).</p>
+    <div class="fix"><strong>Fix.</strong> Implement ARIA 1.2 combobox pattern: labelled input, listbox + option roles, and wire aria-expanded to the combobox.</div>
+    <p class="verified">Cursor guest form: selected United States via div.option click; Continue enabled only after phone + opt-in</p>
+    <details open><summary>Evidence screen grabs (2)</summary><div class="shots"><figure class="shot"><a href="shots/lead-country-suggestions.png" target="_blank" rel="noreferrer"><img src="shots/lead-country-suggestions.png" alt="P2-3 — Country dropdown lacks combobox/listbox semantics" loading="lazy"></a><figcaption>P2-3 — Country dropdown lacks combobox/listbox semantics</figcaption></figure><figure class="shot"><a href="shots/lead-new-viewer-form.png" target="_blank" rel="noreferrer"><img src="shots/lead-new-viewer-form.png" alt="P2-3 — Country dropdown lacks combobox/listbox semantics" loading="lazy"></a><figcaption>P2-3 — Country dropdown lacks combobox/listbox semantics</figcaption></figure></div></details>
+  </article>
+<article class="finding serious" id="be2376b21-P2-11">
+    <div class="meta-row">
+      <span class="badge serious">serious</span>
+      <span class="id">P2-11</span>
+      <span class="owner">Engineering</span>
+      <span class="page">Page C</span>
+      <span class="src">Cursor · axe</span>
+    </div>
+    <h3>Phone field appears only after Country and is easy to miss</h3>
+    <p>Phone Number is visually required and gates Continue, but it is not in the initial field set until Country resolves. Screen readers / keyboard users can believe the form is complete while Continue stays disabled.</p>
+    <div class="fix"><strong>Fix.</strong> Keep phone in the initial required field order (or announce the newly required field via live region when Country is set).</div>
+    <p class="verified">Cursor: Continue stayed disabled until phone filled; error “Phone number is required to continue”</p>
+    <details open><summary>Evidence screen grabs (2)</summary><div class="shots"><figure class="shot"><a href="shots/lead-phone-required-error.png" target="_blank" rel="noreferrer"><img src="shots/lead-phone-required-error.png" alt="P2-11 — Phone field appears only after Country and is easy to miss" loading="lazy"></a><figcaption>P2-11 — Phone field appears only after Country and is easy to miss</figcaption></figure><figure class="shot"><a href="shots/lead-form-complete.png" target="_blank" rel="noreferrer"><img src="shots/lead-form-complete.png" alt="P2-11 — Phone field appears only after Country and is easy to miss" loading="lazy"></a><figcaption>P2-11 — Phone field appears only after Country and is easy to miss</figcaption></figure></div></details>
   </article>
 <article class="finding critical" id="be2376b21-P2-4">
     <div class="meta-row">
@@ -431,13 +459,13 @@
       <span class="id">P2-5</span>
       <span class="owner">Engineering</span>
       <span class="page">Page C</span>
-      <span class="src">Claude · by team</span>
+      <span class="src">Claude · by team</span><span class="src">Cursor · axe</span>
     </div>
-    <h3>Lead-capture modal opens without moving focus</h3>
-    
-    <div class="fix"><strong>Fix.</strong> Move focus to first field or title; add aria-labelledby.</div>
-    
-    <p class="sec-note">No Cursor screen grab — see note above for why this finding could not be captured live.</p>
+    <h3>Lead-capture / new-viewer form opens without a clear focus move</h3>
+    <p>“I’m new here” reveals form[aria-label=&quot;new viewer form&quot;]. Cursor reached and submitted this path; Claude’s separate lead-capture modal focus finding still applies to gated flows that use a dialog.</p>
+    <div class="fix"><strong>Fix.</strong> Move focus to first field or form heading on open; ensure dialog variant uses aria-labelledby.</div>
+    <p class="verified">Cursor completed guest submit → personalized player (b6bd9c4bf)</p>
+    <details open><summary>Evidence screen grabs (2)</summary><div class="shots"><figure class="shot"><a href="shots/lead-new-viewer-form.png" target="_blank" rel="noreferrer"><img src="shots/lead-new-viewer-form.png" alt="P2-5 — Lead-capture / new-viewer form opens without a clear focus move" loading="lazy"></a><figcaption>P2-5 — Lead-capture / new-viewer form opens without a clear focus move</figcaption></figure><figure class="shot"><a href="shots/lead-after-submit-player.png" target="_blank" rel="noreferrer"><img src="shots/lead-after-submit-player.png" alt="P2-5 — Lead-capture / new-viewer form opens without a clear focus move" loading="lazy"></a><figcaption>P2-5 — Lead-capture / new-viewer form opens without a clear focus move</figcaption></figure></div></details>
   </article>
 <article class="finding serious" id="be2376b21-P2-10">
     <div class="meta-row">

@@ -1,0 +1,136 @@
+{
+  "requiredLabels": [
+    "First name",
+    "Last name",
+    "Email",
+    "Country",
+    "Phone Number"
+  ],
+  "values": {
+    "firstName": {
+      "value": "Justin",
+      "checked": false,
+      "validity": true,
+      "validationMessage": ""
+    },
+    "lastName": {
+      "value": "Ware",
+      "checked": false,
+      "validity": true,
+      "validationMessage": ""
+    },
+    "email": {
+      "value": "justin.ware@goconsensus.com",
+      "checked": false,
+      "validity": true,
+      "validationMessage": ""
+    },
+    "country_autofill": {
+      "value": "US",
+      "checked": false,
+      "validity": true,
+      "validationMessage": ""
+    },
+    "field country": {
+      "value": "United States",
+      "checked": false,
+      "validity": true,
+      "validationMessage": ""
+    },
+    "phoneNumber": {
+      "value": "",
+      "checked": false,
+      "validity": true,
+      "validationMessage": ""
+    },
+    "jobTitle": {
+      "value": "Product Designer",
+      "checked": false,
+      "validity": true,
+      "validationMessage": ""
+    }
+  },
+  "btn": {
+    "disabled": true,
+    "ariaDisabled": null,
+    "className": "src-shared-ui-button--button-XQoY9 src-shared-ui-button--contained-J3hao",
+    "type": "submit",
+    "formNoValidate": false
+  },
+  "formCheckValidity": true,
+  "footerText": "Opt In",
+  "checkboxes": [
+    {
+      "testid": "optin toggle",
+      "checked": true,
+      "required": false,
+      "size": {
+        "w": 0,
+        "h": 0
+      }
+    },
+    {
+      "testid": null,
+      "checked": true,
+      "required": false,
+      "size": {
+        "w": 0,
+        "h": 0
+      }
+    },
+    {
+      "testid": null,
+      "checked": true,
+      "required": false,
+      "size": {
+        "w": 0,
+        "h": 0
+      }
+    },
+    {
+      "testid": null,
+      "checked": true,
+      "required": false,
+      "size": {
+        "w": 0,
+        "h": 0
+      }
+    },
+    {
+      "testid": null,
+      "checked": false,
+      "required": false,
+      "size": {
+        "w": 0,
+        "h": 0
+      }
+    },
+    {
+      "testid": null,
+      "checked": false,
+      "required": false,
+      "size": {
+        "w": 0,
+        "h": 0
+      }
+    },
+    {
+      "testid": null,
+      "checked": false,
+      "required": false,
+      "size": {
+        "w": 0,
+        "h": 0
+      }
+    },
+    {
+      "testid": null,
+      "checked": false,
+      "required": false,
+      "size": {
+        "w": 0,
+        "h": 0
+      }
+    }
+  ]
+}

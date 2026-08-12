@@ -1,0 +1,15 @@
+{
+  "after": {
+    "url": "https://play.goconsensus.com/be2376b21",
+    "body": "Personalized demo for\nGoconsensus\nThis is a legal statement describing Opt-in & Legitimate InterestThis is a legal statement describing Opt-in & Legitimate InterestThis is a legal statement describing Opt-in & Legitimate InterestThgitimate Interesgitimate Interesgitimate Interesgitimate Interesgitimate Interesgitimate Interesgit\nZ inc Privacy Policy\nTerms of Service\nZ inc Partners\nCopyright Z inc 2023\nPowered by\nConsensus\nJW\nJustin Ware\nContact me\nHi, I'm Justin.\nTell me who you are to get started.\nFirst name\nLast name\nEmail\nCountry\nPhone Number\nPhone number is required to continue\nJob title\nBack\nContinue\nOpt In",
+    "errors": [
+      "Phone number is required to continue"
+    ]
+  },
+  "requests": [
+    {
+      "method": "POST",
+      "url": "https://play.goconsensus.com/api/del/v2.0/play/share"
+    }
+  ]
+}

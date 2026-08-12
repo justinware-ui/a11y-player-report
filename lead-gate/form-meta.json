@@ -1,0 +1,198 @@
+{
+  "formAria": "new viewer form",
+  "continueDisabled": true,
+  "countryLabelFor": null,
+  "countryFieldId": null,
+  "countryAria": {
+    "labelledby": null,
+    "label": null,
+    "autocomplete": null,
+    "role": null,
+    "expanded": null
+  },
+  "fields": [
+    {
+      "tag": "INPUT",
+      "type": null,
+      "name": "firstName",
+      "id": "firstName",
+      "testid": null,
+      "ariaLabel": null,
+      "ariaLabelledby": null,
+      "ariaRequired": null,
+      "required": false,
+      "ariaInvalid": "false",
+      "ariaHidden": null,
+      "ariaChecked": null,
+      "role": null,
+      "label": "First name",
+      "tabIndex": 0,
+      "size": {
+        "w": 152,
+        "h": 44
+      },
+      "disabled": false,
+      "text": ""
+    },
+    {
+      "tag": "INPUT",
+      "type": null,
+      "name": "lastName",
+      "id": "lastName",
+      "testid": null,
+      "ariaLabel": null,
+      "ariaLabelledby": null,
+      "ariaRequired": null,
+      "required": false,
+      "ariaInvalid": "false",
+      "ariaHidden": null,
+      "ariaChecked": null,
+      "role": null,
+      "label": "Last name",
+      "tabIndex": 0,
+      "size": {
+        "w": 152,
+        "h": 44
+      },
+      "disabled": false,
+      "text": ""
+    },
+    {
+      "tag": "INPUT",
+      "type": null,
+      "name": "email",
+      "id": "email",
+      "testid": "new viewer button-email",
+      "ariaLabel": null,
+      "ariaLabelledby": null,
+      "ariaRequired": null,
+      "required": false,
+      "ariaInvalid": "false",
+      "ariaHidden": null,
+      "ariaChecked": null,
+      "role": null,
+      "label": "Email",
+      "tabIndex": 0,
+      "size": {
+        "w": 320,
+        "h": 44
+      },
+      "disabled": false,
+      "text": ""
+    },
+    {
+      "tag": "INPUT",
+      "type": null,
+      "name": "country_autofill",
+      "id": "",
+      "testid": "hidden-input-country",
+      "ariaLabel": null,
+      "ariaLabelledby": null,
+      "ariaRequired": null,
+      "required": false,
+      "ariaInvalid": null,
+      "ariaHidden": "true",
+      "ariaChecked": null,
+      "role": null,
+      "label": null,
+      "tabIndex": -1,
+      "size": {
+        "w": 9,
+        "h": 7
+      },
+      "disabled": false,
+      "text": ""
+    },
+    {
+      "tag": "INPUT",
+      "type": "text",
+      "name": null,
+      "id": "",
+      "testid": "field country",
+      "ariaLabel": null,
+      "ariaLabelledby": null,
+      "ariaRequired": null,
+      "required": true,
+      "ariaInvalid": null,
+      "ariaHidden": null,
+      "ariaChecked": null,
+      "role": null,
+      "label": null,
+      "tabIndex": 0,
+      "size": {
+        "w": 320,
+        "h": 40
+      },
+      "disabled": false,
+      "text": ""
+    },
+    {
+      "tag": "INPUT",
+      "type": null,
+      "name": "jobTitle",
+      "id": "jobTitle",
+      "testid": null,
+      "ariaLabel": null,
+      "ariaLabelledby": null,
+      "ariaRequired": null,
+      "required": false,
+      "ariaInvalid": "false",
+      "ariaHidden": null,
+      "ariaChecked": null,
+      "role": null,
+      "label": "Job title",
+      "tabIndex": 0,
+      "size": {
+        "w": 320,
+        "h": 44
+      },
+      "disabled": false,
+      "text": ""
+    },
+    {
+      "tag": "BUTTON",
+      "type": "button",
+      "name": null,
+      "id": "",
+      "testid": null,
+      "ariaLabel": null,
+      "ariaLabelledby": null,
+      "ariaRequired": null,
+      "ariaInvalid": null,
+      "ariaHidden": null,
+      "ariaChecked": null,
+      "role": null,
+      "label": null,
+      "tabIndex": 0,
+      "size": {
+        "w": 138,
+        "h": 44
+      },
+      "disabled": false,
+      "text": "Back"
+    },
+    {
+      "tag": "BUTTON",
+      "type": "submit",
+      "name": null,
+      "id": "",
+      "testid": "watch demo now button",
+      "ariaLabel": null,
+      "ariaLabelledby": null,
+      "ariaRequired": null,
+      "ariaInvalid": null,
+      "ariaHidden": null,
+      "ariaChecked": null,
+      "role": null,
+      "label": null,
+      "tabIndex": 0,
+      "size": {
+        "w": 166,
+        "h": 44
+      },
+      "disabled": true,
+      "text": "Continue"
+    }
+  ],
+  "stickyFooterHtml": "<footer class=\"src-shared-ui-sticky-footer--root-mbU9B\"><div class=\"src-shared-ui-sticky-footer--controls-+rz5T\"><button class=\"src-shared-ui-button--button-XQoY9 src-shared-ui-button--text-huPo3 src-widgets-policies-button-ui--policy-button-BqJYA\" type=\"button\">Policies &amp; Statements</button><div class=\"\"><div class=\"src-widgets-opt-in-toggle-ui--root-W1G2K\" data-testid=\"opt in toggle\"><span class=\"src-widgets-opt-in-toggle-ui--title-pCpby\">Opt In</span><div class=\"src-widgets-opt-in-toggle-ui--tooltip-dEpRQ\" data-testid=\"opt in toggle tooltip\" tabindex=\"0\"><svg class=\" src-shared-ui-icons--svg-WKOeB\" data-testid=\"info icon\" viewBox=\"0 0 14 14\" fill=\"none\"><path d=\"M6.333 3.667h1.333v1.334H6.333V3.667Zm0 2.667h1.333v4H6.333v-4Zm.667-6A6.67 6.67 0 0 0 .333 7.001 6.669 6.669 0 0 0 7 13.667a6.669 6.669 0 0 0 6.666-6.666A6.669 6.669 0 0 0 7 .334Zm0 12a5.34 5.34 0 0 1-5.334-5.333A5.34 5.34 0 0 1 7 1.667a5.34 5.34 0 0 1 5.333 5.334A5.34 5.34 0 0 1 7 12.334Z\" fill=\"currentColor\"></path></svg></div><label class=\"src-shared-ui-switch--root-91bG-\"><input type=\"checkbox\" class=\"src-shared-ui-switch--native-control-IbSfs\" data-testid=\"optin toggle\" style=\"\"><span class=\"src-shared-ui-switc"
+}

@@ -1,7 +1,7 @@
 {
   "app": "Consensus Demo Player",
   "url": "https://play.goconsensus.com/be2376b21",
-  "generatedAt": "2026-08-11T23:57:26.288Z",
+  "generatedAt": "2026-08-12T02:13:11.592Z",
   "viewport": {
     "width": 1440,
     "height": 900
@@ -1502,6 +1502,229 @@
         }
       ],
       "consoleErrors": []
+    },
+    {
+      "id": "lead-new-viewer",
+      "title": "New viewer / lead-capture registration form",
+      "note": "Guest path via “I’m new here” using justin.ware@goconsensus.com. Required fields: First/Last name, Email, Country, Phone. Country uses visible data-testid=\"field country\" plus hidden country_autofill. Opt-In toggle is 0×0. Successful submit → personalized player (hash b6bd9c4bf).",
+      "full": "shots/lead-form-complete.png",
+      "extras": [
+        "shots/lead-new-viewer-form.png",
+        "shots/lead-country-suggestions.png",
+        "shots/lead-phone-required-error.png",
+        "shots/lead-after-submit-player.png"
+      ],
+      "measurements": {
+        "countryVisibleInput": {
+          "testid": "field country",
+          "labelled": false,
+          "role": null
+        },
+        "countrySuggestions": {
+          "roleOption": false,
+          "note": "options are div.option without role=option"
+        },
+        "optInToggle": {
+          "testid": "optin toggle",
+          "size": "0×0",
+          "labelled": false
+        },
+        "requiredVisual": [
+          "First name",
+          "Last name",
+          "Email",
+          "Country",
+          "Phone Number"
+        ],
+        "ariaRequiredPresent": false,
+        "legalStatementCorrupted": true
+      },
+      "violations": [
+        {
+          "id": "aria-allowed-attr",
+          "impact": "critical",
+          "help": "Elements must only use supported ARIA attributes",
+          "description": "Ensure an element's role supports its ARIA attributes",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/aria-allowed-attr?application=axeAPI",
+          "tags": [
+            "cat.aria",
+            "wcag2a",
+            "wcag412",
+            "EN-301-549",
+            "EN-9.4.1.2",
+            "RGAAv4",
+            "RGAA-7.1.1"
+          ],
+          "total": 1,
+          "nodes": [
+            {
+              "selector": "._anchor_31dmi_135UiKit_1_20_0",
+              "html": "<div class=\"_anchor_31dmi_135UiKit_1_20_0\" aria-expanded=\"false\" aria-haspopup=\"dialog\">",
+              "failureSummary": "Fix all of the following:\n  ARIA attribute is not allowed: aria-expanded=\"false\"",
+              "impact": "critical",
+              "shot": "shots/lead-new-viewer-form.png"
+            }
+          ]
+        },
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/color-contrast?application=axeAPI",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "total": 5,
+          "nodes": [
+            {
+              "selector": ".src-widgets-legitimate-interest-ui--legitimate-Omr\\+f",
+              "html": "<div class=\"src-widgets-legitimate-interest-ui--legitimate-Omr+f src-widgets-cover-ui--legal-statement-sEr+-\">",
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.5 (foreground color: #c8bcb7, background color: #76574a, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1",
+              "impact": "serious",
+              "shot": "shots/lead-new-viewer-form.png"
+            },
+            {
+              "selector": ".src-widgets-cover-ui--copyright-9vt\\+-",
+              "html": "<div class=\"src-widgets-cover-ui--copyright-9vt+-\" data-testid=\"demo copyright value\">Copyright Z inc 2023</div>",
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.5 (foreground color: #c8bcb7, background color: #76574a, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1",
+              "impact": "serious"
+            },
+            {
+              "selector": ".src-shared-ui-button--ghost-o9lnB",
+              "html": "<button class=\"src-shared-ui-button--button-XQoY9 src-shared-ui-button--ghost-o9lnB src-widgets-contact-description-ui--button-uiljk\" type=\"button\" data-testid=\"contact me button\">Contact me</button>",
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.2 (foreground color: #e85340, background color: #f0f0f0, font size: 7.5pt (10px), font weight: normal). Expected contrast ratio of 4.5:1",
+              "impact": "serious"
+            },
+            {
+              "selector": "._label_9zboc_7UiKit_1_20_0",
+              "html": "<label class=\" _label_9zboc_7UiKit_1_20_0 _required_9zboc_104UiKit_1_20_0\">Country</label>",
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.4 (foreground color: #6f6f6f, background color: #f0f0f0, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+              "impact": "serious"
+            },
+            {
+              "selector": ".src-shared-ui-button--outlined-tqqXi",
+              "html": "<button class=\"src-shared-ui-button--button-XQoY9 src-shared-ui-button--outlined-tqqXi\" type=\"button\">Back</button>",
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.2 (foreground color: #e85340, background color: #f0f0f0, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1",
+              "impact": "serious"
+            }
+          ]
+        },
+        {
+          "id": "label",
+          "impact": "critical",
+          "help": "Form elements must have labels",
+          "description": "Ensure every form element has a label",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/label?application=axeAPI",
+          "tags": [
+            "cat.forms",
+            "wcag2a",
+            "wcag412",
+            "section508",
+            "section508.22.n",
+            "TTv5",
+            "TT5.c",
+            "EN-301-549",
+            "EN-9.4.1.2",
+            "ACT",
+            "RGAAv4",
+            "RGAA-11.1.1"
+          ],
+          "total": 2,
+          "nodes": [
+            {
+              "selector": "._input_9zboc_32UiKit_1_20_0",
+              "html": "<input class=\"\n              _inpu...\" required=\"\" type=\"text\" data-testid=\"field country\" value=\"\" style=\"\">",
+              "failureSummary": "Fix any of the following:\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element has no placeholder attribute\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\"",
+              "impact": "critical",
+              "shot": "shots/lead-new-viewer-form.png"
+            },
+            {
+              "selector": ".src-shared-ui-switch--native-control-IbSfs",
+              "html": "<input type=\"checkbox\" class=\"src-shared-ui-switch--native-control-IbSfs\" data-testid=\"optin toggle\" style=\"\">",
+              "failureSummary": "Fix any of the following:\n  Element does not have an implicit (wrapped) <label>\n  Element does not have an explicit <label>\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute\n  Element has no placeholder attribute\n  Element's default semantics were not overridden with role=\"none\" or role=\"presentation\"",
+              "impact": "critical"
+            }
+          ]
+        },
+        {
+          "id": "landmark-one-main",
+          "impact": "moderate",
+          "help": "Document should have one main landmark",
+          "description": "Ensure the document has a main landmark",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/landmark-one-main?application=axeAPI",
+          "tags": [
+            "cat.semantics",
+            "best-practice"
+          ],
+          "total": 1,
+          "nodes": [
+            {
+              "selector": "html",
+              "html": "<html lang=\"en\" class=\"js-focus-visible\" data-js-focus-visibl...=\"\" style=\"--color-attention-50...\">",
+              "failureSummary": "Fix all of the following:\n  Document does not have a main landmark",
+              "impact": "moderate",
+              "shot": "shots/lead-new-viewer-form.png"
+            }
+          ]
+        },
+        {
+          "id": "region",
+          "impact": "moderate",
+          "help": "All page content should be contained by landmarks",
+          "description": "Ensure all page content is contained by landmarks",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/region?application=axeAPI",
+          "tags": [
+            "cat.keyboard",
+            "best-practice",
+            "RGAAv4",
+            "RGAA-9.2.1"
+          ],
+          "total": 5,
+          "nodes": [
+            {
+              "selector": "div[data-side=\"left\"]",
+              "html": "<div class=\"src-shared-ui-transition-ui-transition--root-zp0yz\" data-phase=\"entered\" data-side=\"left\" data-transition=\"fade-in-center-out-left\" data-width=\"half\">",
+              "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks",
+              "impact": "moderate",
+              "shot": "shots/lead-new-viewer-form.png"
+            },
+            {
+              "selector": ".src-shared-ui-avatar--avatar-s0qid",
+              "html": "<div data-testid=\"contact avatar\" class=\"src-shared-ui-avatar--avatar-s0qid undefined src-shared-ui-avatar--large-jL18w src-widgets-contact-description-ui--avatar-c-Nlk\"><div>JW</div></div>",
+              "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks",
+              "impact": "moderate"
+            },
+            {
+              "selector": ".src-widgets-contact-description-ui--full-name-yspc3",
+              "html": "<span class=\"src-widgets-contact-description-ui--full-name-yspc3\" data-is-vertical=\"false\" data-testid=\"contact info fullname\">Justin Ware</span>",
+              "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks",
+              "impact": "moderate"
+            },
+            {
+              "selector": ".src-shared-ui-message-balloon--inner-d6GlH",
+              "html": "<div class=\"src-shared-ui-message-balloon--inner-d6GlH\" data-testid=\"representative card message\" style=\"background-color: var(--color-neutral-0);\">",
+              "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks",
+              "impact": "moderate"
+            },
+            {
+              "selector": ".src-screens-way-ui-low-privacy--root-bTNMK",
+              "html": "<div aria-label=\"low privacy identification host\" class=\"src-screens-way-ui-low-privacy--root-bTNMK\">",
+              "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks",
+              "impact": "moderate"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

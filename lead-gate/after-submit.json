@@ -1,0 +1,120 @@
+{
+  "after": {
+    "url": "https://play.goconsensus.com/b6bd9c4bf",
+    "body": "New accessibility test\nPause\n00:00\n-04:52\nMute\nEnable subtitles\nSettings\nFullscreen\nJW\nJW\nInvite\n2 invited\nNow Playing\nAll Demos\n1\nJW\nJustin Ware\nContact me\nHere’s your customized demo, Justin. Reach out if you have questions.\nNew accessibility test\nVideo\n4 min 56 sec\nGet in touch",
+    "errors": [],
+    "headings": [
+      "Privacy Preference Center"
+    ]
+  },
+  "apiLog": [
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "https://play.goconsensus.com/api/del/v2.0/play/checkHash/be2376b21",
+      "body": "{\"status\":200,\"data\":{\"migrated\":false}}"
+    },
+    {
+      "status": 200,
+      "method": "POST",
+      "url": "https://play.goconsensus.com/api/del/v1.0/play/getDLSettings",
+      "body": "{\"status\":200,\"data\":{\"customOptInMessage\":\"By selecting \\u201cOpt-In\\u201d you agree that your demo viewing activity will be collected, stored and made available to {{company}}. If you do not select \\u201cOpt-In\\u201d you may contact {{company}} for an alternative way to view the demo.\",\"coverAvatarMessageHeader\":\"Hi, I'm {{contactFirstName}}.\",\"coverAvatarMessageBody\":\"Tell me who you are to get started.\",\"demoPlayerSidebarMessage\":\"Here\\u2019s your customized demo, {{viewerFirstName}}. Reach "
+    },
+    {
+      "status": 200,
+      "method": "POST",
+      "url": "https://play.goconsensus.com/api/del/v2.0/play/getByHash",
+      "body": "{\"status\":200,\"data\":{\"p1\":false,\"item\":{\"session\":{\"v\":\"1f195f33-bee6-674c-b3dc-ba5fb26bf157\",\"u\":\"1f195f33-bee6-68a0-8e1a-ba5fb26bf157\",\"i\":\"MTM2LjU2LjM5LjY5\",\"eu\":0,\"ti\":\"1f195f33-bef4-6e50-a177-ba5fb26bf157\",\"nostat\":0},\"uuid\":\"0f0960d2-2442-4ebc-8e10-3d2c32c9fa5d\",\"isInvite\":false,\"answers\":[],\"hash\":\"be2376b21\",\"orgUuid\":\"2b8d4338-7614-40fa-947a-1001faadb2a2\",\"preselectedRecipientUuid\":\"\",\"isPreview\":false,\"isArchived\":false,\"mode\":\"sales\",\"isTest\":false,\"rivSource\":\"none\",\"customRivUuid\":"
+    },
+    {
+      "status": 200,
+      "method": "POST",
+      "url": "https://play.goconsensus.com/api/del/v2.0/play/getDemoData",
+      "body": "{\"status\":200,\"data\":{\"items\":[{\"uuid\":\"924a5c6f-729d-41bc-8c80-0aa6fee1e4e4\",\"parentUuid\":\"\",\"uuidType\":\"organization\",\"personalize\":true,\"title\":\"New accessibility test\",\"internalTitle\":\"Test\",\"description\":\"\",\"type\":\"single\",\"language\":{\"code\":\"en\",\"title\":\"English\"},\"isPublic\":false,\"isPublished\":true,\"isVisibleInLibrary\":false,\"folderUuid\":null,\"folderName\":\"\",\"isArchived\":false,\"isValid\":true,\"creationDate\":\"2026-08-11T21:31:46+00:00\",\"owner\":\"2289ef24-45f6-44fc-93cc-314a5cf3c9f5\",\"creator"
+    },
+    {
+      "status": 200,
+      "method": "POST",
+      "url": "https://play.goconsensus.com/api/cl/v1.0/media/multiCheckItemStatus",
+      "body": "{\"status\":200,\"data\":{\"items\":[{\"uuid\":\"dfad4e94-c973-4d92-9010-fd2836fe6332\",\"kind\":\"video\",\"title\":\"Recording #31\",\"filename\":\"Recording #31.mp4\",\"status\":\"active\",\"version\":1,\"revision\":\"default\",\"meta\":{\"status\":\"completed\",\"mpsStatus\":{\"status\":\"DONE\",\"message\":\"vETS processing completed successfully!\"},\"hash\":\"t53ac6w3nh\",\"downloadUrl\":\"https:\\/\\/app.goconsensus.com\\/api\\/mps\\/media\\/44bac818-7b97-405a-a038-598aa03405f8?download\",\"thumbnails\":{\"default\":[\"https:\\/\\/app.goconsensus.com\\/api"
+    },
+    {
+      "status": 200,
+      "method": "POST",
+      "url": "https://play.goconsensus.com/api/ugg/v1.0/dictionary/country",
+      "body": "{\"status\":200,\"data\":{\"country\":{\"code\":\"US\",\"name\":\"United States\",\"inEU\":0,\"isGdprCompliant\":0,\"regions\":[{\"name\":\"Arkansas\",\"iso\":\"AR\"},{\"name\":\"District of Columbia\",\"iso\":\"DC\"},{\"name\":\"Delaware\",\"iso\":\"DE\"},{\"name\":\"Florida\",\"iso\":\"FL\"},{\"name\":\"Georgia\",\"iso\":\"GA\"},{\"name\":\"Kansas\",\"iso\":\"KS\"},{\"name\":\"Louisiana\",\"iso\":\"LA\"},{\"name\":\"Maryland\",\"iso\":\"MD\"},{\"name\":\"Missouri\",\"iso\":\"MO\"},{\"name\":\"Mississippi\",\"iso\":\"MS\"},{\"name\":\"North Carolina\",\"iso\":\"NC\"},{\"name\":\"Oklahoma\",\"iso\":\"OK\"},{\""
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "https://play.goconsensus.com/api/integr/v1.0/tracking/TrackingData?provider=google&organizationUuid=2b8d4338-7614-40fa-947a-1001faadb2a2",
+      "body": "{\"status\":200,\"data\":{\"gtm\":\"GTM-MLT63G4B\"}}"
+    },
+    {
+      "status": 200,
+      "method": "POST",
+      "url": "https://play.goconsensus.com/api/feature-toggle/v1.0/features/by-context",
+      "body": "{\"status\":200,\"data\":{\"features\":[{\"uuid\":\"018a6f47-a9ea-71c3-9193-57b959c9540b\",\"name\":\"DEMO_THUMBNAILS\"},{\"uuid\":\"018fa4dc-6992-73ba-bd58-0c0a6547f0ce\",\"name\":\"MARKETPLACE\"},{\"uuid\":\"0191fc1a-c228-70df-87e6-e84e416ad316\",\"name\":\"ANALYTICS_REWRITE_DEMOLYTICS_SALES\"},{\"uuid\":\"01932cad-56e5-71ae-b855-cb3e030c37ad\",\"name\":\"REACHSUITE_INTEGRATION\"},{\"uuid\":\"01946f33-020c-7083-b63c-648ea45349cb\",\"name\":\"SEARCH_SERVICE\"},{\"uuid\":\"0196fbed-fed2-709e-839b-f9c44df7c589\",\"name\":\"DEMO_LIBRARY_MULTISELECT\""
+    },
+    {
+      "status": 302,
+      "method": "GET",
+      "url": "https://play.goconsensus.com/api/cl/media/file/73561de9-29b8-44b8-b48b-663ea5e86adf",
+      "body": ""
+    },
+    {
+      "status": 301,
+      "method": "GET",
+      "url": "https://app.goconsensus.com/api/mps/media/99549d84-2137-4087-abc3-0829d1973235?download",
+      "body": ""
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "https://play.goconsensus.com/api/del/v2.0/play/countries/924a5c6f-729d-41bc-8c80-0aa6fee1e4e4",
+      "body": "{\"status\":200,\"data\":[{\"code\":\"DZ\",\"name\":\"Algeria\",\"inEU\":0,\"isGdprCompliant\":0,\"regions\":[{\"name\":\"Tlemcen Province\",\"iso\":\"13\"},{\"name\":\"Tizi Ouzou Province\",\"iso\":\"15\"},{\"name\":\"Tissemsilt Province\",\"iso\":\"38\"},{\"name\":\"Tipaza Province\",\"iso\":\"42\"},{\"name\":\"Tindouf Province\",\"iso\":\"37\"},{\"name\":\"Tiaret Province\",\"iso\":\"14\"},{\"name\":\"T\\u00e9bessa Province\",\"iso\":\"12\"},{\"name\":\"Tamanrasset Province\",\"iso\":\"11\"},{\"name\":\"Souk Ahras Province\",\"iso\":\"41\"},{\"name\":\"Skikda Province\",\"iso\":\"21\"},{\"n"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "https://play.goconsensus.com/api/del/v1.0/play/legal/statements?country=US&org=2b8d4338-7614-40fa-947a-1001faadb2a2",
+      "body": "{\"status\":200,\"data\":[{\"country\":\"default\",\"statement\":\"This is a legal statement describing Opt-in & Legitimate InterestThis is a legal statement describing Opt-in & Legitimate InterestThis is a legal statement describing Opt-in & Legitimate InterestThgitimate Interesgitimate Interesgitimate Interesgitimate Interesgitimate Interesgitimate Interesgit\",\"includeToggle\":false,\"defaultToggleOff\":false,\"toggleText\":\"\",\"copyright\":\"Copyright Z inc 2023\",\"links\":[{\"url\":\"http:\\/\\/goconsensus.com\\/priva"
+    },
+    {
+      "status": 200,
+      "method": "POST",
+      "url": "https://play.goconsensus.com/api/del/v2.0/play/share",
+      "body": "{\"status\":200,\"data\":{\"p1\":false,\"item\":{\"session\":{\"v\":\"1f195f33-bee6-674c-b3dc-ba5fb26bf157\",\"u\":\"1f195f33-bee6-68a0-8e1a-ba5fb26bf157\",\"i\":\"MTM2LjU2LjM5LjY5\",\"eu\":0,\"ti\":\"1f195f33-bef4-6e50-a177-ba5fb26bf157\",\"nostat\":0,\"isOptOut\":0,\"organizationId\":\"2b8d4338-7614-40fa-947a-1001faadb2a2\"},\"uuid\":\"0f0960d2-2442-4ebc-8e10-3d2c32c9fa5d\",\"isInvite\":true,\"answers\":[],\"hash\":\"be2376b21\",\"orgUuid\":\"2b8d4338-7614-40fa-947a-1001faadb2a2\",\"preselectedRecipientUuid\":\"63192aba-5415-4c84-a5d8-345fe7681e8f"
+    },
+    {
+      "status": 200,
+      "method": "POST",
+      "url": "https://play.goconsensus.com/api/del/v2.0/play/demo",
+      "body": "{\"status\":200,\"data\":{\"result\":\"SUCCESS\"}}"
+    },
+    {
+      "status": 302,
+      "method": "GET",
+      "url": "https://play.goconsensus.com/api/cl/media/file/ee94a408-4b8f-4235-8257-f1d332251069",
+      "body": ""
+    },
+    {
+      "status": 301,
+      "method": "GET",
+      "url": "https://app.goconsensus.com/api/mps/media/77c38ac6-1c1a-48de-873c-ba0998afa5d5",
+      "body": ""
+    },
+    {
+      "status": 301,
+      "method": "GET",
+      "url": "https://app.goconsensus.com/api/mps/media/3be67bb9-1b9e-4698-8f06-82580f70f260?download",
+      "body": ""
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "https://play.goconsensus.com/api/mps/media/8e570863-9595-47ea-b6b8-b99d723a5bd2/videos",
+      "body": "{\"data\":{\"output1080\":\"https://d1i7dxrzqfuu0e.cloudfront.net/2b8d4338-7614-40fa-947a-1001faadb2a2/videos/8e570863-9595-47ea-b6b8-b99d723a5bd2/1080p.mp4?response-content-type=video%2Fmp4&Expires=1787105546&Signature=YcEy8CSbpwhv4oMF2dJFUcRA7~rBy43-7y089ensPV2PP8qT10C5rn3leMhu8cRFu7Htcu5Yzn9IMLM0ssRMrgng3YMPrZn4IYJhO6VpW5nN5HMWTFdPuft7Eg5WNkIScwfRucjtC2CzH-bie82Ii7F929HTA~EYToViGz4MN6ENBYRpHO7gX-3YblRQo-BcstPMtT3M9qWzhN~IdDLDg~0nBIgVpGaVa5OJ8e5LcEyMO7aiew-yBa0RRHB6mAtxnAJ675MXsIcnhb06ZoJqC5np7Qtv1"
+    }
+  ]
+}

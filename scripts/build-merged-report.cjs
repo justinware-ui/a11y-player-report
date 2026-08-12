@@ -27,7 +27,8 @@ const DEMOS = [
     shotRoot: '',
     backlogDoc: 'merged/backlog.md',
     claudeDocs: ['consensus-player-a11y-audit-be2376b21.md', 'consensus-player-a11y-audit-by-team.md'],
-    coverage: 'Cover → Opt-In → video player reached',
+    coverage:
+      'Cover → Opt-In → video player; guest “I’m new here” registration (justin.ware@goconsensus.com) → personalized player',
   },
   {
     slug: 'af5f0eba6',
@@ -178,6 +179,15 @@ function renderDemoSection(d) {
             )}" alt="${esc(s.title)}" loading="lazy"></a></figure>`
           : ''
       }
+      ${(s.extras || [])
+        .filter(d.shotExists)
+        .map(
+          (ex) =>
+            `<figure class="shot"><a href="${d.shotHref(ex)}" target="_blank" rel="noreferrer"><img src="${d.shotHref(
+              ex,
+            )}" alt="${esc(s.title)}" loading="lazy"></a></figure>`,
+        )
+        .join('')}
     </div>`,
     )
     .join('\n')}
