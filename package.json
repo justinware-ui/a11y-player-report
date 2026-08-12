@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "Consensus Demo Player WCAG AA accessibility audit pack (Claude + Cursor)",
   "scripts": {
-    "build": "mkdir -p dist && rsync -a --exclude dist --exclude .git --exclude node_modules --exclude scripts ./ dist/",
+    "build": "node scripts/copy-dist.cjs",
     "rebuild-report": "node scripts/build-merged-report.cjs"
   }
 }
