@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /**
- * Builds the multi-demo merged a11y pack (3 tabs) at public/a11y-audit/merged.html.
- * Tabs: Demos audited · Backlog · Shared component bugs
+ * Builds the multi-demo merged a11y pack.
+ * Tabs: Overview · Contrast · Keyboard · Demos · Backlog · By owner · Shared bugs
  */
 const fs = require('fs')
 const path = require('path')
@@ -26,7 +26,11 @@ const DEMOS = [
     backlog: path.join(MERGED, 'backlog.json'),
     shotRoot: '',
     backlogDoc: 'merged/backlog.md',
-    claudeDocs: ['consensus-player-a11y-audit-be2376b21.md', 'consensus-player-a11y-audit-by-team.md'],
+    claudeDocs: [
+      'consensus-player-a11y-audit-be2376b21.md',
+      'consensus-player-a11y-audit-by-team.md',
+      'consensus-player-a11y-audit-a754d887d-color-contrast-keyboard.md',
+    ],
     coverage:
       'Cover → Opt-In → video player; guest “I’m new here” registration (justin.ware@goconsensus.com) → personalized player',
   },
@@ -38,8 +42,25 @@ const DEMOS = [
     backlog: path.join(MERGED, 'backlog-af5f0eba6.json'),
     shotRoot: 'af5f0eba6/',
     backlogDoc: 'merged/backlog-af5f0eba6.md',
-    claudeDocs: ['consensus-player-a11y-audit-af5f0eba6-by-team.md'],
-    coverage: 'Identity → Opt-In → Topic Rating reached; product tour gated behind rating + cross-origin iframe',
+    claudeDocs: [
+      'consensus-player-a11y-audit-af5f0eba6-by-team.md',
+      'consensus-player-a11y-audit-af5f0eba6-color-contrast-keyboard.md',
+    ],
+    coverage:
+      'Identity → Opt-In → Topic Rating; Claude systematic contrast (14/18 Page A fail, grey theme) + Tab walk; product tour gated behind rating + cross-origin iframe',
+  },
+  {
+    slug: 'a754d887d',
+    label: 'Systematic contrast & keyboard demo',
+    url: 'https://play.goconsensus.com/a754d887d',
+    results: path.join(OUT, 'a754d887d', 'results.json'),
+    backlog: path.join(MERGED, 'backlog-a754d887d.json'),
+    shotRoot: 'a754d887d/',
+    backlogDoc: 'merged/backlog-a754d887d.md',
+    claudeDocs: ['consensus-player-a11y-audit-a754d887d-color-contrast-keyboard.md'],
+    coverage:
+      'Claude systematic pass: 69 text styles / 18 fails (brand orange); full Tab order on Topic Rating → Player → Lead-Capture with 3 focus mechanisms',
+    claudeOnly: true,
   },
 ]
 
@@ -47,6 +68,8 @@ const SRC_LABELS = {
   'claude-by-team': 'Claude · by team',
   'claude-be2376': 'Claude · be2376',
   'claude-af5f0eba6': 'Claude · af5f0eba6',
+  'claude-af5-systematic': 'Claude · systematic af5',
+  'claude-a754-systematic': 'Claude · systematic a754',
   'cursor-axe': 'Cursor · axe',
 }
 
@@ -119,6 +142,54 @@ function demoCounts(d) {
   }
 }
 
+function renderContrastTable(failures) {
+  if (!failures || !failures.length) return ''
+  return `<h4 class="sub">Contrast failures (Claude systematic)</h4>
+  <table class="contrast-table"><thead><tr><th>Text</th><th>Foreground / background</th><th class="num">Ratio</th><th class="num">Needed</th></tr></thead><tbody>
+  ${failures
+    .map((f) => {
+      const ratio = String(f.ratio)
+      const needed = Number(f.needed) || 4.5
+      const numeric = parseFloat(ratio)
+      const fails = Number.isFinite(numeric) ? numeric < needed : true
+      return `<tr class="${fails ? 'contrast-fail' : ''}"><td>${esc(f.text)}</td><td><code>${esc(f.fg)}</code> / <code>${esc(
+        f.bg,
+      )}</code></td><td class="num"><strong class="fail">${esc(ratio)}${String(ratio).includes(':') ? '' : ':1'}</strong></td><td class="num">${esc(
+        f.needed,
+      )}</td></tr>`
+    })
+    .join('')}
+  </tbody></table>`
+}
+
+function renderKeyboardTable(stops) {
+  if (!stops || !stops.length) return ''
+  return `<h4 class="sub">Tab order (real Tab presses)</h4>
+  <table class="keyboard-table"><thead><tr><th class="num">#</th><th>Stop</th><th>Visible focus?</th><th>Mechanism</th></tr></thead><tbody>
+  ${stops
+    .map((s) => {
+      const missing = s.visible === false
+      const vis = s.visible
+        ? s.correction
+          ? 'Yes — correction'
+          : 'Yes'
+        : missing
+          ? '<strong class="fail">No</strong>'
+          : '—'
+      return `<tr class="${missing ? 'keyboard-fail' : s.correction ? 'keyboard-fix' : ''}"><td class="num">${esc(s.n)}</td><td>${esc(
+        s.stop,
+      )}</td><td>${vis}</td><td>${esc(s.mechanism || '—')}</td></tr>`
+    })
+    .join('')}
+  </tbody></table>`
+}
+
+function renderFocusRingNotes(notes) {
+  if (!notes || !notes.length) return ''
+  return `<h4 class="sub">Focus-indicator contrast notes</h4>
+  <ul class="sources">${notes.map((n) => `<li><strong>${esc(n.control)}.</strong> ${esc(n.detail)}</li>`).join('')}</ul>`
+}
+
 /** One demo's evidence block (screens + measurements) — used inside the consolidated Demos tab. */
 function renderDemoSection(d) {
   const counts = demoCounts(d)
@@ -143,12 +214,26 @@ function renderDemoSection(d) {
     }
   }
 
+  const summary = d.results.summary
+  const summaryBlock = summary
+    ? `<div class="finding critical" style="margin-bottom:16px">
+        <h3>${esc(summary.headline || 'Systematic contrast summary')}</h3>
+        <p class="sec-note">${esc(d.results.methodNote || '')}</p>
+        <p><strong>${esc(summary.stylesFailed)}</strong> of <strong>${esc(summary.stylesChecked)}</strong> distinct text styles failed.
+        Brand orange token: <code>${esc(summary.brandOrange || '')}</code>.</p>
+      </div>`
+    : ''
+
+  const axeLabel = d.claudeOnly
+    ? `Claude systematic · no axe`
+    : `axe <code>${esc(d.results.axeVersion)}</code>`
+
   return `<article class="demo-block" id="demo-${esc(d.slug)}">
   <header class="demo-head">
     <h2>${esc(d.label)}</h2>
     <div class="meta">
       <span>URL <code><a href="${esc(d.url)}" target="_blank" rel="noreferrer">${esc(d.url)}</a></code></span>
-      <span>axe <code>${esc(d.results.axeVersion)}</code></span>
+      <span>${axeLabel}</span>
       <span>Run <code>${new Date(d.results.generatedAt).toLocaleString()}</code></span>
     </div>
     <p class="sec-note"><strong>Coverage.</strong> ${esc(d.coverage)}</p>
@@ -162,16 +247,19 @@ function renderDemoSection(d) {
   </div>
   <p class="sec-note">Tickets for this demo are in the <button type="button" class="inline-tab-link" data-target="panel-backlog">Backlog</button> tab → <a href="#backlog-${esc(d.slug)}">${esc(d.label)}</a>.</p>
 
-  <h3 class="sub">Screens captured</h3>
+  ${summaryBlock}
+
+  <h3 class="sub">Screens / states captured</h3>
   <div class="states">
   ${(d.results.states || [])
     .map(
       (s) => `<div class="finding">
       <h4>${esc(s.title)}</h4>
-      <p class="sec-note">${esc(s.note)} — ${s.violations.length} axe rules, ${s.violations.reduce(
-        (n, v) => n + v.total,
-        0,
-      )} elements</p>
+      <p class="sec-note">${esc(s.note)}${
+        (s.violations || []).length
+          ? ` — ${s.violations.length} axe rules, ${s.violations.reduce((n, v) => n + v.total, 0)} elements`
+          : ''
+      }</p>
       ${
         d.shotExists(s.full)
           ? `<figure class="shot"><a href="${d.shotHref(s.full)}" target="_blank" rel="noreferrer"><img src="${d.shotHref(
@@ -188,6 +276,9 @@ function renderDemoSection(d) {
             )}" alt="${esc(s.title)}" loading="lazy"></a></figure>`,
         )
         .join('')}
+      ${renderContrastTable(s.contrastFailures)}
+      ${renderFocusRingNotes(s.focusRingNotes)}
+      ${renderKeyboardTable(s.keyboardStops)}
     </div>`,
     )
     .join('\n')}
@@ -223,7 +314,11 @@ function renderDemoSection(d) {
   <h3 class="sub">Sources</h3>
   <ul class="sources">
     ${d.claudeDocs.map((c) => `<li>Claude — <code>${esc(c)}</code></li>`).join('')}
-    <li>Cursor — live Playwright + axe-core run (<code>${esc(d.results.axeVersion)}</code>)</li>
+    ${
+      d.claudeOnly
+        ? ''
+        : `<li>Cursor — live Playwright + axe-core run (<code>${esc(d.results.axeVersion)}</code>)</li>`
+    }
     <li>Backlog data — <a href="${esc(d.backlogDoc)}">${esc(path.basename(d.backlogDoc))}</a></li>
   </ul>
 </article>`
@@ -277,19 +372,24 @@ const totals = demos.reduce(
 
 const SHARED = [
   {
+    title: 'Brand orange fails AA text contrast (design-system token)',
+    demos: 'a754d887d systematic (18/69 styles); be2376b21 Cursor axe; applies wherever orange tokens are used',
+    note: 'rgb(252,104,57) → 2.57–2.93:1 as text or under white text. Not a per-component bug.',
+  },
+  {
     title: 'Topic-rating controls at 0×0 with no accessible name',
-    demos: 'af5f0eba6 (Cursor-confirmed), a754d887d + be2376b21 (Claude)',
-    note: 'Three demos. Keyboard users cannot rate topics; rating is required to proceed.',
+    demos: 'All three demos (Cursor on af5f0eba6; Claude Tab walks on a754d887d + by-team)',
+    note: 'Keyboard users cannot rate topics; rating is required to proceed.',
+  },
+  {
+    title: 'Opt-In toggle: unlabeled, often 0×0, and no focus indicator',
+    demos: 'All three demos',
+    note: 'Shared switch; axe label rule + three-mechanism focus check both fail.',
   },
   {
     title: 'Modal close (X) button unlabeled',
     demos: 'be2376b21, af5f0eba6 (both Cursor axe-confirmed)',
     note: 'Single shared modal-header component.',
-  },
-  {
-    title: 'Opt-In toggle unlabeled (and 0×0 on af5f0eba6)',
-    demos: 'be2376b21, af5f0eba6',
-    note: 'Shared switch component; axe label rule fires on both.',
   },
   {
     title: 'Corrupted / duplicated legal disclaimer copy',
@@ -298,15 +398,515 @@ const SHARED = [
   },
   {
     title: 'Required-field indication is visual only',
-    demos: 'be2376b21, af5f0eba6',
+    demos: 'be2376b21, af5f0eba6, a754d887d lead form',
     note: 'No required / aria-required on asterisked fields.',
   },
   {
+    title: 'Focus rings that exist but fail 3:1 non-text contrast',
+    demos: 'a754d887d (reaction bar 1.34–1.76:1); af5f0eba6 (both ring layers fail)',
+    note: 'Earlier “missing focus” claims corrected — ring is present but not reliably visible.',
+  },
+  {
+    title: 'Seek / Volume sliders have no focus indicator',
+    demos: 'a754d887d (re-verified via outline, box-shadow, border-color)',
+    note: 'Other Plyr controls use a dashed outline and pass.',
+  },
+  {
     title: 'Missing landmarks, generic document titles, heading-order gaps',
-    demos: 'Both audited demos',
+    demos: 'be2376b21, af5f0eba6',
     note: 'Structural fixes at the player shell.',
   },
 ]
+
+const COMPARISON = [
+  {
+    dimension: 'Contrast root cause',
+    a754: 'Brand orange rgb(252,104,57) fails in usual text/on-orange contexts (~25% of styles)',
+    af5: 'Entire theme = grey placeholder rgb(169,169,169) — up to 78% fail on identity',
+    be2376: 'Brand orange tokens (Cursor axe); lead-form legal + chrome also fail',
+  },
+  {
+    dimension: 'Focus-ring contrast',
+    a754: 'Outer orange layer 3.61:1 passes; inner alone 1.99:1 fails',
+    af5: 'Both grey layers fail (1.71:1 / 2.92:1) — ring not reliably visible',
+    be2376: 'Same orange-ring family as a754 where brand theme loads',
+  },
+  {
+    dimension: 'Rating checkboxes 0×0',
+    a754: 'Confirmed (Tab walk)',
+    af5: 'Confirmed (Cursor + Claude) — 2 topics × 3',
+    be2376: 'Confirmed (Claude by-team)',
+  },
+  {
+    dimension: 'Opt-In toggle focus',
+    a754: 'Missing (3 mechanisms)',
+    af5: 'Missing (3 mechanisms)',
+    be2376: 'Missing + unlabeled (Cursor axe / lead form)',
+  },
+  {
+    dimension: 'Lead / registration form',
+    a754: 'Full Tab walk; border-color focus; Country combobox gaps',
+    af5: 'Same pattern on identity path',
+    be2376: 'Cursor completed guest path (justin.ware@…) + axe + shots',
+  },
+  {
+    dimension: 'Product tour',
+    a754: 'N/A (video)',
+    af5: 'Cross-origin iframe; close X non-responsive; Tab advances spotlight',
+    be2376: 'N/A (single video)',
+  },
+]
+
+const CORRECTIONS = [
+  {
+    was: 'Reaction bar / Contact me / Adjust my selections — no visible focus',
+    now: 'They use box-shadow rings; earlier checks only looked at outline',
+    demos: 'a754d887d (systematic)',
+  },
+  {
+    was: 'Lead-capture text fields — “clear ring” (generic)',
+    now: 'Mechanism is border-color → orange, not outline/box-shadow',
+    demos: 'a754d887d',
+  },
+  {
+    was: 'af5 grey theme ~2.06:1 from a few samples',
+    now: '14/18 Page A styles fail (78%); structural grey placeholder, not one orange token',
+    demos: 'af5f0eba6',
+  },
+  {
+    was: 'Reaction focus “missing” vs “maybe present”',
+    now: 'Ring exists but fails 3:1 non-text contrast (1.34–1.76:1 over video)',
+    demos: 'a754d887d',
+  },
+]
+
+const WCAG_MAP = [
+  {
+    criterion: '1.4.3 Contrast (Minimum)',
+    level: 'AA',
+    findings: 'Brand orange system-wide; af5 grey theme 78% Page A; legal/footer links; Continue / Get in touch / JW avatar',
+  },
+  {
+    criterion: '1.4.11 Non-text Contrast',
+    level: 'AA',
+    findings: 'Focus rings (reaction bar; af5 grey ring both layers; orange ring inner layer)',
+  },
+  {
+    criterion: '2.4.7 Focus Visible / 2.4.11 Focus Appearance (2.2)',
+    level: 'AA',
+    findings: 'Opt-In toggle; Seek/Volume; Select all / Contact me on Topic Rating; low-contrast rings that “exist” but fail visibility',
+  },
+  {
+    criterion: '2.1.1 Keyboard',
+    level: 'A',
+    findings: '0×0 rating checkboxes skipped by Tab; tour Tab advances spotlight; unused Plyr rewind/FF 0×0',
+  },
+  {
+    criterion: '4.1.2 Name, Role, Value',
+    level: 'A',
+    findings: 'Modal close unlabeled; Opt-In unlabeled; Country missing combobox/aria-expanded; rating checkbox-as-radio',
+  },
+  {
+    criterion: '3.3.2 Labels or Instructions / 3.3.1',
+    level: 'A',
+    findings: 'Required fields visual-only (*); phone appears late after Country',
+  },
+  {
+    criterion: '1.3.1 Info and Relationships',
+    level: 'A',
+    findings: 'Missing main/landmarks; heading-order jumps; dialog naming',
+  },
+]
+
+const FIX_ORDER = [
+  'Brand-orange + theme contrast tokens (design system) + grey-theme config safety net',
+  'Topic-rating hit targets + radiogroup/radio semantics (one shared component)',
+  'Modal close aria-label + Opt-In label, hit target, and :focus-visible',
+  'Focus-ring contrast (reaction bar; grey-theme ring on af5)',
+  'Seek / Volume focus indicators',
+  'Required / aria-required on shared form fields; phone field order',
+  'Legal disclaimer template / concatenation bug',
+  'Country combobox ARIA; landmarks, titles, heading order',
+  'Tour close button + deliberate Tab behavior (af5); dedicated tour-codebase audit',
+]
+
+function ownerBucket(owner) {
+  if (/^Design$/i.test(owner)) return 'Design'
+  if (/Engineering/i.test(owner) && !/Design/i.test(owner)) return 'Engineering'
+  return 'Design + Engineering'
+}
+
+function allItems() {
+  return demos.flatMap((d) =>
+    d.backlog.items.map((i) => ({
+      ...i,
+      demoSlug: d.slug,
+      demoLabel: d.label,
+      demo: d,
+    })),
+  )
+}
+
+function isContrastItem(item) {
+  const blob = `${item.title || ''} ${item.detail || ''} ${(item.axeRules || []).join(' ')}`.toLowerCase()
+  return (
+    (item.axeRules || []).includes('color-contrast') ||
+    /contrast|brand orange|grey theme|gray theme|focus.?ring|luminance|2\.\d+:1|4\.5:1|3:1/.test(blob)
+  )
+}
+
+function renderContrastTab() {
+  const contrastItems = allItems().filter(isContrastItem)
+  const sevOrder = { critical: 0, serious: 1, moderate: 2, minor: 3 }
+  const sorted = [...contrastItems].sort(
+    (a, b) =>
+      (sevOrder[a.severity] ?? 9) - (sevOrder[b.severity] ?? 9) || a.demoLabel.localeCompare(b.demoLabel) || a.id.localeCompare(b.id),
+  )
+
+  let failureRows = 0
+  const demoBlocks = demos
+    .map((d) => {
+      const states = (d.results.states || []).filter(
+        (s) => (s.contrastFailures || []).length || (s.focusRingNotes || []).length || (s.theme || []).length,
+      )
+      if (!states.length && !d.results.summary) return ''
+
+      const summary = d.results.summary
+      const stateHtml = states
+        .map((s) => {
+          failureRows += (s.contrastFailures || []).length
+          const themeRows = (s.theme || [])
+            .filter((t) => !t.passesAA)
+            .map(
+              (t) =>
+                `<tr class="contrast-fail"><td>${esc(t.label)}</td><td><code>${esc(t.color)}</code> / <code>${esc(
+                  t.background,
+                )}</code></td><td class="num"><strong class="fail">${esc(t.ratio)}:1</strong></td><td class="num">4.5</td></tr>`,
+            )
+            .join('')
+          return `<div class="finding contrast-block">
+            <h4>${esc(s.title)}</h4>
+            <p class="sec-note">${esc(s.note || '')}</p>
+            ${renderContrastTable(s.contrastFailures)}
+            ${
+              themeRows
+                ? `<h4 class="sub">Cursor measured fails</h4><table class="contrast-table"><thead><tr><th>Control</th><th>Foreground / background</th><th class="num">Ratio</th><th class="num">Needed</th></tr></thead><tbody>${themeRows}</tbody></table>`
+                : ''
+            }
+            ${renderFocusRingNotes(s.focusRingNotes)}
+          </div>`
+        })
+        .join('\n')
+
+      return `<article class="demo-block" id="contrast-${esc(d.slug)}">
+        <header class="demo-head">
+          <h2>${esc(d.label)}</h2>
+          <p class="sec-note"><a href="${esc(d.url)}" target="_blank" rel="noreferrer"><code>${esc(d.url)}</code></a></p>
+        </header>
+        ${
+          summary
+            ? `<div class="finding critical contrast-callout"><h3>${esc(summary.headline || 'Contrast summary')}</h3>
+               <p><strong>${esc(summary.stylesFailed)}</strong> of styles failed · token <code>${esc(summary.brandOrange || '')}</code></p>
+               ${summary.comparisonToA754 ? `<p class="sec-note">${esc(summary.comparisonToA754)}</p>` : ''}
+             </div>`
+            : ''
+        }
+        ${stateHtml || '<p class="sec-note">No systematic contrast tables on this demo — see Cursor axe shots in Demos / Backlog.</p>'}
+      </article>`
+    })
+    .join('\n')
+
+  return `<header class="demo-head">
+    <h2>Color &amp; contrast</h2>
+    <p class="sec-note">All WCAG 1.4.3 text-contrast and 1.4.11 / 2.4.11 focus-indicator contrast findings in one place. Red rows failed their threshold. Full ticket cards live in <button type="button" class="inline-tab-link" data-target="panel-backlog">Backlog</button>.</p>
+  </header>
+
+  <div class="cards">
+    <div class="card critical"><div class="n">${failureRows || '—'}</div><div class="l">Measured style fails</div></div>
+    <div class="card serious"><div class="n">${sorted.length}</div><div class="l">Contrast-related tickets</div></div>
+    <div class="card"><div class="n">2.93:1</div><div class="l">White on brand orange</div></div>
+    <div class="card"><div class="n">2.06:1</div><div class="l">Grey on #F0F0F0 (af5)</div></div>
+  </div>
+
+  <div class="two-col" style="margin-top:16px">
+    <div class="finding critical contrast-callout">
+      <h4>Root cause A — Brand orange</h4>
+      <p><code>rgb(252, 104, 57)</code> fails as text on white/#F0F0F0 (<strong>2.57–2.93:1</strong>) and under white text (<strong>2.93:1</strong>, still fails large-text 3:1 on JW avatar). Design-system token fix — not per-component.</p>
+      <p class="sec-note">Seen on a754d887d systematic + be2376b21 Cursor axe.</p>
+    </div>
+    <div class="finding critical contrast-callout">
+      <h4>Root cause B — Broken grey theme</h4>
+      <p><code>rgb(169, 169, 169)</code> stands in for brand color on af5f0eba6. <strong>14/18</strong> identity styles fail (78%). Focus ring both layers also fail 3:1 because the palette is desaturated.</p>
+      <p class="sec-note">Likely demo theme/config pipeline — same components look better (still imperfect) on orange demos.</p>
+    </div>
+  </div>
+
+  <h3 class="sub">Contrast-related backlog tickets</h3>
+  <table class="contrast-table">
+    <thead><tr><th>ID</th><th>Sev</th><th>Demo</th><th>Finding</th><th>Owner</th></tr></thead>
+    <tbody>
+      ${sorted
+        .map(
+          (i) => `<tr class="contrast-fail">
+        <td><a href="#${esc(i.demoSlug)}-${esc(i.id)}"><code>${esc(i.id)}</code></a></td>
+        <td>${badge(i.severity)}</td>
+        <td>${esc(i.demoLabel)}</td>
+        <td><strong>${esc(i.title)}</strong></td>
+        <td>${esc(i.owner)}</td>
+      </tr>`,
+        )
+        .join('')}
+    </tbody>
+  </table>
+
+  <h3 class="sub">Measured failures by demo</h3>
+  <p class="jump">Jump to: ${demos.map((d) => `<a href="#contrast-${esc(d.slug)}">${esc(d.label)}</a>`).join(' · ')}</p>
+  ${demoBlocks}`
+}
+
+function isKeyboardItem(item) {
+  const blob = `${item.title || ''} ${item.detail || ''}`.toLowerCase()
+  // Focus-ring *contrast* stays on Contrast tab; keyboard tab owns operability / Tab order / missing indicators
+  if (/brand orange|grey theme|gray theme|luminance|color.contrast/.test(blob) && !/focus|tab|keyboard|seek|volume|opt-in|checkbox|0×0|0x0/.test(blob)) {
+    return false
+  }
+  return /tab|keyboard|focus|seek|volume|opt-in toggle|0×0|0x0|hit.?target|checkbox|rewind|fast-forward|duplicate.*tab|tour.*tab|focus trap|combobox/.test(
+    blob,
+  )
+}
+
+function renderKeyboardTab() {
+  const kbItems = allItems().filter(isKeyboardItem)
+  const sevOrder = { critical: 0, serious: 1, moderate: 2, minor: 3 }
+  const sorted = [...kbItems].sort(
+    (a, b) =>
+      (sevOrder[a.severity] ?? 9) - (sevOrder[b.severity] ?? 9) || a.demoLabel.localeCompare(b.demoLabel) || a.id.localeCompare(b.id),
+  )
+
+  let stopCount = 0
+  let missingFocus = 0
+  const demoBlocks = demos
+    .map((d) => {
+      const states = (d.results.states || []).filter((s) => (s.keyboardStops || []).length)
+      if (!states.length) return ''
+      const stateHtml = states
+        .map((s) => {
+          const stops = s.keyboardStops || []
+          stopCount += stops.length
+          missingFocus += stops.filter((x) => x.visible === false).length
+          return `<div class="finding keyboard-block">
+            <h4>${esc(s.title)}</h4>
+            <p class="sec-note">${esc(s.note || '')}</p>
+            ${renderKeyboardTable(stops)}
+          </div>`
+        })
+        .join('\n')
+      return `<article class="demo-block" id="keyboard-${esc(d.slug)}">
+        <header class="demo-head">
+          <h2>${esc(d.label)}</h2>
+          <p class="sec-note"><a href="${esc(d.url)}" target="_blank" rel="noreferrer"><code>${esc(d.url)}</code></a></p>
+        </header>
+        ${stateHtml}
+      </article>`
+    })
+    .join('\n')
+
+  return `<header class="demo-head">
+    <h2>Keyboard &amp; focus</h2>
+    <p class="sec-note">Complete Tab walks (real key presses) and keyboard-operability tickets. Focus visibility checked via outline, box-shadow, and border-color. Red rows = no visible focus; amber = corrected from an earlier false negative. Ticket cards: <button type="button" class="inline-tab-link" data-target="panel-backlog">Backlog</button>.</p>
+  </header>
+
+  <div class="cards">
+    <div class="card"><div class="n">${stopCount || '—'}</div><div class="l">Tab stops logged</div></div>
+    <div class="card critical"><div class="n">${missingFocus || '—'}</div><div class="l">Stops with no focus style</div></div>
+    <div class="card serious"><div class="n">${sorted.length}</div><div class="l">Keyboard-related tickets</div></div>
+    <div class="card"><div class="n">3</div><div class="l">Focus CSS mechanisms</div></div>
+  </div>
+
+  <div class="two-col" style="margin-top:16px">
+    <div class="finding critical keyboard-callout">
+      <h4>Hard blocks</h4>
+      <p><strong>Topic-rating checkboxes at 0×0</strong> — Tab skips them on all three demos; rating is required to continue. <strong>Opt-In toggle</strong> receives focus but has no visible indicator (all three mechanisms). <strong>Seek / Volume</strong> sliders have no focus style.</p>
+    </div>
+    <div class="finding serious keyboard-callout">
+      <h4>Corrections &amp; tour quirks</h4>
+      <p>Reaction bar / Contact me / Adjust my selections <strong>do</strong> have box-shadow rings (earlier outline-only checks were wrong). Lead fields use <strong>border-color</strong>. On af5 tours, Tab appears to advance the spotlight; close (X) did not dismiss.</p>
+    </div>
+  </div>
+
+  <h3 class="sub">Keyboard-related backlog tickets</h3>
+  <table class="keyboard-table">
+    <thead><tr><th>ID</th><th>Sev</th><th>Demo</th><th>Finding</th><th>Owner</th></tr></thead>
+    <tbody>
+      ${sorted
+        .map(
+          (i) => `<tr class="keyboard-fail">
+        <td><a href="#${esc(i.demoSlug)}-${esc(i.id)}"><code>${esc(i.id)}</code></a></td>
+        <td>${badge(i.severity)}</td>
+        <td>${esc(i.demoLabel)}</td>
+        <td><strong>${esc(i.title)}</strong></td>
+        <td>${esc(i.owner)}</td>
+      </tr>`,
+        )
+        .join('')}
+    </tbody>
+  </table>
+
+  <h3 class="sub">Tab walks by demo</h3>
+  <p class="jump">Jump to: ${demos.map((d) => `<a href="#keyboard-${esc(d.slug)}">${esc(d.label)}</a>`).join(' · ')}</p>
+  ${demoBlocks || '<p class="sec-note">No structured Tab walks in results yet for some demos — see backlog tickets above.</p>'}`
+}
+
+function renderOverview() {
+  const items = allItems()
+  const bySev = { critical: 0, serious: 0, moderate: 0, minor: 0 }
+  const byOwner = { Design: 0, Engineering: 0, 'Design + Engineering': 0 }
+  for (const i of items) {
+    bySev[i.severity] = (bySev[i.severity] || 0) + 1
+    byOwner[ownerBucket(i.owner)] = (byOwner[ownerBucket(i.owner)] || 0) + 1
+  }
+  const withShots = items.filter((i) => (i.shots || []).some((s) => i.demo.shotExists(s))).length
+  const sources = [
+    ...new Set(demos.flatMap((d) => d.claudeDocs.map((c) => `sources/${c}`))),
+  ]
+
+  return `<header class="demo-head">
+    <h2>Executive overview</h2>
+    <p class="sec-note">Cross-demo rollup of Claude (manual + systematic contrast/keyboard) and Cursor (Playwright + axe-core) audits of the Consensus Demo Player.</p>
+  </header>
+
+  <div class="cards">
+    <div class="card"><div class="n">${demos.length}</div><div class="l">Demos audited</div></div>
+    <div class="card critical"><div class="n">${bySev.critical || 0}</div><div class="l">Critical tickets</div></div>
+    <div class="card serious"><div class="n">${bySev.serious || 0}</div><div class="l">Serious tickets</div></div>
+    <div class="card"><div class="n">${items.length}</div><div class="l">Total backlog</div></div>
+    <div class="card"><div class="n">${withShots}</div><div class="l">With screen grabs</div></div>
+    <div class="card"><div class="n">${byOwner.Engineering}</div><div class="l">Eng-owned</div></div>
+    <div class="card"><div class="n">${byOwner.Design}</div><div class="l">Design-owned</div></div>
+    <div class="card"><div class="n">${byOwner['Design + Engineering']}</div><div class="l">Design + Eng</div></div>
+  </div>
+
+  <h3 class="sub">Headline findings</h3>
+  <ol class="headline-list">
+    <li><strong>Brand orange fails AA text contrast</strong> wherever it is used as text or under white text (2.57–2.93:1) — design-system root cause on orange-themed demos. <button type="button" class="inline-tab-link" data-target="panel-contrast">Open Contrast tab</button></li>
+    <li><strong>af5f0eba6 ships a broken grey theme</strong> (<code>rgb(169,169,169)</code>) — 14/18 identity styles fail (78%); theming/config safety net needed. <button type="button" class="inline-tab-link" data-target="panel-contrast">Open Contrast tab</button></li>
+    <li><strong>Topic-rating controls are 0×0 and Tab-skipped</strong> on all three demos — single shared component fix. <button type="button" class="inline-tab-link" data-target="panel-keyboard">Open Keyboard tab</button></li>
+    <li><strong>Opt-In toggle</strong> is unlabeled, often 0×0, and has no focus indicator (three-mechanism confirmed). <button type="button" class="inline-tab-link" data-target="panel-keyboard">Open Keyboard tab</button></li>
+    <li><strong>Focus rings that “exist” can still fail</strong> WCAG 1.4.11 / 2.4.11 (reaction bar; af5 grey ring). <button type="button" class="inline-tab-link" data-target="panel-contrast">Contrast</button> · <button type="button" class="inline-tab-link" data-target="panel-keyboard">Keyboard</button></li>
+    <li><strong>Corrupted legal disclaimer</strong> copy is three-for-three — shared template bug.</li>
+    <li><strong>Product tours (af5)</strong> need a dedicated in-iframe audit; close X and Tab-as-advance are open Design/Eng decisions.</li>
+  </ol>
+
+  <h3 class="sub">Methodology</h3>
+  <div class="two-col">
+    <div class="finding">
+      <h4>Claude — systematic contrast</h4>
+      <p>Every distinct text style (color + effective background + size + weight) measured with the WCAG relative-luminance formula. Thresholds: <strong>4.5:1</strong> normal text, <strong>3:1</strong> large/bold (≥18.66px bold or ≥24px regular).</p>
+    </div>
+    <div class="finding">
+      <h4>Claude — systematic keyboard</h4>
+      <p>Full Tab order via real key presses (not simulated). Focus visibility checked via <strong>outline</strong>, <strong>box-shadow</strong>, and <strong>border-color</strong> — this app uses all three. Earlier outline-only checks produced false negatives.</p>
+    </div>
+    <div class="finding">
+      <h4>Cursor — axe + Playwright</h4>
+      <p>Live runs on <code>be2376b21</code> and <code>af5f0eba6</code> with WCAG 2.1 A/AA + best-practice tags, screen grabs per violation node, independent contrast sampling, and <code>getBoundingClientRect</code> hit-target probes. Guest lead-form path unlocked with an allowed email.</p>
+    </div>
+    <div class="finding">
+      <h4>Out of scope / limits</h4>
+      <p>OneTrust cookie UI excluded from axe. Cross-origin tour iframe (ReachSuite) cannot be DOM-audited from the parent. Disabled controls flagged for completeness where noted.</p>
+    </div>
+  </div>
+
+  <h3 class="sub">Cross-demo comparison</h3>
+  <table>
+    <thead><tr><th>Dimension</th><th>a754d887d</th><th>af5f0eba6</th><th>be2376b21</th></tr></thead>
+    <tbody>
+      ${COMPARISON.map(
+        (r) =>
+          `<tr><td><strong>${esc(r.dimension)}</strong></td><td>${esc(r.a754)}</td><td>${esc(r.af5)}</td><td>${esc(r.be2376)}</td></tr>`,
+      ).join('')}
+    </tbody>
+  </table>
+
+  <h3 class="sub">Corrections to earlier spot-checks</h3>
+  <table>
+    <thead><tr><th>Previously reported</th><th>Corrected to</th><th>Demo</th></tr></thead>
+    <tbody>
+      ${CORRECTIONS.map(
+        (c) =>
+          `<tr><td>${esc(c.was)}</td><td>${esc(c.now)}</td><td><code>${esc(c.demos)}</code></td></tr>`,
+      ).join('')}
+    </tbody>
+  </table>
+
+  <h3 class="sub">WCAG criteria map</h3>
+  <table>
+    <thead><tr><th>Criterion</th><th>Level</th><th>Where it shows up in this pack</th></tr></thead>
+    <tbody>
+      ${WCAG_MAP.map(
+        (w) =>
+          `<tr><td><strong>${esc(w.criterion)}</strong></td><td>${esc(w.level)}</td><td>${esc(w.findings)}</td></tr>`,
+      ).join('')}
+    </tbody>
+  </table>
+
+  <h3 class="sub">Recommended fix order</h3>
+  <ol class="headline-list">
+    ${FIX_ORDER.map((f) => `<li>${esc(f)}</li>`).join('')}
+  </ol>
+
+  <h3 class="sub">Source documents</h3>
+  <ul class="sources">
+    ${sources.map((s) => `<li><a href="${esc(s)}"><code>${esc(s)}</code></a></li>`).join('')}
+    <li>Backlogs — ${demos.map((d) => `<a href="${esc(d.backlogDoc)}"><code>${esc(path.basename(d.backlogDoc))}</code></a>`).join(' · ')}</li>
+  </ul>`
+}
+
+function renderByOwner() {
+  const items = allItems()
+  const groups = {
+    Design: items.filter((i) => ownerBucket(i.owner) === 'Design'),
+    Engineering: items.filter((i) => ownerBucket(i.owner) === 'Engineering'),
+    'Design + Engineering': items.filter((i) => ownerBucket(i.owner) === 'Design + Engineering'),
+  }
+  const sevOrder = { critical: 0, serious: 1, moderate: 2, minor: 3 }
+  const priOrder = { P0: 0, P1: 1, P2: 2 }
+
+  const renderGroup = (title, list) => {
+    const sorted = [...list].sort(
+      (a, b) =>
+        (priOrder[a.priority] ?? 9) - (priOrder[b.priority] ?? 9) ||
+        (sevOrder[a.severity] ?? 9) - (sevOrder[b.severity] ?? 9) ||
+        a.id.localeCompare(b.id),
+    )
+    return `<h3 class="sub">${esc(title)} <span class="sec-note" style="display:inline">(${sorted.length})</span></h3>
+    <table>
+      <thead><tr><th>ID</th><th>Pri</th><th>Sev</th><th>Demo</th><th>Finding</th><th>Pages</th></tr></thead>
+      <tbody>
+      ${sorted
+        .map(
+          (i) => `<tr>
+        <td><a href="#${esc(i.demoSlug)}-${esc(i.id)}"><code>${esc(i.id)}</code></a></td>
+        <td>${esc(i.priority)}</td>
+        <td>${badge(i.severity)}</td>
+        <td>${esc(i.demoLabel)}</td>
+        <td><strong>${esc(i.title)}</strong>${i.detail ? `<div class="sec-note">${esc(i.detail.slice(0, 160))}${i.detail.length > 160 ? '…' : ''}</div>` : ''}</td>
+        <td>${esc((i.pages || []).join(', '))}</td>
+      </tr>`,
+        )
+        .join('')}
+      </tbody>
+    </table>`
+  }
+
+  return `<header class="demo-head">
+    <h2>Backlog by ownership</h2>
+    <p class="sec-note">Same tickets as the Backlog tab, regrouped for Design vs Engineering planning. Links jump to the full ticket card.</p>
+  </header>
+  ${renderGroup('Design — needs a visual / interaction / content decision', groups.Design)}
+  ${renderGroup('Engineering — fixable in code without a new design decision', groups.Engineering)}
+  ${renderGroup('Design + Engineering — decision then implementation', groups['Design + Engineering'])}`
+}
 
 const jumpDemos = demos
   .map((d) => `<a href="#demo-${esc(d.slug)}">${esc(d.label)}</a>`)
@@ -343,6 +943,19 @@ const html = `<!doctype html>
   .tab .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--critical); margin-right: 8px; vertical-align: middle; }
   .tab.backlog .dot { background: var(--orange); }
   .tab.shared .dot { background: var(--serious); }
+  .tab.owner .dot { background: var(--moderate); }
+  .tab.overview .dot { background: var(--ink); }
+  .tab.contrast .dot { background: var(--critical); }
+  .tab.keyboard .dot { background: #2F6FED; }
+  .contrast-fail { background: #FFF1F0; }
+  .contrast-fail:hover { background: #FFE4E1; }
+  .contrast-callout { border-left-width: 6px; }
+  .contrast-block { border-left-color: var(--critical); }
+  table.contrast-table th:nth-child(3), table.contrast-table td.num { font-weight: 600; }
+  .keyboard-fail { background: #FFF1F0; }
+  .keyboard-fix { background: #FFF8E8; }
+  .keyboard-callout { border-left-width: 6px; }
+  .keyboard-block { border-left-color: #2F6FED; }
   .inline-tab-link { appearance: none; background: none; border: none; padding: 0; font: inherit; color: var(--orange); font-weight: 600; text-decoration: underline; cursor: pointer; }
   .inline-tab-link:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
   .jump { font-size: 14px; margin: 0 0 20px; color: var(--muted); }
@@ -368,6 +981,10 @@ const html = `<!doctype html>
   .finding.moderate { border-left-color: var(--moderate); }
   .finding.minor { border-left-color: var(--minor); }
   .finding h3 { font-size: 16px; margin: 10px 0 6px; }
+  .finding h4 { margin-top: 0; }
+  .two-col { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin: 12px 0 8px; }
+  .headline-list { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 16px 16px 16px 36px; margin: 0 0 8px; }
+  .headline-list li { margin: 8px 0; }
   .meta-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
   .badge { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; padding: 3px 8px; border-radius: 999px; color: #fff; }
   .badge.critical { background: var(--critical); }
@@ -408,15 +1025,32 @@ const html = `<!doctype html>
     <span>P0 hotfixes <code>${totals.p0}</code></span>
     <span>Standard <code>WCAG 2.1 / 2.2 AA</code></span>
   </div>
+  <p class="sec-note" style="margin-top:14px">Systematic contrast + keyboard on <code>a754d887d</code> and <code>af5f0eba6</code>; Cursor axe + screen grabs on <code>be2376b21</code> and <code>af5f0eba6</code>; guest lead-form evidence on the single-video demo.</p>
 </header>
 
 <div class="tabs" role="tablist" aria-label="Audit report sections">
-  <button class="tab" role="tab" id="tab-demos" aria-controls="panel-demos" aria-selected="true" data-target="panel-demos"><span class="dot"></span>Demos audited</button>
+  <button class="tab overview" role="tab" id="tab-overview" aria-controls="panel-overview" aria-selected="true" data-target="panel-overview"><span class="dot"></span>Overview</button>
+  <button class="tab contrast" role="tab" id="tab-contrast" aria-controls="panel-contrast" aria-selected="false" data-target="panel-contrast"><span class="dot"></span>Contrast</button>
+  <button class="tab keyboard" role="tab" id="tab-keyboard" aria-controls="panel-keyboard" aria-selected="false" data-target="panel-keyboard"><span class="dot"></span>Keyboard</button>
+  <button class="tab" role="tab" id="tab-demos" aria-controls="panel-demos" aria-selected="false" data-target="panel-demos"><span class="dot"></span>Demos audited</button>
   <button class="tab backlog" role="tab" id="tab-backlog" aria-controls="panel-backlog" aria-selected="false" data-target="panel-backlog"><span class="dot"></span>Backlog</button>
-  <button class="tab shared" role="tab" id="tab-shared" aria-controls="panel-shared" aria-selected="false" data-target="panel-shared"><span class="dot"></span>Shared component bugs</button>
+  <button class="tab owner" role="tab" id="tab-owner" aria-controls="panel-owner" aria-selected="false" data-target="panel-owner"><span class="dot"></span>By owner</button>
+  <button class="tab shared" role="tab" id="tab-shared" aria-controls="panel-shared" aria-selected="false" data-target="panel-shared"><span class="dot"></span>Shared bugs</button>
 </div>
 
-<section class="panel active" id="panel-demos" role="tabpanel" aria-labelledby="tab-demos">
+<section class="panel active" id="panel-overview" role="tabpanel" aria-labelledby="tab-overview">
+  ${renderOverview()}
+</section>
+
+<section class="panel" id="panel-contrast" role="tabpanel" aria-labelledby="tab-contrast">
+  ${renderContrastTab()}
+</section>
+
+<section class="panel" id="panel-keyboard" role="tabpanel" aria-labelledby="tab-keyboard">
+  ${renderKeyboardTab()}
+</section>
+
+<section class="panel" id="panel-demos" role="tabpanel" aria-labelledby="tab-demos">
   <p class="jump">Jump to: ${jumpDemos}</p>
   ${demos.map(renderDemoSection).join('\n')}
 </section>
@@ -424,16 +1058,20 @@ const html = `<!doctype html>
 <section class="panel" id="panel-backlog" role="tabpanel" aria-labelledby="tab-backlog">
   <header class="demo-head">
     <h2>Fix backlog</h2>
-    <p class="sec-note">All Design vs Engineering tickets across both demos — P0 → P1 → P2 within each demo.</p>
+    <p class="sec-note">All Design vs Engineering tickets across demos — P0 → P1 → P2 within each demo. Prefer the <button type="button" class="inline-tab-link" data-target="panel-owner">By owner</button> tab for planning lanes.</p>
   </header>
   <p class="jump">Jump to: ${jumpBacklogs}</p>
   ${demos.map(renderBacklogSection).join('\n')}
 </section>
 
+<section class="panel" id="panel-owner" role="tabpanel" aria-labelledby="tab-owner">
+  ${renderByOwner()}
+</section>
+
 <section class="panel" id="panel-shared" role="tabpanel" aria-labelledby="tab-shared">
   <header class="demo-head">
     <h2>Bugs that reproduce across demos</h2>
-    <p class="sec-note">These are single shared-component or shared-template defects. Fixing each once clears the same finding on every demo — highest leverage work in the whole pack.</p>
+    <p class="sec-note">Single shared-component or shared-template defects. Fixing each once clears the same finding on every demo — highest leverage work in the pack.</p>
   </header>
   <table>
     <thead><tr><th>Finding</th><th>Seen on</th><th>Why it matters</th></tr></thead>
@@ -443,12 +1081,13 @@ const html = `<!doctype html>
       ).join('')}
     </tbody>
   </table>
-  <div class="fix" style="margin-top:20px"><strong>Recommended order.</strong> 1) Rating hit-target + radio semantics · 2) Modal close + Opt-In toggle labels · 3) Required-field indication · 4) Legal-copy template bug · 5) Landmarks, titles, heading order · 6) Per-demo theme/contrast config safety net.</div>
+  <div class="fix" style="margin-top:20px"><strong>Recommended order.</strong> See Overview for the full sequenced list. Short version: brand/theme contrast → rating hit targets → Opt-In + modal close → focus-ring contrast → Seek/Volume → required fields → legal template → combobox/landmarks → tour close/Tab.</div>
 </section>
 
 <footer>
-  Pack lives at <code>/a11y-audit/</code> ·
-  <a href="report.html">Cursor-only report (single video)</a>
+  Sources under <code>sources/</code> ·
+  <a href="report.html">Cursor-only report (single video)</a> ·
+  Rebuild with <code>AUDIT_OUT=. node scripts/build-merged-report.cjs</code>
 </footer>
 </div>
 <script>
@@ -471,12 +1110,28 @@ const html = `<!doctype html>
       }
     }),
   );
-  // In-panel jump links that need the backlog/demos tab open first
   document.querySelectorAll('.jump a[href^="#backlog-"]').forEach((a) => {
     a.addEventListener('click', () => select('panel-backlog'));
   });
   document.querySelectorAll('.jump a[href^="#demo-"]').forEach((a) => {
     a.addEventListener('click', () => select('panel-demos'));
+  });
+  document.querySelectorAll('.jump a[href^="#contrast-"]').forEach((a) => {
+    a.addEventListener('click', () => select('panel-contrast'));
+  });
+  document.querySelectorAll('.jump a[href^="#keyboard-"]').forEach((a) => {
+    a.addEventListener('click', () => select('panel-keyboard'));
+  });
+  document.querySelectorAll('#panel-owner a[href^="#"], #panel-contrast a[href^="#"], #panel-keyboard a[href^="#"]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      const id = a.getAttribute('href');
+      if (!id || id.startsWith('#contrast-') || id.startsWith('#keyboard-')) return;
+      const el = document.querySelector(id);
+      if (!el) return;
+      select('panel-backlog');
+      requestAnimationFrame(() => el.scrollIntoView({ behavior: 'smooth' }));
+      e.preventDefault();
+    });
   });
   document.querySelectorAll('a[href^="#backlog-"]').forEach((a) => {
     if (a.closest('.jump')) return;
@@ -503,15 +1158,17 @@ const html = `<!doctype html>
   } else if (location.hash && location.hash.startsWith('#demo-')) {
     select('panel-demos');
     requestAnimationFrame(() => document.querySelector(location.hash)?.scrollIntoView());
+  } else if (location.hash && document.querySelector(location.hash)) {
+    select('panel-backlog');
+    requestAnimationFrame(() => document.querySelector(location.hash)?.scrollIntoView());
   }
 </script>
 </body>
 </html>`
 
 fs.writeFileSync(path.join(OUT, 'merged.html'), html)
-// Keep nested index in sync if present
 if (fs.existsSync(MERGED)) {
   fs.writeFileSync(path.join(MERGED, 'index.html'), html)
 }
 console.log(`✓ ${path.join(OUT, 'merged.html')}`)
-console.log(`  3 tabs · ${demos.length} demos · ${totals.items} backlog items · ${totals.p0} P0`)
+console.log(`  7 tabs · ${demos.length} demos · ${totals.items} backlog items · ${totals.p0} P0`)

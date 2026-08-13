@@ -3,13 +3,13 @@
   "demoSlug": "af5f0eba6",
   "demoLabel": "Dylan Standard personalized with tours",
   "url": "https://play.goconsensus.com/af5f0eba6",
-  "generatedAt": "2026-08-12T00:55:37.711Z",
+  "generatedAt": "2026-08-13T19:38:41.314Z",
   "viewport": {
     "width": 1440,
     "height": 900
   },
   "axeVersion": "4.12.1",
-  "standard": "WCAG 2.1 A/AA + axe best practices",
+  "standard": "WCAG 2.1 / 2.2 AA + Claude systematic contrast/keyboard",
   "states": [
     {
       "id": "identity-cookies",
@@ -217,7 +217,7 @@
     {
       "id": "identity",
       "title": "Identity screen — viewer picker",
-      "note": "After accepting cookies: “I’m new here” / named viewers, Contact me, Opt In toggle, legal footer.",
+      "note": "After accepting cookies: “I’m new here” / named viewers, Contact me, Opt In toggle, legal footer. Claude systematic: 14/18 distinct text styles fail on this screen (78%), all from rgb(169,169,169).",
       "full": "shots/identity-full.png",
       "violations": [
         {
@@ -520,12 +520,110 @@
           "accessibleName": ""
         }
       ],
-      "bodyTextSample": "Personalized demo for\nGoconsensus\nThis is a legal statement describing Opt-in & Legitimate InterestThis is a legal statement describing Opt-in & Legitimate InterestThis is a legal statement describing Opt-in & Legitimate InterestThgitimate Interesgitimate Interesgitimate Interesgitimate Interesgitimate Interesgitimate Interesgit\nZ inc Privacy Policy\nTerms of Service\nZ inc Partners\nCopyright Z inc 2023\nPowered by\nConsensus\nJW\nJustin Ware\nContact me\nHi, I'm Justin.\nTell me who you are to get start"
+      "bodyTextSample": "Personalized demo for\nGoconsensus\nThis is a legal statement describing Opt-in & Legitimate InterestThis is a legal statement describing Opt-in & Legitimate InterestThis is a legal statement describing Opt-in & Legitimate InterestThgitimate Interesgitimate Interesgitimate Interesgitimate Interesgitimate Interesgitimate Interesgit\nZ inc Privacy Policy\nTerms of Service\nZ inc Partners\nCopyright Z inc 2023\nPowered by\nConsensus\nJW\nJustin Ware\nContact me\nHi, I'm Justin.\nTell me who you are to get start",
+      "contrastFailures": [
+        {
+          "text": "Personalized demo for",
+          "fg": "white",
+          "bg": "grey rgb(169,169,169)",
+          "ratio": 2.35,
+          "needed": 4.5
+        },
+        {
+          "text": "Goconsensus (28px)",
+          "fg": "white",
+          "bg": "grey",
+          "ratio": 2.35,
+          "needed": 3
+        },
+        {
+          "text": "JW avatar (32px)",
+          "fg": "white",
+          "bg": "grey",
+          "ratio": 2.35,
+          "needed": 3
+        },
+        {
+          "text": "Justin Ware / Test User identity buttons",
+          "fg": "white",
+          "bg": "grey",
+          "ratio": 2.35,
+          "needed": 4.5
+        },
+        {
+          "text": "Legal / Privacy / Terms / Partners / footer",
+          "fg": "white",
+          "bg": "grey",
+          "ratio": 2.35,
+          "needed": 4.5
+        },
+        {
+          "text": "Contact me, I’m new here",
+          "fg": "grey",
+          "bg": "light-grey #F0F0F0",
+          "ratio": 2.06,
+          "needed": 4.5
+        }
+      ],
+      "focusRingNotes": [
+        {
+          "control": "Grey two-layer focus ring (Contact me, I’m new here, identity buttons, ⓘ)",
+          "detail": "Inner rgb(198,198,198)=1.71:1 vs white / 1.50:1 vs light-grey; outer rgb(151,151,151)=2.92:1 vs white — both fail 3:1. Worse than a754d887d where outer layer passed at 3.61:1."
+        }
+      ],
+      "keyboardStops": [
+        {
+          "n": "1–4",
+          "stop": "Footer links (Privacy / Terms / Partners / Consensus logo)",
+          "visible": true,
+          "mechanism": "Browser default outline: auto"
+        },
+        {
+          "n": "5",
+          "stop": "Contact me",
+          "visible": true,
+          "mechanism": "Two-layer grey box-shadow — fails 3:1 contrast",
+          "correction": true
+        },
+        {
+          "n": "6",
+          "stop": "I’m new here",
+          "visible": true,
+          "mechanism": "Same low-contrast grey ring",
+          "correction": true
+        },
+        {
+          "n": "7",
+          "stop": "Justin Ware",
+          "visible": true,
+          "mechanism": "Same low-contrast grey ring",
+          "correction": true
+        },
+        {
+          "n": "8–9",
+          "stop": "Test User (duplicate stop)",
+          "visible": true,
+          "mechanism": "Same ring; duplicate focusable element in DOM"
+        },
+        {
+          "n": "10",
+          "stop": "Opt-In info (ⓘ)",
+          "visible": true,
+          "mechanism": "Same low-contrast grey ring",
+          "correction": true
+        },
+        {
+          "n": "11",
+          "stop": "Opt-In toggle",
+          "visible": false,
+          "mechanism": "none (outline / box-shadow / border — all inactive)"
+        }
+      ]
     },
     {
       "id": "opt-in",
       "title": "Opt-in consent modal",
-      "note": "Consent gate shown after selecting a known viewer.",
+      "note": "Consent gate shown after selecting a known viewer. Claude systematic: broken grey theme reaches the Continue CTA (2.35:1); modal copy itself passes.",
       "full": "shots/opt-in-full.png",
       "violations": [
         {
@@ -969,12 +1067,22 @@
       ],
       "theme": [],
       "ratingControls": [],
-      "bodyTextSample": "Personalized demo for\nGoconsensus\nThis is a legal statement describing Opt-in & Legitimate InterestThis is a legal statement describing Opt-in & Legitimate InterestThis is a legal statement describing Opt-in & Legitimate InterestThgitimate Interesgitimate Interesgitimate Interesgitimate Interesgitimate Interesgitimate Interesgit\nZ inc Privacy Policy\nTerms of Service\nZ inc Partners\nCopyright Z inc 2023\nPowered by\nConsensus\nJW\nJustin Ware\nContact me\nHi, I'm Justin.\nTell me who you are to get start"
+      "bodyTextSample": "Personalized demo for\nGoconsensus\nThis is a legal statement describing Opt-in & Legitimate InterestThis is a legal statement describing Opt-in & Legitimate InterestThis is a legal statement describing Opt-in & Legitimate InterestThgitimate Interesgitimate Interesgitimate Interesgitimate Interesgitimate Interesgitimate Interesgit\nZ inc Privacy Policy\nTerms of Service\nZ inc Partners\nCopyright Z inc 2023\nPowered by\nConsensus\nJW\nJustin Ware\nContact me\nHi, I'm Justin.\nTell me who you are to get start",
+      "contrastFailures": [
+        {
+          "text": "Opt-in and Continue button",
+          "fg": "white",
+          "bg": "grey rgb(169,169,169)",
+          "ratio": 2.35,
+          "needed": 4.5,
+          "note": "Modal heading/body are fine (black on white ~21:1); only the brand-colored CTA fails"
+        }
+      ]
     },
     {
       "id": "post-continue",
       "title": "Topic Rating screen",
-      "note": "Topic rating grid (Very / Somewhat / Not important) with Select all controls.",
+      "note": "Topic rating grid (Very / Somewhat / Not important) with Select all controls. Claude systematic: 6/20 styles fail (30%) — better than identity once past grey-heavy chrome; rating 0×0 still confirmed.",
       "full": "shots/post-continue-full.png",
       "violations": [
         {
@@ -1278,7 +1386,53 @@
           "accessibleName": ""
         }
       ],
-      "bodyTextSample": "JW\nJustin Ware\nContact me\nWelcome, Justin.\nWhat topics are most important to you? Our system will create a demo tailored to your needs.\n\nDylan Standard personalized with tours\n\nTopic\nVery important\nSelect all\nSomewhat important\nSelect all\nNot important\nSelect all\nFeature 1\nFeature 2\nRate all topics to continue\nNow Playing\nAll Demos\n2\nMy demo\n0 topics | 0 min\nRate the topics on the left to build your demo\nRate all topics to continue"
+      "bodyTextSample": "JW\nJustin Ware\nContact me\nWelcome, Justin.\nWhat topics are most important to you? Our system will create a demo tailored to your needs.\n\nDylan Standard personalized with tours\n\nTopic\nVery important\nSelect all\nSomewhat important\nSelect all\nNot important\nSelect all\nFeature 1\nFeature 2\nRate all topics to continue\nNow Playing\nAll Demos\n2\nMy demo\n0 topics | 0 min\nRate the topics on the left to build your demo\nRate all topics to continue",
+      "contrastFailures": [
+        {
+          "text": "JW avatar",
+          "fg": "white",
+          "bg": "grey",
+          "ratio": 2.35,
+          "needed": 3
+        },
+        {
+          "text": "Contact me, Select all",
+          "fg": "grey",
+          "bg": "light-grey",
+          "ratio": 2.06,
+          "needed": 4.5
+        },
+        {
+          "text": "Rate all topics to continue (disabled)",
+          "fg": "white",
+          "bg": "grey",
+          "ratio": 2.35,
+          "needed": 4.5
+        },
+        {
+          "text": "Now Playing tab label",
+          "fg": "dark navy",
+          "bg": "near-transparent grey",
+          "ratio": 4.15,
+          "needed": 4.5,
+          "note": "Independent of grey theme — close miss"
+        },
+        {
+          "text": "Notification badge “2”",
+          "fg": "white",
+          "bg": "grey",
+          "ratio": 2.35,
+          "needed": 4.5
+        }
+      ]
     }
-  ]
+  ],
+  "methodNote": "Claude systematic pass: every distinct text style vs computed background (WCAG luminance); real Tab walk with outline / box-shadow / border-color focus checks. Companion to a754d887d systematic report.",
+  "summary": {
+    "stylesChecked": "18+21+20 across Pages A–C",
+    "stylesFailed": "14 on Page A (78%); 6 on Page C (30%)",
+    "brandOrange": "rgb(169,169,169) grey placeholder (not brand orange)",
+    "headline": "Entire theme uses grey placeholder rgb(169,169,169) instead of brand color — up to 78% of Page A text styles fail; worse than a754d887d’s single-token orange failures.",
+    "comparisonToA754": "a754d887d: brand orange fails in context (~25%). af5f0eba6: theme pipeline appears broken → flat grey; focus ring outer layer 2.92:1 (fails) vs 3.61:1 (passes) on a754."
+  }
 }

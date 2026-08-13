@@ -3,9 +3,10 @@
   "demoSlug": "af5f0eba6",
   "demoLabel": "Dylan Standard personalized with tours",
   "url": "https://play.goconsensus.com/af5f0eba6",
-  "generatedAt": "2026-08-12T00:55:00.000Z",
+  "generatedAt": "2026-08-13T19:30:00.000Z",
   "sources": [
     "Claude: consensus-player-a11y-audit-af5f0eba6-by-team.md",
+    "Claude: consensus-player-a11y-audit-af5f0eba6-color-contrast-keyboard.md",
     "Cursor: live axe-core + Playwright audit (identity, opt-in, topic rating) with independent contrast + hit-target measurement"
   ],
   "pages": {
@@ -21,8 +22,8 @@
       "severity": "critical",
       "owner": "Design + Engineering",
       "pages": ["A", "C"],
-      "title": "Entire demo renders in a grey theme at ~2:1 contrast",
-      "detail": "Cursor independently measured every themed control on this demo: \"I'm new here\", \"Contact me\" and \"Select all\" at rgb(169,169,169) on rgb(240,240,240) = 2.06:1; \"Justin Ware\", \"Test User\" and \"Continue\" white-on-grey = 2.35:1. 8 of 9 measured controls fail AA. Matches Claude's finding exactly.",
+      "title": "Entire demo renders in a grey theme — 14/18 Page A styles fail (78%)",
+      "detail": "Systematic Claude pass: 14 of 18 checked text styles fail on Page A alone (78%), all tracing to rgb(169,169,169) — white-on-grey 2.35:1 and grey-on-#F0F0F0 2.06:1. Page C is better but still 6/20 fail. Cursor independently sampled the same tokens (2.06:1 / 2.35:1). Broken theme appears scoped to components, not one global variable; other demos use vivid brand orange.",
       "fix": "Investigate the missing/failed brand theme assignment for this demo, and add a contrast-safe token fallback so a themeless demo cannot ship below 4.5:1 (3:1 for UI boundaries).",
       "sources": ["claude-af5f0eba6", "cursor-axe"],
       "shots": [
@@ -31,7 +32,7 @@
         "shots/identity-full.png"
       ],
       "axeRules": ["color-contrast"],
-      "verified": "Independently confirmed by Cursor computed-style measurement"
+      "verified": "Claude systematic style enumeration + Cursor computed-style measurement"
     },
     {
       "id": "AF-P0-2",
@@ -220,6 +221,45 @@
       "sources": ["claude-af5f0eba6", "claude-by-team"],
       "shots": [],
       "verified": "Claude-confirmed; shared component"
+    },
+    {
+      "id": "AF-P1-5",
+      "priority": "P1",
+      "severity": "serious",
+      "owner": "Design + Engineering",
+      "pages": ["A", "B", "C"],
+      "title": "Focus ring exists but both layers fail 3:1 (worse than a754d887d)",
+      "detail": "Same two-layer box-shadow technique as a754d887d, but here both layers fail non-text contrast — inner rgb(198,198,198) = 1.71:1 vs white / 1.50:1 vs light-grey; outer rgb(151,151,151) = 2.92:1 vs white. On a754d887d the outer layer alone passed at 3.61:1 because brand orange kept saturation. Ring is present on Contact me / I'm new here / identity buttons but not reliably visible. Opt-In toggle still has zero focus indicator via all three mechanisms.",
+      "fix": "Darken the focus-ring token so both layers meet ≥3:1 on this (and themeless) demos; ensure Opt-In gets the same token. Root cause is the desaturated grey theme — fixing theme assignment also improves ring contrast.",
+      "sources": ["claude-af5f0eba6", "claude-af5-systematic"],
+      "shots": ["shots/identity-full.png"],
+      "verified": "Claude systematic three-mechanism + luminance pass"
+    },
+    {
+      "id": "AF-P2-8",
+      "priority": "P2",
+      "severity": "moderate",
+      "owner": "Engineering",
+      "pages": ["A"],
+      "title": "Duplicate “Test User” tab stop on identity screen",
+      "detail": "Real Tab sequence hits “Test User” twice consecutively — likely a stale/duplicated focusable element from session/identity state.",
+      "fix": "Remove the duplicate focusable node from the identity picker DOM.",
+      "sources": ["claude-af5f0eba6", "claude-af5-systematic"],
+      "shots": [],
+      "verified": "Claude real-Tab walk"
+    },
+    {
+      "id": "AF-P2-9",
+      "priority": "P2",
+      "severity": "moderate",
+      "owner": "Design + Engineering",
+      "pages": ["C"],
+      "title": "“Now Playing” tab label at 4.15:1 — independent of grey theme",
+      "detail": "Dark navy on near-transparent grey measures 4.15:1 (needs 4.5:1). Close miss and not caused by the rgb(169,169,169) placeholder — separate small-margin contrast issue.",
+      "fix": "Slightly darken the tab label or raise its background opacity to clear 4.5:1.",
+      "sources": ["claude-af5-systematic"],
+      "shots": ["shots/evidence-topics-full.png"],
+      "verified": "Claude systematic luminance pass"
     }
   ]
 }

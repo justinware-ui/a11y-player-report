@@ -1,0 +1,135 @@
+{
+  "title": "Consensus Player — Accessibility Fix Backlog (a754d887d)",
+  "demoSlug": "a754d887d",
+  "demoLabel": "Systematic contrast & keyboard demo",
+  "url": "https://play.goconsensus.com/a754d887d",
+  "generatedAt": "2026-08-13T19:30:00.000Z",
+  "sources": [
+    "Claude: consensus-player-a11y-audit-a754d887d-color-contrast-keyboard.md",
+    "Claude: consensus-player-a11y-audit-by-team.md (prior; corrected by this pass)"
+  ],
+  "pages": {
+    "A": "Topic Rating",
+    "B": "Video Player",
+    "C": "Lead-Capture modal"
+  },
+  "items": [
+    {
+      "id": "A7-P0-1",
+      "priority": "P0",
+      "severity": "critical",
+      "owner": "Design + Engineering",
+      "pages": ["A", "B", "C", "Shared"],
+      "title": "Brand orange fails WCAG AA text contrast everywhere it is used",
+      "detail": "Systematic scan of 69 distinct text styles across three pages: 18 failed. Root cause is brand orange rgb(252,104,57) — white-on-orange 2.93:1 and orange-on-white 2.93:1 / orange-on-#F0F0F0 2.57:1. Affects Contact me, Select all, Continue, Get in touch, JW avatar (still fails 3:1 large-text), legal links, and modal headings. Design-system-level fix, not per-component.",
+      "fix": "Darken or recolor brand orange text/on-orange tokens to ≥4.5:1 (normal) and ≥3:1 (large text / UI); ship contrast-safe text and button variants in the design system.",
+      "sources": ["claude-a754-systematic"],
+      "shots": [],
+      "verified": "Claude systematic programmatic luminance pass"
+    },
+    {
+      "id": "A7-P0-2",
+      "priority": "P0",
+      "severity": "critical",
+      "owner": "Design + Engineering",
+      "pages": ["A"],
+      "title": "Topic-rating checkboxes are 0×0 and skipped by Tab",
+      "detail": "Re-verified in the full Tab walk: after the info icon, focus lands on body because the three rating checkboxes render at 0×0px. Chrome skips them regardless of tabIndex. Now confirmed on all three demos.",
+      "fix": "Give inputs real dimensions matching visible icons (or move focus to a sized sibling); convert to radiogroup/radio.",
+      "sources": ["claude-a754-systematic", "claude-by-team"],
+      "shots": [],
+      "verified": "Claude real-Tab walk + getBoundingClientRect"
+    },
+    {
+      "id": "A7-P1-1",
+      "priority": "P1",
+      "severity": "serious",
+      "owner": "Design + Engineering",
+      "pages": ["B"],
+      "title": "Reaction-bar focus ring exists but fails 3:1 non-text contrast",
+      "detail": "Correction: earlier reports said no visible focus. Ring is a grey box-shadow; compositing over the video bar yields only 1.34:1 (light frame) / 1.76:1 (dark frame). Exists but is not reliably visible (WCAG 1.4.11 / 2.4.11).",
+      "fix": "Raise reaction-bar :focus-visible contrast to ≥3:1 against both light and dark video frames (or a solid control chrome).",
+      "sources": ["claude-a754-systematic"],
+      "shots": [],
+      "verified": "Claude three-mechanism focus check + compositing measurement"
+    },
+    {
+      "id": "A7-P1-2",
+      "priority": "P1",
+      "severity": "serious",
+      "owner": "Engineering",
+      "pages": ["B"],
+      "title": "Seek and Volume sliders have no visible focus indicator",
+      "detail": "Re-verified via outline, box-shadow, and border-color — all inactive. Play/Mute/Subtitles/Settings/Fullscreen use Plyr's dashed outline and pass.",
+      "fix": "Add a visible :focus-visible style on Plyr range inputs (seek + volume).",
+      "sources": ["claude-a754-systematic", "claude-by-team"],
+      "shots": [],
+      "verified": "Claude real-Tab walk, three-mechanism check"
+    },
+    {
+      "id": "A7-P1-3",
+      "priority": "P1",
+      "severity": "critical",
+      "owner": "Engineering",
+      "pages": ["C", "A"],
+      "title": "Opt-In toggle and Select-all / Contact me (Page A) lack focus styles",
+      "detail": "Opt-In toggle: no outline/box-shadow/border on input or sibling span. Page A Contact me and Select all also show no focus indicator (on Page B, Contact me does use the orange box-shadow — screen-specific gap).",
+      "fix": "Apply the shared focus-visible token (border-color or two-layer ring) to Opt-In, Select all, and any Contact me variant that currently has none.",
+      "sources": ["claude-a754-systematic"],
+      "shots": [],
+      "verified": "Claude three-mechanism check"
+    },
+    {
+      "id": "A7-P1-4",
+      "priority": "P1",
+      "severity": "moderate",
+      "owner": "Design",
+      "pages": ["B", "Shared"],
+      "title": "Orange focus ring depends on outer layer alone for 3:1",
+      "detail": "Inner layer rgb(255,160,124) = 1.99:1 vs white; outer rgb(224,94,52) = 3.61:1. Combined likely adequate on light backgrounds — Design should confirm intentional layering.",
+      "fix": "Document the two-layer ring as a deliberate token, or strengthen the inner layer so either layer alone meets 3:1.",
+      "sources": ["claude-a754-systematic"],
+      "shots": [],
+      "verified": "Claude focus-ring contrast measurement"
+    },
+    {
+      "id": "A7-P2-1",
+      "priority": "P2",
+      "severity": "moderate",
+      "owner": "Engineering",
+      "pages": ["B"],
+      "title": "Unused Plyr rewind/fast-forward controls are 0×0 and still focusable in DOM",
+      "detail": "Not disabled — only visually unused / zero-sized — so Tab skips them the same way as rating checkboxes. Cleanup item.",
+      "fix": "Remove from DOM or disable unused Plyr controls for this control-bar layout.",
+      "sources": ["claude-a754-systematic"],
+      "shots": [],
+      "verified": "Claude Tab walk"
+    },
+    {
+      "id": "A7-P2-2",
+      "priority": "P2",
+      "severity": "moderate",
+      "owner": "Engineering",
+      "pages": ["C"],
+      "title": "Country/State combobox missing role=combobox and aria-expanded",
+      "detail": "Arrow-key + listbox/option + aria-activedescendant work; input still lacks combobox/aria-expanded. Focus uses border-color (mechanism correction from prior generic 'ring' wording).",
+      "fix": "Add role=combobox + aria-expanded (and aria-controls) per ARIA 1.2 combobox pattern.",
+      "sources": ["claude-a754-systematic"],
+      "shots": [],
+      "verified": "Claude DOM + keyboard check"
+    },
+    {
+      "id": "A7-COR-1",
+      "priority": "P2",
+      "severity": "minor",
+      "owner": "Engineering",
+      "pages": ["B", "C"],
+      "title": "Corrections: several controls DO have visible focus (methodology gap)",
+      "detail": "Reaction bar, Contact me (Page B), and Adjust my selections use box-shadow rings — previously reported as missing because only outline was checked. Lead-capture text fields use border-color, not outline/box-shadow. Pass/fail unchanged for fields; only the CSS mechanism description is corrected.",
+      "fix": "When replicating focus styles, look for border-color and box-shadow rules — not only outline.",
+      "sources": ["claude-a754-systematic"],
+      "shots": [],
+      "verified": "Claude three-mechanism re-check"
+    }
+  ]
+}

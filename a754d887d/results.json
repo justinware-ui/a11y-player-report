@@ -1,0 +1,92 @@
+{
+  "app": "Consensus Demo Player",
+  "demoSlug": "a754d887d",
+  "demoLabel": "Systematic contrast & keyboard demo",
+  "url": "https://play.goconsensus.com/a754d887d",
+  "generatedAt": "2026-08-13T19:30:00.000Z",
+  "viewport": { "width": 1440, "height": 900 },
+  "axeVersion": "Claude systematic (no axe)",
+  "standard": "WCAG 2.2 AA — programmatic contrast + real Tab walk (outline / box-shadow / border-color)",
+  "methodNote": "69 distinct text styles checked across 3 pages (18 failed). Keyboard walked stop-by-stop with real Tab presses; focus visibility checked via outline, box-shadow, and border-color.",
+  "summary": {
+    "stylesChecked": 69,
+    "stylesFailed": 18,
+    "brandOrange": "rgb(252, 104, 57)",
+    "headline": "Brand orange fails text contrast nearly everywhere it is used as text or as a background under white text."
+  },
+  "states": [
+    {
+      "id": "page-a-topic-rating",
+      "title": "Page A — Topic Rating",
+      "note": "15 distinct text styles checked; 4 failed. Rating checkboxes skipped in Tab order (0×0). Contact me + Select all lack visible focus on this screen.",
+      "full": null,
+      "violations": [],
+      "contrastFailures": [
+        { "text": "JW avatar", "fg": "white", "bg": "brand orange", "ratio": 2.93, "needed": 3.0 },
+        { "text": "Contact me", "fg": "brand orange", "bg": "light-grey #F0F0F0", "ratio": 2.57, "needed": 4.5 },
+        { "text": "Select all (×3)", "fg": "brand orange", "bg": "light-grey #F0F0F0", "ratio": 2.57, "needed": 4.5 },
+        { "text": "Rate all topics to continue (disabled)", "fg": "white", "bg": "brand orange", "ratio": 2.93, "needed": 4.5, "note": "Flagged for completeness; inactive UI often treated as out of scope for 1.4.3" }
+      ],
+      "keyboardStops": [
+        { "n": "1", "stop": "Cookie-preferences icon", "visible": true, "mechanism": "Browser default outline: auto" },
+        { "n": "2", "stop": "Contact me", "visible": false, "mechanism": "none (outline / box-shadow / border inactive)" },
+        { "n": "3–5", "stop": "Select all × 3", "visible": false, "mechanism": "none" },
+        { "n": "6", "stop": "Info (ⓘ) tooltip icon", "visible": true, "mechanism": "Browser default outline: auto" },
+        { "n": "7", "stop": "(lands on body — rating checkboxes skipped)", "visible": false, "mechanism": "0×0 checkboxes skipped by Chrome Tab" }
+      ]
+    },
+    {
+      "id": "page-b-player",
+      "title": "Page B — Video Player",
+      "note": "18 distinct text styles checked; 3 failed. Prior 'missing focus' claims for reaction bar / Contact me / Adjust my selections corrected — they use box-shadow rings.",
+      "full": null,
+      "violations": [],
+      "contrastFailures": [
+        { "text": "JW avatar", "fg": "white", "bg": "brand orange", "ratio": 2.93, "needed": 3.0 },
+        { "text": "Contact me", "fg": "brand orange", "bg": "white", "ratio": 2.93, "needed": 4.5 },
+        { "text": "Adjust my selections", "fg": "brand orange", "bg": "white", "ratio": 2.93, "needed": 4.5 }
+      ],
+      "focusRingNotes": [
+        { "control": "Orange focus ring (Contact me, Adjust my selections, Start my demo)", "detail": "Two-layer box-shadow: inner rgb(255,160,124) = 1.99:1 vs white (fails alone); outer rgb(224,94,52) = 3.61:1 vs white (passes). Combined likely adequate — Design should confirm intentional." },
+        { "control": "Reaction bar grey focus ring", "detail": "rgba(111,111,111,0.5) on rgba(0,0,0,0.35) bar over video: 1.34:1 (light frame) / 1.76:1 (dark frame) — fails 3:1 non-text focus-indicator requirement. Ring exists but is not reliably visible." }
+      ],
+      "keyboardStops": [
+        { "n": "1–3", "stop": "Reaction bar (Like / Comment / Confused)", "visible": true, "mechanism": "Grey box-shadow (low contrast — see focus notes)", "correction": true },
+        { "n": "4", "stop": "Contact me", "visible": true, "mechanism": "Two-layer orange box-shadow", "correction": true },
+        { "n": "5", "stop": "Adjust my selections", "visible": true, "mechanism": "Two-layer orange box-shadow", "correction": true },
+        { "n": "6", "stop": "(body — Plyr rewind/FF 0×0 skipped)", "visible": false, "mechanism": "Unused Plyr controls present but 0×0, not disabled" },
+        { "n": "7", "stop": "Cookie-preferences icon", "visible": true, "mechanism": "Browser default outline" },
+        { "n": "8", "stop": "Play/Pause", "visible": true, "mechanism": "Plyr native dashed outline" },
+        { "n": "9", "stop": "Seek slider", "visible": false, "mechanism": "none (all three mechanisms)" },
+        { "n": "10", "stop": "Mute", "visible": true, "mechanism": "Plyr native dashed outline" },
+        { "n": "11", "stop": "Volume slider", "visible": false, "mechanism": "none (all three mechanisms)" },
+        { "n": "12–14", "stop": "Subtitles / Settings / Fullscreen", "visible": true, "mechanism": "Plyr native dashed outline" }
+      ]
+    },
+    {
+      "id": "page-c-lead-capture",
+      "title": "Page C — Lead-Capture modal",
+      "note": "36 distinct text styles checked; 11 failed. Text-field focus uses border-color (mechanism correction). Opt-In toggle still has no focus style. Focus trap confirmed.",
+      "full": null,
+      "violations": [],
+      "contrastFailures": [
+        { "text": "JW avatar", "fg": "white", "bg": "brand orange", "ratio": 2.93, "needed": 3.0 },
+        { "text": "Get in touch", "fg": "white", "bg": "brand orange", "ratio": 2.93, "needed": 4.5 },
+        { "text": "Hi,", "fg": "white", "bg": "brand orange", "ratio": 2.93, "needed": 4.5 },
+        { "text": "Tell me about yourself to continue", "fg": "white", "bg": "brand orange", "ratio": 2.93, "needed": 4.5 },
+        { "text": "Continue", "fg": "white", "bg": "brand orange", "ratio": 2.93, "needed": 4.5 },
+        { "text": "Adjust my selections (×2)", "fg": "brand orange", "bg": "white / light-grey", "ratio": "2.93 / 2.57", "needed": 4.5 },
+        { "text": "Contact me", "fg": "brand orange", "bg": "light-grey", "ratio": 2.57, "needed": 4.5 },
+        { "text": "Z inc Privacy Policy / Terms / Partners", "fg": "brand orange", "bg": "white", "ratio": 2.93, "needed": 4.5 }
+      ],
+      "keyboardStops": [
+        { "n": "1–7+", "stop": "Form fields (name, email, phone, org, job, etc.)", "visible": true, "mechanism": "border-color → orange (mechanism correction)", "correction": true },
+        { "n": "—", "stop": "Opt-In info (ⓘ)", "visible": true, "mechanism": "Circular orange ring" },
+        { "n": "—", "stop": "Country / State dropdown", "visible": true, "mechanism": "border-color; listbox/option + aria-activedescendant OK; missing combobox/aria-expanded" },
+        { "n": "—", "stop": "Opt-In toggle", "visible": false, "mechanism": "none on input or sibling span (all three mechanisms)" },
+        { "n": "—", "stop": "Privacy / Terms / Partners links", "visible": true, "mechanism": "Browser-default focus box" },
+        { "n": "—", "stop": "Focus trap back to First name", "visible": true, "mechanism": "Confirmed working" }
+      ]
+    }
+  ]
+}

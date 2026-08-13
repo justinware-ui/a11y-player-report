@@ -16,7 +16,7 @@
 
 | ID | Finding | Sev | Owner | Pages | Verified by |
 |---|---|---|---|---|---|
-| AF-P0-1 | **Whole demo renders in a grey theme at ~2:1 contrast.** Measured: `rgb(169,169,169)` on `rgb(240,240,240)` = **2.06:1** (“I’m new here”, “Contact me”, “Select all”); white on grey = **2.35:1** (“Justin Ware”, “Test User”, “Continue”). 8 of 9 measured controls fail AA. | Critical | Design + Eng | A, C | **Cursor + Claude** |
+| AF-P0-1 | **Whole demo theme is low-contrast grey — systematic: 14/18 Page A styles fail (78%).** Tokens: `rgb(169,169,169)` on `#F0F0F0` = **2.06:1**; white on grey = **2.35:1**. Page C: 6/20 fail. Cursor samples match. | Critical | Design + Eng | A, C | **Claude systematic + Cursor** |
 | AF-P0-2 | **Topic-rating checkboxes render 0×0 and are skipped by Tab.** All 6 inputs (2 topics × 3 ratings) return width/height 0 with `tabIndex=0` and no accessible name. Rating is required to continue → keyboard users are hard-blocked. | Critical | Design + Eng | C | **Cursor + Claude** |
 | AF-P0-3 | **Rating controls are checkboxes implementing radio behavior** — 3 inputs share one `name` per topic, with no `radiogroup`/`radio` semantics. | Critical | Design + Eng | C | **Cursor + Claude** |
 | AF-P0-4 | **Tour close (X) does not respond to clicks** — strands the visitor inside the tour. | Serious | Engineering | D | Claude only |
@@ -31,6 +31,7 @@
 | AF-P1-2 | **Modal close (X) has no accessible name** (shared modal-header component) | Critical | Engineering | B | Cursor axe |
 | AF-P1-3 | **Opt-In modal has no dialog accessible name; spinner progressbar unnamed** | Serious | Engineering | B | Cursor axe |
 | AF-P1-4 | **Corrupted / duplicated legal disclaimer copy** — third confirmation across demos | Serious | Design + Eng | A, B | **Cursor + Claude** |
+| AF-P1-5 | **Focus ring exists but both layers fail 3:1** (inner 1.71:1, outer 2.92:1) — worse than a754d887d; Opt-In still has zero focus style | Serious | Design + Eng | A, B, C | Claude systematic |
 
 ---
 
@@ -45,6 +46,8 @@
 | AF-P2-5 | **Three “Select all” buttons share one accessible name** | Moderate | Design + Eng | C | Both |
 | AF-P2-6 | **Document title is the demo’s internal name** | Minor | Engineering | A | Both |
 | AF-P2-7 | **Required-field asterisks have no programmatic equivalent** | Moderate | Engineering | A | Claude |
+| AF-P2-8 | **Duplicate “Test User” tab stop** on identity screen | Moderate | Engineering | A | Claude Tab walk |
+| AF-P2-9 | **“Now Playing” tab at 4.15:1** — independent of grey theme | Moderate | Design + Eng | C | Claude systematic |
 
 ---
 

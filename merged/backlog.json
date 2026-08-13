@@ -1,14 +1,33 @@
 {
   "title": "Consensus Player — Accessibility Fix Backlog",
   "url": "https://play.goconsensus.com/be2376b21",
-  "generatedAt": "2026-08-12T02:15:00.000Z",
+  "generatedAt": "2026-08-13T19:30:00.000Z",
   "sources": [
     "Claude: consensus-player-a11y-audit-by-team.md",
     "Claude: consensus-player-a11y-audit-be2376b21.md",
+    "Claude: consensus-player-a11y-audit-a754d887d-color-contrast-keyboard.md (brand-orange + focus methodology)",
     "Cursor: live axe-core + Playwright audit",
     "Cursor: guest registration / lead-gate (justin.ware@goconsensus.com)"
   ],
   "items": [
+    {
+      "id": "P0-5",
+      "priority": "P0",
+      "severity": "critical",
+      "owner": "Design + Engineering",
+      "pages": ["Cover", "A", "B", "C", "Shared"],
+      "title": "Brand orange fails AA text contrast system-wide",
+      "detail": "From the a754d887d systematic pass (applies wherever brand orange tokens are used, including this demo): white-on-orange 2.93:1 and orange-on-white/#F0F0F0 2.57–2.93:1. Cursor axe already flagged orange Contact me / legal / chrome on this URL. Design-system fix.",
+      "fix": "Ship contrast-safe brand text and on-orange button tokens (≥4.5:1 normal, ≥3:1 large).",
+      "sources": ["claude-a754-systematic", "cursor-axe"],
+      "shots": [
+        "shots/cover-color-contrast-1.png",
+        "shots/cover-color-contrast-3.png",
+        "shots/player-color-contrast-1.png"
+      ],
+      "axeRules": ["color-contrast"],
+      "verified": "Claude systematic on a754d887d; Cursor axe contrast on be2376b21"
+    },
     {
       "id": "P0-1",
       "priority": "P0",
@@ -112,9 +131,10 @@
       "severity": "serious",
       "owner": "Design + Engineering",
       "pages": ["A", "B", "C", "Shared"],
-      "title": "No focus-ring token for custom controls",
-      "fix": "Define one :focus-visible token; apply to header arrows, seek/volume, reactions, Opt-In toggle.",
-      "sources": ["claude-by-team"],
+      "title": "Focus visibility gaps: Opt-In / Seek / Volume still missing; some rings fail contrast",
+      "detail": "Systematic a754d887d pass corrected earlier false negatives: reaction bar, Contact me (player), and Adjust my selections DO have box-shadow rings. Remaining gaps: Opt-In toggle (no style via any of 3 mechanisms), Seek + Volume (none), Select-all / Contact me on Topic Rating. Reaction ring exists but measures 1.34–1.76:1 over video. Lead fields use border-color, not outline.",
+      "fix": "Define one :focus-visible token (≥3:1) and apply to Opt-In, Select all, Seek, Volume; strengthen reaction-bar ring contrast.",
+      "sources": ["claude-by-team", "claude-a754-systematic"],
       "shots": ["shots/player-full.png"]
     },
     {
@@ -150,10 +170,10 @@
       "title": "Country dropdown lacks combobox/listbox semantics",
       "detail": "Visible control is input[data-testid=\"field country\"] with no accessible name (axe label). Suggestions render as div.option without role=option / listbox. Hidden country_autofill is aria-hidden. Nearby UIKit anchor uses aria-expanded/aria-haspopup without an allowed role (axe aria-allowed-attr).",
       "fix": "Implement ARIA 1.2 combobox pattern: labelled input, listbox + option roles, and wire aria-expanded to the combobox.",
-      "sources": ["claude-be2376", "cursor-axe"],
+      "sources": ["claude-be2376", "cursor-axe", "claude-a754-systematic"],
       "shots": ["shots/lead-country-suggestions.png", "shots/lead-new-viewer-form.png"],
       "axeRules": ["label", "aria-allowed-attr"],
-      "verified": "Cursor guest form: selected United States via div.option click; Continue enabled only after phone + opt-in"
+      "verified": "Cursor guest form + Claude a754d887d (listbox/option OK; missing combobox/aria-expanded)"
     },
     {
       "id": "P2-11",
@@ -198,9 +218,10 @@
       "severity": "serious",
       "owner": "Design + Engineering",
       "pages": ["Cover", "B"],
-      "title": "Color contrast below WCAG AA on legal text and player chrome",
-      "fix": "Raise contrast to ≥4.5:1 (3:1 large text).",
-      "sources": ["cursor-axe"],
+      "title": "Color contrast below WCAG AA on legal text and player chrome (see also P0-5)",
+      "detail": "Cursor axe node-level shots remain useful evidence; root cause for brand-orange text is tracked in P0-5.",
+      "fix": "See P0-5 — raise contrast to ≥4.5:1 (3:1 large text).",
+      "sources": ["cursor-axe", "claude-a754-systematic"],
       "shots": [
         "shots/cover-color-contrast-1.png",
         "shots/cover-color-contrast-2.png",
